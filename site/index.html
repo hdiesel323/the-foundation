@@ -14,6 +14,7 @@
             :root {
                 --navy-900: #0f172a;
                 --navy-800: #1e293b;
+                --navy-750: #283548;
                 --navy-700: #334155;
                 --indigo-600: #4f46e5;
                 --indigo-500: #6366f1;
@@ -23,6 +24,17 @@
                 --gray-300: #cbd5e1;
                 --gray-400: #94a3b8;
                 --gray-600: #475569;
+                --blue-500: #3b82f6;
+                --red-500: #ef4444;
+                --green-500: #10b981;
+                --yellow-500: #f59e0b;
+                --purple-500: #a855f7;
+                --cyan-400: #22d3ee;
+                --green-400: #4ade80;
+            }
+
+            html {
+                scroll-behavior: smooth;
             }
 
             body {
@@ -33,6 +45,63 @@
                 color: var(--white);
                 line-height: 1.6;
                 overflow-x: hidden;
+                position: relative;
+            }
+
+            /* Background Elements */
+            body::before {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background:
+                    radial-gradient(
+                        circle at 20% 50%,
+                        rgba(79, 70, 229, 0.08) 0%,
+                        transparent 50%
+                    ),
+                    radial-gradient(
+                        circle at 80% 80%,
+                        rgba(168, 85, 247, 0.05) 0%,
+                        transparent 50%
+                    ),
+                    radial-gradient(
+                        circle at 40% 90%,
+                        rgba(59, 130, 246, 0.05) 0%,
+                        transparent 50%
+                    );
+                pointer-events: none;
+                z-index: 0;
+            }
+
+            body::after {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image:
+                    linear-gradient(
+                        rgba(255, 255, 255, 0.01) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        90deg,
+                        rgba(255, 255, 255, 0.01) 1px,
+                        transparent 1px
+                    );
+                background-size: 50px 50px;
+                pointer-events: none;
+                z-index: 0;
+                opacity: 0.3;
+            }
+
+            main {
+                position: relative;
+                z-index: 1;
             }
 
             /* Container */
@@ -52,6 +121,10 @@
             header {
                 padding: 24px 0;
                 border-bottom: 1px solid var(--navy-700);
+                position: relative;
+                z-index: 10;
+                background: rgba(15, 23, 42, 0.8);
+                backdrop-filter: blur(12px);
             }
 
             .header-content {
@@ -82,30 +155,47 @@
 
             /* Hero Section */
             .hero {
-                padding: 120px 0 160px;
-                text-align: center;
+                padding: 80px 0 140px;
                 position: relative;
+                overflow: hidden;
             }
 
             .hero::before {
                 content: "";
                 position: absolute;
-                top: 0;
+                top: -20%;
                 left: 50%;
                 transform: translateX(-50%);
-                width: 800px;
-                height: 800px;
+                width: 1000px;
+                height: 1000px;
                 background: radial-gradient(
                     circle,
-                    rgba(79, 70, 229, 0.15) 0%,
+                    rgba(79, 70, 229, 0.2) 0%,
+                    rgba(168, 85, 247, 0.05) 40%,
                     transparent 70%
                 );
                 pointer-events: none;
+                animation: pulseGlow 8s ease-in-out infinite;
+            }
+
+            @keyframes pulseGlow {
+                0%,
+                100% {
+                    opacity: 0.5;
+                    transform: translateX(-50%) scale(1);
+                }
+                50% {
+                    opacity: 0.8;
+                    transform: translateX(-50%) scale(1.1);
+                }
             }
 
             .hero-content {
                 position: relative;
                 z-index: 1;
+                text-align: center;
+                max-width: 900px;
+                margin: 0 auto 80px;
             }
 
             h1 {
@@ -179,29 +269,328 @@
                 background: rgba(79, 70, 229, 0.1);
             }
 
-            /* Section Styles */
-            section {
-                padding: 120px 0;
-                opacity: 0;
-                transform: translateY(40px);
-                animation: fadeInUp 0.8s forwards;
+            /* Dashboard Mockup */
+            .dashboard-preview {
+                position: relative;
+                max-width: 1100px;
+                margin: 0 auto;
+                perspective: 2000px;
             }
 
-            @keyframes fadeInUp {
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
+            .dashboard-container {
+                position: relative;
+                transform: rotateX(8deg) rotateY(0deg);
+                transition: transform 0.3s ease;
+                animation: floatDashboard 6s ease-in-out infinite;
+            }
+
+            @keyframes floatDashboard {
+                0%,
+                100% {
+                    transform: rotateX(8deg) translateY(0px);
+                }
+                50% {
+                    transform: rotateX(8deg) translateY(-10px);
                 }
             }
 
-            section:nth-child(2) {
-                animation-delay: 0.1s;
+            .dashboard-glow {
+                position: absolute;
+                inset: -60px;
+                background: radial-gradient(
+                    circle at center,
+                    rgba(79, 70, 229, 0.4) 0%,
+                    rgba(168, 85, 247, 0.2) 40%,
+                    transparent 70%
+                );
+                filter: blur(40px);
+                opacity: 0.6;
+                animation: glowPulse 4s ease-in-out infinite;
+                z-index: -1;
             }
-            section:nth-child(3) {
-                animation-delay: 0.2s;
+
+            @keyframes glowPulse {
+                0%,
+                100% {
+                    opacity: 0.6;
+                    transform: scale(1);
+                }
+                50% {
+                    opacity: 0.9;
+                    transform: scale(1.05);
+                }
             }
-            section:nth-child(4) {
-                animation-delay: 0.3s;
+
+            .dashboard-mockup {
+                background: linear-gradient(135deg, #1a1f35 0%, #0f1419 100%);
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow:
+                    0 0 0 1px rgba(255, 255, 255, 0.05),
+                    0 20px 60px rgba(0, 0, 0, 0.5),
+                    0 0 100px rgba(79, 70, 229, 0.2);
+                border: 1px solid rgba(79, 70, 229, 0.2);
+            }
+
+            .dashboard-header {
+                background: rgba(30, 41, 59, 0.6);
+                padding: 16px 24px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .dashboard-title {
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--white);
+            }
+
+            .dashboard-user {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 14px;
+                color: var(--gray-400);
+            }
+
+            .user-avatar {
+                width: 28px;
+                height: 28px;
+                border-radius: 50%;
+                background: linear-gradient(
+                    135deg,
+                    var(--indigo-500),
+                    var(--purple-500)
+                );
+            }
+
+            .dashboard-body {
+                display: grid;
+                grid-template-columns: 220px 1fr;
+                min-height: 500px;
+            }
+
+            .dashboard-sidebar {
+                background: rgba(20, 28, 45, 0.4);
+                border-right: 1px solid rgba(255, 255, 255, 0.05);
+                padding: 24px 0;
+            }
+
+            .nav-item {
+                padding: 12px 24px;
+                color: var(--gray-400);
+                font-size: 14px;
+                font-weight: 500;
+                transition: all 0.2s;
+                cursor: pointer;
+                position: relative;
+            }
+
+            .nav-item.active {
+                color: var(--white);
+                background: rgba(79, 70, 229, 0.1);
+                border-left: 3px solid var(--indigo-500);
+            }
+
+            .nav-item:not(.active):hover {
+                color: var(--white);
+                background: rgba(255, 255, 255, 0.03);
+            }
+
+            .dashboard-main {
+                padding: 32px;
+            }
+
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+                margin-bottom: 32px;
+            }
+
+            .stat-card {
+                background: rgba(30, 41, 59, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 8px;
+                padding: 20px;
+            }
+
+            .stat-label {
+                font-size: 13px;
+                color: var(--gray-400);
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .stat-value {
+                font-size: 32px;
+                font-weight: 700;
+                color: var(--white);
+            }
+
+            .service-health {
+                background: rgba(30, 41, 59, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+
+            .service-health-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--white);
+                margin-bottom: 16px;
+            }
+
+            .service-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            }
+
+            .service-item:last-child {
+                border-bottom: none;
+            }
+
+            .service-name {
+                font-size: 13px;
+                color: var(--gray-300);
+            }
+
+            .service-status {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 12px;
+                color: var(--green-400);
+            }
+
+            .status-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--green-500);
+                box-shadow: 0 0 8px var(--green-500);
+                animation: statusPulse 2s ease-in-out infinite;
+            }
+
+            @keyframes statusPulse {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.6;
+                }
+            }
+
+            .task-section {
+                background: rgba(30, 41, 59, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 8px;
+                padding: 20px;
+            }
+
+            .task-section-title {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--white);
+                margin-bottom: 16px;
+            }
+
+            .task-item {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 12px;
+                background: rgba(20, 28, 45, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 6px;
+                margin-bottom: 10px;
+                transition: all 0.2s;
+            }
+
+            .task-item:last-child {
+                margin-bottom: 0;
+            }
+
+            .task-item.awaiting {
+                border-color: var(--purple-500);
+                box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+                animation: taskGlow 2s ease-in-out infinite;
+            }
+
+            @keyframes taskGlow {
+                0%,
+                100% {
+                    box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+                }
+                50% {
+                    box-shadow: 0 0 30px rgba(168, 85, 247, 0.5);
+                }
+            }
+
+            .task-info {
+                flex: 1;
+            }
+
+            .task-name {
+                font-size: 13px;
+                color: var(--white);
+                margin-bottom: 4px;
+            }
+
+            .task-meta {
+                display: flex;
+                gap: 8px;
+            }
+
+            .task-priority {
+                font-size: 11px;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-weight: 600;
+                background: rgba(239, 68, 68, 0.2);
+                color: var(--red-500);
+            }
+
+            .task-priority.p2 {
+                background: rgba(245, 158, 11, 0.2);
+                color: var(--yellow-500);
+            }
+
+            .task-status {
+                font-size: 11px;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-weight: 600;
+            }
+
+            .task-status.in-progress {
+                background: rgba(59, 130, 246, 0.2);
+                color: var(--blue-500);
+            }
+
+            .task-status.completed {
+                background: rgba(16, 185, 129, 0.2);
+                color: var(--green-500);
+            }
+
+            .task-status.awaiting {
+                background: rgba(168, 85, 247, 0.2);
+                color: var(--purple-500);
+            }
+
+            /* Section Styles */
+            section {
+                padding: 120px 0;
+                position: relative;
             }
 
             .section-title {
@@ -220,94 +609,419 @@
                 margin: -48px auto 64px;
             }
 
-            /* How It Works */
-            .how-it-works {
+            /* Stats Section */
+            .stats-section {
+                padding: 80px 0;
                 background: linear-gradient(
-                    180deg,
-                    var(--navy-900) 0%,
-                    var(--navy-800) 100%
+                    135deg,
+                    rgba(79, 70, 229, 0.05) 0%,
+                    rgba(168, 85, 247, 0.05) 100%
                 );
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             }
 
-            .steps {
+            .stats-display {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-                gap: 32px;
-                margin-top: 48px;
+                gap: 48px;
+                max-width: 1000px;
+                margin: 0 auto;
             }
 
-            .step {
+            .stat-display {
                 text-align: center;
-                padding: 32px 24px;
-                background: var(--navy-700);
-                border-radius: 12px;
-                border: 1px solid transparent;
-                transition: all 0.3s;
             }
 
-            .step:hover {
-                border-color: var(--indigo-500);
-                transform: translateY(-4px);
-                box-shadow: 0 8px 24px rgba(79, 70, 229, 0.2);
-            }
-
-            .step-number {
-                display: inline-block;
-                width: 48px;
-                height: 48px;
-                line-height: 48px;
-                background: var(--indigo-600);
-                border-radius: 50%;
-                font-size: 20px;
+            .stat-number {
+                font-size: 64px;
                 font-weight: 700;
-                margin-bottom: 16px;
+                background: linear-gradient(
+                    135deg,
+                    var(--indigo-400),
+                    var(--purple-500)
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin-bottom: 8px;
+                animation: countUp 2s ease-out;
             }
 
-            .step-title {
-                font-size: 20px;
-                font-weight: 600;
-                margin-bottom: 12px;
-                color: var(--white);
+            @keyframes countUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
 
-            .step-desc {
+            .stat-desc {
+                font-size: 18px;
                 color: var(--gray-400);
-                font-size: 15px;
-                line-height: 1.6;
+                font-weight: 500;
+            }
+
+            /* How It Works */
+            .how-it-works {
+                background: var(--navy-900);
+            }
+
+            .workflow-pipeline {
+                max-width: 1000px;
+                margin: 48px auto 0;
+                position: relative;
+                padding: 60px 0;
+            }
+
+            .pipeline-nodes {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: relative;
+            }
+
+            .pipeline-line {
+                position: absolute;
+                top: 50%;
+                left: 10%;
+                right: 10%;
+                height: 2px;
+                background: linear-gradient(
+                    90deg,
+                    var(--indigo-500) 0%,
+                    var(--indigo-500) 20%,
+                    rgba(79, 70, 229, 0.3) 20%,
+                    rgba(79, 70, 229, 0.3) 40%,
+                    var(--indigo-500) 40%,
+                    var(--indigo-500) 60%,
+                    rgba(79, 70, 229, 0.3) 60%,
+                    rgba(79, 70, 229, 0.3) 80%,
+                    var(--indigo-500) 80%,
+                    var(--indigo-500) 100%
+                );
+                animation: pipelineFlow 4s ease-in-out infinite;
+            }
+
+            @keyframes pipelineFlow {
+                0% {
+                    background-position: 0% 0%;
+                    background-size: 200% 100%;
+                }
+                100% {
+                    background-position: -200% 0%;
+                    background-size: 200% 100%;
+                }
+            }
+
+            .pipeline-node {
+                position: relative;
+                z-index: 2;
+                text-align: center;
+                flex: 0 0 120px;
+            }
+
+            .node-circle {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: var(--navy-800);
+                border: 3px solid rgba(79, 70, 229, 0.3);
+                margin: 0 auto 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 28px;
+                font-weight: 700;
+                color: var(--gray-400);
+                transition: all 0.3s;
+                box-shadow: 0 0 0 rgba(79, 70, 229, 0);
+            }
+
+            .pipeline-node.active .node-circle {
+                border-color: var(--indigo-500);
+                background: linear-gradient(
+                    135deg,
+                    var(--indigo-600),
+                    var(--purple-500)
+                );
+                color: var(--white);
+                box-shadow: 0 0 30px rgba(79, 70, 229, 0.6);
+                animation: nodeActivePulse 2s ease-in-out infinite;
+            }
+
+            @keyframes nodeActivePulse {
+                0%,
+                100% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.05);
+                }
+            }
+
+            .pipeline-node:nth-child(1) {
+                animation: activateNode 10s ease-in-out infinite;
+                animation-delay: 0s;
+            }
+            .pipeline-node:nth-child(2) {
+                animation: activateNode 10s ease-in-out infinite;
+                animation-delay: 2s;
+            }
+            .pipeline-node:nth-child(3) {
+                animation: activateNode 10s ease-in-out infinite;
+                animation-delay: 4s;
+            }
+            .pipeline-node:nth-child(4) {
+                animation: activateNode 10s ease-in-out infinite;
+                animation-delay: 6s;
+            }
+            .pipeline-node:nth-child(5) {
+                animation: activateNode 10s ease-in-out infinite;
+                animation-delay: 8s;
+            }
+
+            @keyframes activateNode {
+                0%,
+                20%,
+                100% {
+                    opacity: 0.5;
+                }
+                5%,
+                15% {
+                    opacity: 1;
+                }
+            }
+
+            .node-label {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--gray-400);
+            }
+
+            /* Terminal Section */
+            .terminal-section {
+                padding: 80px 0;
+                background: rgba(15, 23, 42, 0.5);
+            }
+
+            .terminal-window {
+                max-width: 800px;
+                margin: 0 auto;
+                background: #0a0e1a;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            .terminal-header {
+                background: rgba(30, 41, 59, 0.6);
+                padding: 12px 16px;
+                display: flex;
+                gap: 8px;
+                align-items: center;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            .terminal-dot {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+            }
+
+            .terminal-dot:nth-child(1) {
+                background: #ff5f56;
+            }
+            .terminal-dot:nth-child(2) {
+                background: #ffbd2e;
+            }
+            .terminal-dot:nth-child(3) {
+                background: #27c93f;
+            }
+
+            .terminal-body {
+                padding: 24px;
+                font-family: "Menlo", "Monaco", "Courier New", monospace;
+                font-size: 14px;
+                line-height: 1.8;
+                min-height: 300px;
+            }
+
+            .terminal-line {
+                display: block;
+                color: var(--gray-400);
+                margin-bottom: 4px;
+            }
+
+            .terminal-prompt {
+                color: var(--green-400);
+            }
+
+            .terminal-command {
+                color: var(--cyan-400);
+            }
+
+            .terminal-output {
+                color: var(--gray-400);
+                margin-left: 0;
+            }
+
+            .terminal-cursor {
+                display: inline-block;
+                width: 8px;
+                height: 16px;
+                background: var(--green-400);
+                animation: blink 1s step-end infinite;
+                margin-left: 2px;
+            }
+
+            @keyframes blink {
+                0%,
+                50% {
+                    opacity: 1;
+                }
+                51%,
+                100% {
+                    opacity: 0;
+                }
+            }
+
+            .typing-animation {
+                overflow: hidden;
+                border-right: 2px solid var(--green-400);
+                white-space: nowrap;
+                animation:
+                    typing 2s steps(40) 1s forwards,
+                    blink-caret 0.75s step-end 20;
+                width: 0;
+            }
+
+            @keyframes typing {
+                from {
+                    width: 0;
+                }
+                to {
+                    width: 100%;
+                }
+            }
+
+            @keyframes blink-caret {
+                50% {
+                    border-color: transparent;
+                }
             }
 
             /* Agents Section */
             .divisions {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
                 gap: 24px;
                 margin-top: 48px;
             }
 
             .division {
-                background: var(--navy-800);
+                background: linear-gradient(
+                    135deg,
+                    var(--navy-800) 0%,
+                    var(--navy-750) 100%
+                );
                 border: 1px solid var(--navy-700);
                 border-radius: 12px;
                 padding: 32px;
                 transition: all 0.3s;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .division::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 4px;
+                background: var(--blue-500);
+            }
+
+            .division.command::before {
+                background: var(--blue-500);
+            }
+            .division.infrastructure::before {
+                background: var(--red-500);
+            }
+            .division.commerce::before {
+                background: var(--green-500);
+            }
+            .division.intelligence::before {
+                background: var(--yellow-500);
+            }
+            .division.operations::before {
+                background: var(--purple-500);
             }
 
             .division:hover {
-                border-color: var(--indigo-500);
                 transform: translateY(-4px);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
             }
 
             .division-title {
                 font-size: 22px;
                 font-weight: 700;
                 margin-bottom: 20px;
-                color: var(--indigo-400);
+                color: var(--white);
+            }
+
+            .agents-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .agent-avatar {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                font-size: 16px;
+                color: var(--white);
+                transition: all 0.3s;
+                cursor: pointer;
+                position: relative;
+            }
+
+            .division.command .agent-avatar {
+                background: linear-gradient(135deg, var(--blue-500), #2563eb);
+            }
+            .division.infrastructure .agent-avatar {
+                background: linear-gradient(135deg, var(--red-500), #dc2626);
+            }
+            .division.commerce .agent-avatar {
+                background: linear-gradient(135deg, var(--green-500), #059669);
+            }
+            .division.intelligence .agent-avatar {
+                background: linear-gradient(135deg, var(--yellow-500), #d97706);
+            }
+            .division.operations .agent-avatar {
+                background: linear-gradient(135deg, var(--purple-500), #9333ea);
+            }
+
+            .agent-avatar:hover {
+                transform: scale(1.15);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
             }
 
             .agent {
                 margin-bottom: 16px;
                 padding-bottom: 16px;
-                border-bottom: 1px solid var(--navy-700);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             }
 
             .agent:last-child {
@@ -337,20 +1051,55 @@
             }
 
             .feature {
-                background: var(--navy-800);
-                border: 1px solid var(--navy-700);
+                background: rgba(30, 41, 59, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.05);
                 border-radius: 12px;
                 padding: 40px 32px;
                 transition: all 0.3s;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .feature::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    135deg,
+                    rgba(79, 70, 229, 0.05) 0%,
+                    transparent 100%
+                );
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+
+            .feature:hover::before {
+                opacity: 1;
             }
 
             .feature:hover {
                 border-color: var(--indigo-500);
+                transform: translateY(-4px);
+                box-shadow: 0 12px 40px rgba(79, 70, 229, 0.15);
+            }
+
+            .feature-icon {
+                width: 48px;
+                height: 48px;
+                border-radius: 8px;
                 background: linear-gradient(
                     135deg,
-                    var(--navy-800) 0%,
-                    rgba(79, 70, 229, 0.05) 100%
+                    var(--indigo-600),
+                    var(--purple-500)
                 );
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+                margin-bottom: 20px;
             }
 
             .feature-title {
@@ -370,11 +1119,11 @@
             .open-source {
                 background: linear-gradient(
                     135deg,
-                    var(--navy-800) 0%,
-                    var(--navy-700) 100%
+                    rgba(79, 70, 229, 0.1) 0%,
+                    rgba(168, 85, 247, 0.05) 100%
                 );
-                border-top: 1px solid var(--navy-700);
-                border-bottom: 1px solid var(--navy-700);
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
                 text-align: center;
             }
 
@@ -408,8 +1157,8 @@
             }
 
             .quickstart-step {
-                background: var(--navy-800);
-                border: 1px solid var(--navy-700);
+                background: rgba(30, 41, 59, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.05);
                 border-radius: 12px;
                 padding: 32px;
             }
@@ -421,8 +1170,8 @@
             }
 
             .code-block {
-                background: var(--navy-900);
-                border: 1px solid var(--navy-700);
+                background: #0a0e1a;
+                border: 1px solid rgba(255, 255, 255, 0.05);
                 border-radius: 8px;
                 padding: 20px;
                 font-family: "Monaco", "Menlo", "Courier New", monospace;
@@ -446,28 +1195,53 @@
             }
 
             .pricing-card {
-                background: var(--navy-800);
-                border: 2px solid var(--navy-700);
+                background: rgba(30, 41, 59, 0.4);
+                border: 2px solid rgba(255, 255, 255, 0.05);
                 border-radius: 16px;
                 padding: 40px 32px;
                 transition: all 0.3s;
                 display: flex;
                 flex-direction: column;
+                position: relative;
+            }
+
+            .pricing-card.free {
+                border-style: dashed;
+                border-color: var(--navy-700);
             }
 
             .pricing-card:hover {
-                border-color: var(--indigo-500);
                 transform: translateY(-8px);
-                box-shadow: 0 16px 48px rgba(79, 70, 229, 0.2);
+                box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
             }
 
             .pricing-card.featured {
                 border-color: var(--indigo-500);
                 background: linear-gradient(
                     135deg,
-                    var(--navy-800) 0%,
+                    rgba(30, 41, 59, 0.6) 0%,
                     rgba(79, 70, 229, 0.1) 100%
                 );
+                position: relative;
+            }
+
+            .pricing-card.featured::before {
+                content: "MOST POPULAR";
+                position: absolute;
+                top: -12px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(
+                    135deg,
+                    var(--indigo-600),
+                    var(--purple-500)
+                );
+                color: var(--white);
+                padding: 6px 20px;
+                border-radius: 20px;
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.5px;
             }
 
             .pricing-tier {
@@ -495,7 +1269,7 @@
                 font-size: 14px;
                 margin-bottom: 32px;
                 padding-bottom: 24px;
-                border-bottom: 1px solid var(--navy-700);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             }
 
             .pricing-features {
@@ -508,13 +1282,24 @@
                 padding: 12px 0;
                 color: var(--gray-300);
                 font-size: 15px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
             }
 
             .pricing-features li::before {
                 content: "✓";
                 color: var(--indigo-400);
                 font-weight: 700;
-                margin-right: 12px;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: rgba(79, 70, 229, 0.2);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                flex-shrink: 0;
             }
 
             .pricing-card .btn {
@@ -524,8 +1309,8 @@
 
             /* Footer */
             footer {
-                background: var(--navy-800);
-                border-top: 1px solid var(--navy-700);
+                background: rgba(30, 41, 59, 0.4);
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
                 padding: 64px 0 32px;
             }
 
@@ -570,7 +1355,7 @@
 
             .footer-bottom {
                 padding-top: 32px;
-                border-top: 1px solid var(--navy-700);
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
@@ -606,7 +1391,36 @@
                 }
 
                 .hero {
-                    padding: 80px 0 100px;
+                    padding: 60px 0 80px;
+                }
+
+                .dashboard-mockup {
+                    transform: none !important;
+                }
+
+                .dashboard-body {
+                    grid-template-columns: 1fr;
+                }
+
+                .dashboard-sidebar {
+                    display: none;
+                }
+
+                .stats-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .stat-number {
+                    font-size: 48px;
+                }
+
+                .pipeline-nodes {
+                    flex-direction: column;
+                    gap: 40px;
+                }
+
+                .pipeline-line {
+                    display: none;
                 }
 
                 .footer-content {
@@ -618,10 +1432,6 @@
                     flex-direction: column;
                     gap: 16px;
                     text-align: center;
-                }
-
-                .steps {
-                    grid-template-columns: 1fr;
                 }
 
                 .divisions {
@@ -685,6 +1495,183 @@
                             >
                         </div>
                     </div>
+
+                    <!-- Dashboard Mockup -->
+                    <div class="dashboard-preview">
+                        <div class="dashboard-glow"></div>
+                        <div class="dashboard-container">
+                            <div class="dashboard-mockup">
+                                <div class="dashboard-header">
+                                    <div class="dashboard-title">
+                                        The Foundation Dashboard
+                                    </div>
+                                    <div class="dashboard-user">
+                                        <div class="user-avatar"></div>
+                                        <span>admin</span>
+                                    </div>
+                                </div>
+                                <div class="dashboard-body">
+                                    <div class="dashboard-sidebar">
+                                        <div class="nav-item active">
+                                            Dashboard
+                                        </div>
+                                        <div class="nav-item">Team</div>
+                                        <div class="nav-item">Workflows</div>
+                                        <div class="nav-item">Settings</div>
+                                    </div>
+                                    <div class="dashboard-main">
+                                        <div class="stats-grid">
+                                            <div class="stat-card">
+                                                <div class="stat-label">
+                                                    People
+                                                </div>
+                                                <div class="stat-value">1</div>
+                                            </div>
+                                            <div class="stat-card">
+                                                <div class="stat-label">
+                                                    Bots
+                                                </div>
+                                                <div class="stat-value">14</div>
+                                            </div>
+                                            <div class="stat-card">
+                                                <div class="stat-label">
+                                                    Online
+                                                </div>
+                                                <div class="stat-value">12</div>
+                                            </div>
+                                            <div class="stat-card">
+                                                <div class="stat-label">
+                                                    Total
+                                                </div>
+                                                <div class="stat-value">15</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="service-health">
+                                            <div class="service-health-title">
+                                                Service Health
+                                            </div>
+                                            <div class="service-item">
+                                                <div class="service-name">
+                                                    PostgreSQL
+                                                </div>
+                                                <div class="service-status">
+                                                    <span
+                                                        class="status-dot"
+                                                    ></span>
+                                                    <span>Operational</span>
+                                                </div>
+                                            </div>
+                                            <div class="service-item">
+                                                <div class="service-name">
+                                                    Seldon Core
+                                                </div>
+                                                <div class="service-status">
+                                                    <span
+                                                        class="status-dot"
+                                                    ></span>
+                                                    <span>Operational</span>
+                                                </div>
+                                            </div>
+                                            <div class="service-item">
+                                                <div class="service-name">
+                                                    MCP Gateway
+                                                </div>
+                                                <div class="service-status">
+                                                    <span
+                                                        class="status-dot"
+                                                    ></span>
+                                                    <span>Operational</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="task-section">
+                                            <div class="task-section-title">
+                                                Active Tasks
+                                            </div>
+                                            <div class="task-item">
+                                                <div class="task-info">
+                                                    <div class="task-name">
+                                                        Build authentication
+                                                        module
+                                                    </div>
+                                                    <div class="task-meta">
+                                                        <span
+                                                            class="task-priority"
+                                                            >P1</span
+                                                        >
+                                                        <span
+                                                            class="task-status in-progress"
+                                                            >in_progress</span
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="task-item">
+                                                <div class="task-info">
+                                                    <div class="task-name">
+                                                        Market analysis report
+                                                    </div>
+                                                    <div class="task-meta">
+                                                        <span
+                                                            class="task-priority p2"
+                                                            >P2</span
+                                                        >
+                                                        <span
+                                                            class="task-status completed"
+                                                            >completed</span
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="task-item awaiting">
+                                                <div class="task-info">
+                                                    <div class="task-name">
+                                                        Security audit
+                                                    </div>
+                                                    <div class="task-meta">
+                                                        <span
+                                                            class="task-priority"
+                                                            >P1</span
+                                                        >
+                                                        <span
+                                                            class="task-status awaiting"
+                                                            >awaiting_approval</span
+                                                        >
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="stats-section">
+                <div class="container">
+                    <div class="stats-display">
+                        <div class="stat-display">
+                            <div class="stat-number">14</div>
+                            <div class="stat-desc">Specialized Agents</div>
+                        </div>
+                        <div class="stat-display">
+                            <div class="stat-number">5</div>
+                            <div class="stat-desc">Divisions</div>
+                        </div>
+                        <div class="stat-display">
+                            <div class="stat-number">5</div>
+                            <div class="stat-desc">Workflow Templates</div>
+                        </div>
+                        <div class="stat-display">
+                            <div class="stat-number">0</div>
+                            <div class="stat-desc">Exposed Ports</div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -692,46 +1679,113 @@
             <section class="how-it-works">
                 <div class="container">
                     <h2 class="section-title">How It Works</h2>
-                    <div class="steps">
-                        <div class="step">
-                            <div class="step-number">1</div>
-                            <h3 class="step-title">Define</h3>
-                            <p class="step-desc">
-                                Configure your agent team, assign roles, set
-                                authority levels
-                            </p>
+                    <div class="workflow-pipeline">
+                        <div class="pipeline-line"></div>
+                        <div class="pipeline-nodes">
+                            <div class="pipeline-node">
+                                <div class="node-circle">1</div>
+                                <div class="node-label">Define</div>
+                            </div>
+                            <div class="pipeline-node">
+                                <div class="node-circle">2</div>
+                                <div class="node-label">Dispatch</div>
+                            </div>
+                            <div class="pipeline-node">
+                                <div class="node-circle">3</div>
+                                <div class="node-label">Approve</div>
+                            </div>
+                            <div class="pipeline-node">
+                                <div class="node-circle">4</div>
+                                <div class="node-label">Execute</div>
+                            </div>
+                            <div class="pipeline-node">
+                                <div class="node-circle">5</div>
+                                <div class="node-label">Monitor</div>
+                            </div>
                         </div>
-                        <div class="step">
-                            <div class="step-number">2</div>
-                            <h3 class="step-title">Dispatch</h3>
-                            <p class="step-desc">
-                                Submit tasks through Discord or the API. Seldon
-                                creates a plan.
-                            </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Terminal Demo -->
+            <section class="terminal-section">
+                <div class="container">
+                    <h2 class="section-title">See It In Action</h2>
+                    <p class="section-subtitle">
+                        Submit a task and watch Seldon orchestrate your agent
+                        team
+                    </p>
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
+                            <div class="terminal-dot"></div>
                         </div>
-                        <div class="step">
-                            <div class="step-number">3</div>
-                            <h3 class="step-title">Approve</h3>
-                            <p class="step-desc">
-                                Review the pre-flight plan. Approve, modify, or
-                                reject.
-                            </p>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">4</div>
-                            <h3 class="step-title">Execute</h3>
-                            <p class="step-desc">
-                                Agents coordinate through workflows with
-                                dependency management and critic chains.
-                            </p>
-                        </div>
-                        <div class="step">
-                            <div class="step-number">5</div>
-                            <h3 class="step-title">Monitor</h3>
-                            <p class="step-desc">
-                                Track progress via the dashboard. Get updates in
-                                Discord threads.
-                            </p>
+                        <div class="terminal-body">
+                            <span class="terminal-line"
+                                ><span class="terminal-prompt">$</span>
+                                <span class="terminal-command"
+                                    >curl -X POST
+                                    http://localhost:8000/seldon/preflight
+                                    \</span
+                                ></span
+                            >
+                            <span class="terminal-line">
+                                <span class="terminal-command"
+                                    >-H "Content-Type: application/json" \</span
+                                ></span
+                            >
+                            <span class="terminal-line">
+                                <span class="terminal-command"
+                                    >-d '{"task": "Build authentication
+                                    module"}'</span
+                                ></span
+                            >
+                            <span class="terminal-line"></span>
+                            <span class="terminal-line terminal-output">{</span>
+                            <span class="terminal-line terminal-output">
+                                "workflow_id": "wf_a3c9d2e1",</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                "status": "awaiting_approval",</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                "plan": {</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                "assigned_agents": ["Daneel", "Venabili",
+                                "Amaryl"],</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                "estimated_time": "2 hours",</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                "steps": [</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                "Design auth schema (Demerzel)",</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                "Implement JWT middleware (Daneel)",</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                "Security review (Venabili)",</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                "Write tests (Amaryl)"</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                ]</span
+                            >
+                            <span class="terminal-line terminal-output">
+                                }</span
+                            >
+                            <span class="terminal-line terminal-output">}</span>
+                            <span class="terminal-line"></span>
+                            <span class="terminal-line"
+                                ><span class="terminal-prompt">$</span>
+                                <span class="terminal-cursor"></span
+                            ></span>
                         </div>
                     </div>
                 </div>
@@ -746,8 +1800,13 @@
                         specific expertise and authority
                     </p>
                     <div class="divisions">
-                        <div class="division">
+                        <div class="division command">
                             <h3 class="division-title">Command</h3>
+                            <div class="agents-list">
+                                <div class="agent-avatar">S</div>
+                                <div class="agent-avatar">D</div>
+                                <div class="agent-avatar">H</div>
+                            </div>
                             <div class="agent">
                                 <div class="agent-name">Seldon</div>
                                 <div class="agent-role">Orchestrator</div>
@@ -762,8 +1821,13 @@
                             </div>
                         </div>
 
-                        <div class="division">
+                        <div class="division infrastructure">
                             <h3 class="division-title">Infrastructure</h3>
+                            <div class="agents-list">
+                                <div class="agent-avatar">D</div>
+                                <div class="agent-avatar">A</div>
+                                <div class="agent-avatar">V</div>
+                            </div>
                             <div class="agent">
                                 <div class="agent-name">Demerzel</div>
                                 <div class="agent-role">Architect</div>
@@ -778,8 +1842,13 @@
                             </div>
                         </div>
 
-                        <div class="division">
+                        <div class="division commerce">
                             <h3 class="division-title">Commerce</h3>
+                            <div class="agents-list">
+                                <div class="agent-avatar">M</div>
+                                <div class="agent-avatar">M</div>
+                                <div class="agent-avatar">T</div>
+                            </div>
                             <div class="agent">
                                 <div class="agent-name">Magnifico</div>
                                 <div class="agent-role">Content Creator</div>
@@ -794,8 +1863,13 @@
                             </div>
                         </div>
 
-                        <div class="division">
+                        <div class="division intelligence">
                             <h3 class="division-title">Intelligence</h3>
+                            <div class="agents-list">
+                                <div class="agent-avatar">M</div>
+                                <div class="agent-avatar">G</div>
+                                <div class="agent-avatar">R</div>
+                            </div>
                             <div class="agent">
                                 <div class="agent-name">Mis</div>
                                 <div class="agent-role">Research</div>
@@ -810,8 +1884,12 @@
                             </div>
                         </div>
 
-                        <div class="division">
+                        <div class="division operations">
                             <h3 class="division-title">Operations</h3>
+                            <div class="agents-list">
+                                <div class="agent-avatar">P</div>
+                                <div class="agent-avatar">A</div>
+                            </div>
                             <div class="agent">
                                 <div class="agent-name">Preem</div>
                                 <div class="agent-role">Automation</div>
@@ -831,6 +1909,7 @@
                     <h2 class="section-title">Built for Production</h2>
                     <div class="features-grid">
                         <div class="feature">
+                            <div class="feature-icon">✓</div>
                             <h3 class="feature-title">
                                 Pre-flight Approval Gates
                             </h3>
@@ -841,6 +1920,7 @@
                             </p>
                         </div>
                         <div class="feature">
+                            <div class="feature-icon">→</div>
                             <h3 class="feature-title">
                                 Dependency-based Workflow Engine
                             </h3>
@@ -851,6 +1931,7 @@
                             </p>
                         </div>
                         <div class="feature">
+                            <div class="feature-icon">💬</div>
                             <h3 class="feature-title">
                                 Discord Thread Integration
                             </h3>
@@ -861,6 +1942,7 @@
                             </p>
                         </div>
                         <div class="feature">
+                            <div class="feature-icon">⚡</div>
                             <h3 class="feature-title">Multi-Model Routing</h3>
                             <p class="feature-desc">
                                 Claude as primary, Grok for overflow. Automatic
@@ -868,6 +1950,7 @@
                             </p>
                         </div>
                         <div class="feature">
+                            <div class="feature-icon">👁</div>
                             <h3 class="feature-title">
                                 Critic Chain Review System
                             </h3>
@@ -878,6 +1961,7 @@
                             </p>
                         </div>
                         <div class="feature">
+                            <div class="feature-icon">📊</div>
                             <h3 class="feature-title">Real-time Dashboard</h3>
                             <p class="feature-desc">
                                 Monitor all workflows, agent activity, and
@@ -969,7 +2053,7 @@
                         everything for you
                     </p>
                     <div class="pricing-grid">
-                        <div class="pricing-card">
+                        <div class="pricing-card free">
                             <div class="pricing-tier">Self-Hosted</div>
                             <div class="pricing-price">
                                 Free<small> forever</small>
