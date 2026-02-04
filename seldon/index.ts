@@ -70,7 +70,7 @@ async function createTaskThread(
   let channelConfig: Record<string, unknown> = {};
   try {
     const raw = fs.readFileSync(
-      path.resolve(__dirname, "..", "config", "channels.json"),
+      path.resolve(__dirname, "config", "channels.json"),
       "utf-8",
     );
     channelConfig = JSON.parse(raw);
@@ -298,7 +298,7 @@ function loadWorkflowTemplate(
 ): { name: string; steps: WorkflowStep[] } | null {
   try {
     const raw = fs.readFileSync(
-      path.resolve(__dirname, "..", "config", "workflows.json"),
+      path.resolve(__dirname, "config", "workflows.json"),
       "utf-8",
     );
     const config = JSON.parse(raw);
@@ -1296,7 +1296,7 @@ app.post(
       if (workflowTemplate) {
         try {
           const raw = fs.readFileSync(
-            path.resolve(__dirname, "..", "config", "workflows.json"),
+            path.resolve(__dirname, "config", "workflows.json"),
             "utf-8",
           );
           const config = JSON.parse(raw);
@@ -2440,7 +2440,7 @@ app.get("/dashboard", (_req: Request, res: Response) => {
 app.get("/seldon/divisions", (_req: Request, res: Response) => {
   const divisionsPath =
     process.env.DIVISIONS_PATH ||
-    path.resolve(__dirname, "..", "config", "divisions.json");
+    path.resolve(__dirname, "config", "divisions.json");
   try {
     const raw = fs.readFileSync(divisionsPath, "utf-8");
     const data = JSON.parse(raw);
@@ -2473,7 +2473,7 @@ app.get("/seldon/status", async (_req: Request, res: Response) => {
     // Division counts
     const divisionPath =
       process.env.DIVISIONS_PATH ||
-      path.resolve(__dirname, "..", "config", "divisions.json");
+      path.resolve(__dirname, "config", "divisions.json");
     let divisions: Record<string, unknown> = {};
     try {
       const raw = fs.readFileSync(divisionPath, "utf-8");
