@@ -784,7 +784,7 @@ app.post("/seldon/register", async (req: Request, res: Response) => {
         location || null,
         endpoint || null,
         status || "online",
-        capabilities || [],
+        Array.isArray(capabilities) ? capabilities : capabilities?.allow || [],
         metadata || {},
       ],
     );
@@ -901,7 +901,7 @@ app.post("/seldon/dispatch", async (req: Request, res: Response) => {
         // Try fallback agents if preferred is not found
         if (fallback_agents && fallback_agents.length > 0) {
           const fallbackCheck = await pool.query(
-            `SELECT id FROM agents WHERE id = ANY($1) AND status IN ('online', 'healthy') LIMIT 1`,
+            `SELECT id FROM agents WHERE id = ANY($1) AND status IN ('online', 'healthy', 'idle', 'active') LIMIT 1`,
             [fallback_agents],
           );
           if (fallbackCheck.rowCount && fallbackCheck.rowCount > 0) {
@@ -923,7 +923,7 @@ app.post("/seldon/dispatch", async (req: Request, res: Response) => {
     } else {
       // No preferred agent — pick first available online agent
       const anyAgent = await pool.query(
-        `SELECT id FROM agents WHERE status IN ('online', 'healthy') ORDER BY last_heartbeat DESC LIMIT 1`,
+        `SELECT id FROM agents WHERE status IN ('online', 'healthy', 'idle', 'active') ORDER BY last_heartbeat DESC LIMIT 1`,
       );
       if (anyAgent.rowCount && anyAgent.rowCount > 0) {
         targetAgent = anyAgent.rows[0].id;
