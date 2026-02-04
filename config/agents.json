@@ -1,16 +1,75 @@
 {
   "agents": {
     "defaults": {
-      "model": "claude-sonnet-4-5-20250929",
+      "model": "anthropic/claude-haiku-4-5",
       "apiBaseUrl": "http://anthropic-router:3333",
+      "modelRouting": {
+        "default": "haiku",
+        "escalate_to_sonnet": [
+          "architecture_decisions",
+          "production_code_review",
+          "security_analysis",
+          "complex_debugging",
+          "strategic_multi_project_decisions"
+        ],
+        "rule": "Always use Haiku. Switch to Sonnet ONLY for architecture, security, complex reasoning, production code review, or strategic decisions. When in doubt: try Haiku first."
+      },
+      "cache": {
+        "enabled": true,
+        "ttl": "5m",
+        "priority": "high",
+        "cacheable_files": ["SOUL.md", "USER.md", "TOOLS.md", "REFERENCE.md"],
+        "never_cache": ["MEMORY.md", "memory/*.md", "DECISIONS.md"]
+      },
+      "sessionInit": {
+        "eager_load": ["SOUL.md", "USER.md", "IDENTITY.md"],
+        "conditional_load": ["memory/YYYY-MM-DD.md"],
+        "never_auto_load": [
+          "MEMORY.md",
+          "session_history",
+          "prior_messages",
+          "previous_tool_outputs"
+        ],
+        "on_context_request": "Use memory_search() on demand, pull only relevant snippet with memory_get(), never load whole file",
+        "end_of_session_write": {
+          "file": "memory/YYYY-MM-DD.md",
+          "fields": [
+            "work_completed",
+            "decisions_made",
+            "leads_generated",
+            "blockers",
+            "next_steps"
+          ]
+        }
+      },
+      "rateLimits": {
+        "min_api_call_interval_seconds": 5,
+        "min_web_search_interval_seconds": 10,
+        "max_searches_per_batch": 5,
+        "batch_cooldown_seconds": 120,
+        "on_429": "STOP, wait 5 minutes, retry",
+        "daily_budget_usd": 5,
+        "monthly_budget_usd": 200,
+        "warning_threshold_pct": 75
+      },
       "modelTiers": {
+        "haiku": {
+          "model": "anthropic/claude-haiku-4-5",
+          "provider": "anthropic",
+          "apiBaseUrl": "http://anthropic-router:3333",
+          "apiKeySecret": "anthropic_key",
+          "cost_per_1m": { "input": 0.8, "output": 4.0, "cached": 0.08 },
+          "use_for": "DEFAULT — all routine agent work, heartbeats, simple queries, content drafts"
+        },
         "claude": {
           "model": "claude-sonnet-4-5-20250929",
           "provider": "anthropic",
           "apiBaseUrl": "http://anthropic-router:3333",
           "apiKeySecret": "anthropic_key",
+          "cost_per_1m": { "input": 3.0, "output": 15.0, "cached": 0.3 },
+          "cache": true,
           "billing": "flat-rate (Max subscription $100/mo)",
-          "use_for": "ALL agent work — primary tier for all 14 agents (flat-rate Max subscription)"
+          "use_for": "ESCALATION ONLY — architecture decisions, security analysis, complex reasoning, production code review"
         },
         "deepseek_v3": {
           "model": "deepseek-chat",
@@ -81,14 +140,25 @@
           "use_for": "RATE-LIMIT OVERFLOW — when Claude hits rate limits, parallel agent overflow, swarm batch jobs"
         }
       },
-      "modelFallbackChain": ["claude", "free", "openrouter"],
+      "modelFallbackChain": ["haiku", "claude", "free", "openrouter"],
       "routingStrategy": {
-        "primary": "claude",
-        "primaryNote": "Claude Max subscription — flat-rate unlimited. Use for ALL agent work.",
+        "primary": "haiku",
+        "primaryNote": "Haiku for all routine work — 97% cost reduction vs Sonnet-only",
+        "escalateToSonnet": "Architecture, security, complex reasoning, production code review only",
         "fallbackToFree": "Only when Claude rate-limited or for parallel overflow",
         "useGrokOnly": "When input exceeds 200K tokens (Grok has 2M context window)",
         "useOpenAIOnly": "Embeddings and vision tasks that require OpenAI-specific models",
-        "swarmLayer": "Free/cheap models for batch pre-processing via swarm.json"
+        "swarmLayer": "Free/cheap models for batch pre-processing via swarm.json",
+        "heartbeat": "ollama/llama3.2:3b — free local model for status checks"
+      },
+      "heartbeat": {
+        "every": "1h",
+        "model": "ollama/llama3.2:3b",
+        "session": "main",
+        "target": "slack",
+        "prompt": "Check: Any blockers, opportunities, or progress updates needed?",
+        "fallback_model": "haiku",
+        "cost": "$0/mo (local Ollama)"
       },
       "memory": {
         "preFlushEnabled": true,
@@ -111,7 +181,13 @@
       "seldon": {
         "port": 18789,
         "role": "Orchestrator",
-        "modelTier": "claude",
+        "modelTier": "haiku",
+        "escalateTier": "claude",
+        "escalateWhen": [
+          "architecture_decisions",
+          "strategic_multi_project_decisions",
+          "complex_debugging"
+        ],
         "division": "command",
         "location": "mac-mini",
         "priority": 0,
@@ -138,7 +214,13 @@
       "daneel": {
         "port": 18790,
         "role": "SysAdmin",
-        "modelTier": "claude",
+        "modelTier": "haiku",
+        "escalateTier": "claude",
+        "escalateWhen": [
+          "production_code_review",
+          "complex_debugging",
+          "architecture_decisions"
+        ],
         "division": "infrastructure",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/daneel/SOUL.md",
@@ -151,6 +233,7 @@
         "port": 18791,
         "role": "Security Critic",
         "modelTier": "claude",
+        "modelTierNote": "Hardin always uses Sonnet — security analysis requires highest reasoning capability",
         "division": "infrastructure",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/hardin/SOUL.md",
@@ -188,7 +271,7 @@
       "magnifico": {
         "port": 18792,
         "role": "Creative Director",
-        "modelTier": "claude",
+        "modelTier": "haiku",
         "division": "operations",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/magnifico/SOUL.md",
@@ -211,7 +294,12 @@
       "trader": {
         "port": 18793,
         "role": "Trading Operations",
-        "modelTier": "claude",
+        "modelTier": "haiku",
+        "escalateTier": "claude",
+        "escalateWhen": [
+          "complex_debugging",
+          "strategic_multi_project_decisions"
+        ],
         "division": "commerce",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/trader/SOUL.md",
@@ -232,6 +320,7 @@
         "port": 18794,
         "role": "Factual Critic",
         "modelTier": "claude",
+        "modelTierNote": "Gaal always uses Sonnet — factual verification requires highest reasoning capability",
         "division": "intelligence",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/gaal/SOUL.md",
@@ -271,7 +360,7 @@
       "mallow": {
         "port": 18799,
         "role": "Revenue Ops VP",
-        "modelTier": "claude",
+        "modelTier": "haiku",
         "division": "commerce",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/mallow/SOUL.md",
@@ -299,7 +388,7 @@
       "riose": {
         "port": 18800,
         "role": "Paid Media Director",
-        "modelTier": "claude",
+        "modelTier": "haiku",
         "division": "commerce",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/riose/SOUL.md",
@@ -326,7 +415,7 @@
       "preem": {
         "port": 18797,
         "role": "VP Sales",
-        "modelTier": "claude",
+        "modelTier": "haiku",
         "division": "commerce",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/preem/SOUL.md",
@@ -348,7 +437,7 @@
       "mis": {
         "port": 18801,
         "role": "VP Research",
-        "modelTier": "claude",
+        "modelTier": "haiku",
         "overflowTier": "grok_reasoning",
         "overflowNote": "Falls back to Grok for 2M context window when document exceeds Claude's 200K limit",
         "division": "intelligence",
@@ -373,7 +462,7 @@
       "amaryl": {
         "port": 18802,
         "role": "Quant Analyst",
-        "modelTier": "claude",
+        "modelTier": "haiku",
         "division": "intelligence",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/amaryl/SOUL.md",
@@ -396,7 +485,7 @@
       "arkady": {
         "port": 18798,
         "role": "Content Writer",
-        "modelTier": "claude",
+        "modelTier": "haiku",
         "division": "operations",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/arkady/SOUL.md",
@@ -419,7 +508,12 @@
       "demerzel": {
         "port": 18795,
         "role": "Chief Intelligence",
-        "modelTier": "claude",
+        "modelTier": "haiku",
+        "escalateTier": "claude",
+        "escalateWhen": [
+          "strategic_multi_project_decisions",
+          "complex_debugging"
+        ],
         "overflowTier": "grok_fast",
         "overflowNote": "Falls back to Grok for 2M context window when synthesizing bulk intel exceeding Claude's 200K limit",
         "division": "intelligence",
@@ -448,7 +542,7 @@
       "venabili": {
         "port": 18796,
         "role": "Project Manager",
-        "modelTier": "claude",
+        "modelTier": "haiku",
         "division": "operations",
         "location": "vps-1",
         "soulPath": "~/.openclaw/agents/venabili/SOUL.md",
