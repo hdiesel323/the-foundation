@@ -1,0 +1,69 @@
+{
+  "schedule": {
+    "trigger_day": "sunday",
+    "trigger_time_utc": "14:00",
+    "trigger_time_local": "09:00",
+    "timezone": "America/New_York",
+    "agent": "mis",
+    "reviewer": "demerzel",
+    "delivery_channel": "telegram",
+    "telegram_channel": "@clawd_ceo"
+  },
+  "sections": {
+    "executive_summary": {
+      "enabled": true,
+      "max_length": 500,
+      "include": ["top_3_changes", "market_sentiment_shift", "recommended_actions"]
+    },
+    "competitive_changes": {
+      "enabled": true,
+      "sort_by": "significance",
+      "min_significance": 4,
+      "group_by": "competitor",
+      "include": [
+        "pricing_changes",
+        "new_products",
+        "strategic_announcements",
+        "partnership_announcements",
+        "hiring_signals"
+      ]
+    },
+    "market_trends": {
+      "enabled": true,
+      "include": [
+        "industry_news_summary",
+        "search_trend_changes",
+        "social_sentiment",
+        "regulatory_updates"
+      ]
+    },
+    "recommended_actions": {
+      "enabled": true,
+      "categories": [
+        "pricing_response",
+        "product_development",
+        "marketing_adjustment",
+        "partnership_opportunity",
+        "defensive_action"
+      ],
+      "priority_levels": ["immediate", "this_week", "this_month", "monitor"]
+    },
+    "score_summary": {
+      "enabled": true,
+      "include": [
+        "total_changes_detected",
+        "by_competitor",
+        "by_change_type",
+        "avg_significance",
+        "scan_coverage_pct"
+      ]
+    }
+  },
+  "distribution": {
+    "primary": "admin",
+    "cc_agents": ["seldon", "mallow", "magnifico"],
+    "format": "markdown",
+    "archive": true,
+    "archive_path": "agents/mis/workspace/digests/"
+  }
+}

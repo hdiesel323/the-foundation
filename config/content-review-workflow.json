@@ -1,0 +1,91 @@
+{
+  "pipeline": {
+    "stages": [
+      {
+        "order": 1,
+        "name": "draft",
+        "agent": "arkady",
+        "description": "Content writer creates initial draft from brief or calendar",
+        "auto_advance": false,
+        "approval_criteria": {
+          "word_count_met": true,
+          "seo_keywords_included": true,
+          "brand_voice_aligned": true,
+          "cta_present": true
+        }
+      },
+      {
+        "order": 2,
+        "name": "creative_review",
+        "agent": "magnifico",
+        "description": "Creative Director reviews for brand alignment, quality, and engagement",
+        "auto_advance": false,
+        "review_criteria": {
+          "brand_voice_score_min": 7,
+          "headline_quality": "compelling_and_clear",
+          "visual_direction": "specified",
+          "engagement_hooks": "present",
+          "cta_effectiveness": "strong"
+        },
+        "actions": {
+          "approve": "Advance to fact-check",
+          "revision_needed": "Return to arkady with specific notes",
+          "reject": "Send back to brief stage with creative direction"
+        },
+        "max_revision_rounds": 3
+      },
+      {
+        "order": 3,
+        "name": "fact_check",
+        "agent": "gaal",
+        "description": "Factual Critic verifies all claims, data, and references",
+        "auto_advance": false,
+        "review_criteria": {
+          "claims_verified": true,
+          "data_sourced": true,
+          "no_misleading_statements": true,
+          "legal_compliance": true,
+          "competitor_claims_fair": true
+        },
+        "actions": {
+          "approve": "Advance to publication",
+          "revision_needed": "Return to arkady with specific corrections",
+          "veto": "Block publication — factual issues found (VETO authority)"
+        }
+      },
+      {
+        "order": 4,
+        "name": "publish",
+        "agent": "seldon",
+        "description": "Seldon dispatches approved content to appropriate channels",
+        "auto_advance": true,
+        "publish_actions": {
+          "blog": "Deploy to CMS and social amplification",
+          "social": "Schedule via social management tool",
+          "email": "Queue in email platform",
+          "landing_page": "Deploy to website"
+        }
+      }
+    ],
+    "escalation": {
+      "revision_limit_exceeded": {
+        "action": "Escalate to Seldon for priority reassignment",
+        "threshold": 3
+      },
+      "deadline_at_risk": {
+        "action": "Notify admin via Telegram @clawd_ceo",
+        "warning_hours_before": 24
+      },
+      "creative_disagreement": {
+        "action": "Magnifico has final creative authority, Gaal has final factual authority",
+        "override": "Only Seldon can override with admin approval"
+      }
+    }
+  },
+  "tracking": {
+    "status_field": "review_status",
+    "statuses": ["draft", "in_review", "revision", "approved", "published", "rejected"],
+    "audit_log": true,
+    "notify_on_stage_change": true
+  }
+}

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# bd — Beads task DAG CLI shortcut
+# Delegates to scripts/bd.sh from the project root
+exec "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/scripts/bd.sh" "$@"

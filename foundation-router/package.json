@@ -1,0 +1,20 @@
+{
+  "name": "foundation-router",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "5-signal scoring engine for agent task routing",
+  "main": "scoring-engine.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.16.0",
+    "typescript": "^5.6.0"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "pg": "^8.18.0"
+  }
+}

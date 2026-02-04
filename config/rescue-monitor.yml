@@ -1,0 +1,20 @@
+# rescue-monitor.yml
+# Monitors the Main Gateway (port 18789) and takes over
+# Slack/Telegram bindings if it fails.
+# Runs as systemd service on port 19001.
+
+monitor:
+  target: http://localhost:18789/health
+  interval: 30s
+  timeout: 10s
+  failureThreshold: 3
+
+  onFailure:
+    - alert:
+        channel: slack
+        message: "ALERT: Main gateway down. Rescue bot taking over."
+    - takeover:
+        bindings: ["slack:#openclaw"]
+    - attempt_recovery:
+        command: "systemctl restart openclaw-main"
+        maxAttempts: 3

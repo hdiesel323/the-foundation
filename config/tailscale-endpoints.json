@@ -1,0 +1,29 @@
+{
+  "topology": {
+    "nodes": [
+      {
+        "hostname": "openclaw-mini",
+        "ip": "100.64.0.1",
+        "location": "Mac Mini",
+        "services": [
+          { "name": "seldon", "port": 18789, "endpoint": "100.64.0.1:18789" },
+          { "name": "rescue-bot", "port": 19001, "endpoint": "100.64.0.1:19001" }
+        ]
+      },
+      {
+        "hostname": "openclaw-vps",
+        "ip": "100.64.0.2",
+        "location": "Hetzner VPS",
+        "services": [
+          { "name": "daneel", "port": 18790, "endpoint": "100.64.0.2:18790" },
+          { "name": "hardin", "port": 18791, "endpoint": "100.64.0.2:18791" },
+          { "name": "magnifico", "port": 18792, "endpoint": "100.64.0.2:18792" },
+          { "name": "trader", "port": 18793, "endpoint": "100.64.0.2:18793" },
+          { "name": "gaal", "port": 18794, "endpoint": "100.64.0.2:18794" },
+          { "name": "preem", "port": 18797, "endpoint": "100.64.0.2:18797" },
+          { "name": "arkady", "port": 18798, "endpoint": "100.64.0.2:18798" }
+        ]
+      }
+    ]
+  }
+}

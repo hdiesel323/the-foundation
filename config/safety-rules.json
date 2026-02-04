@@ -1,0 +1,124 @@
+{
+  "safety_rules": {
+    "version": "1.0.0",
+    "description": "Operational safety rules enforced across all OpenClaw agents",
+
+    "destructive_commands": {
+      "banned": [
+        "rm -rf",
+        "rm -r",
+        "rm -fr",
+        "rmdir",
+        "shred",
+        "dd if=/dev/zero",
+        "mkfs",
+        "wipefs",
+        "git clean -fd",
+        "git reset --hard",
+        "docker system prune -a",
+        "DROP DATABASE",
+        "DROP TABLE",
+        "TRUNCATE TABLE",
+        "DELETE FROM"
+      ],
+      "alternatives": {
+        "rm -rf": "mv <path> /opt/openclaw/backups/trash/$(date +%Y%m%d_%H%M%S)/",
+        "rm -r": "mv <path> /opt/openclaw/backups/trash/$(date +%Y%m%d_%H%M%S)/",
+        "DROP TABLE": "ALTER TABLE <name> RENAME TO _archived_<name>_$(date +%Y%m%d)",
+        "DELETE FROM": "INSERT INTO <table>_archive SELECT * FROM <table> WHERE <condition>; DELETE FROM <table> WHERE <condition>"
+      },
+      "enforcement": "hard_block",
+      "escalation": "human_required"
+    },
+
+    "backup_before_action": {
+      "enabled": true,
+      "backup_dir": "/opt/openclaw/backups/",
+      "triggers": [
+        "file_overwrite",
+        "database_migration",
+        "config_change",
+        "schema_alteration",
+        "docker_compose_change",
+        "secret_rotation"
+      ],
+      "backup_retention_days": 30,
+      "format": "timestamped_copy",
+      "naming": "{original_name}_{YYYYMMDD_HHMMSS}.bak"
+    },
+
+    "protected_paths": {
+      "absolute_deny": [
+        "/",
+        "/bin",
+        "/sbin",
+        "/usr",
+        "/etc",
+        "/var",
+        "/boot",
+        "/root",
+        "/Users",
+        "/home"
+      ],
+      "write_protected": [
+        "/opt/openclaw/",
+        "/var/lib/postgresql/",
+        "/opt/openclaw/init-scripts/",
+        "/opt/openclaw/secrets/"
+      ],
+      "allowed_write_dirs": [
+        "/opt/openclaw/agents/",
+        "/opt/openclaw/memory/",
+        "/opt/openclaw/data/",
+        "/opt/openclaw/logs/",
+        "/opt/openclaw/backups/",
+        "/opt/openclaw/tmp/"
+      ],
+      "description": "Agents can only write to explicitly allowed directories. Root-level paths are always denied."
+    },
+
+    "consolidation_rules": {
+      "strategy": "copy_then_archive",
+      "description": "Consolidation always creates a copy first, then archives the original. Never delete directly.",
+      "steps": [
+        "1. Create backup copy at /opt/openclaw/backups/<category>/<timestamp>/",
+        "2. Verify backup integrity (checksum match)",
+        "3. Perform consolidation on working copy",
+        "4. Verify consolidated output",
+        "5. Move original to archive: /opt/openclaw/backups/archive/",
+        "6. Original remains in archive for 30 days before trash"
+      ],
+      "archive_retention_days": 30,
+      "trash_retention_days": 7,
+      "never_delete": [
+        "SOUL.md",
+        "MEMORY.md",
+        "DECISIONS.md",
+        "init-scripts/01-schema.sql",
+        "docker-compose.yml",
+        ".env"
+      ]
+    },
+
+    "rate_limits": {
+      "max_file_operations_per_minute": 100,
+      "max_db_writes_per_minute": 500,
+      "max_api_calls_per_minute": 60,
+      "max_docker_operations_per_hour": 10
+    },
+
+    "human_escalation": {
+      "required_for": [
+        "production_database_changes",
+        "secret_rotation",
+        "docker_compose_modifications",
+        "firewall_rule_changes",
+        "user_data_deletion",
+        "agent_deregistration",
+        "backup_restoration"
+      ],
+      "timeout_seconds": 300,
+      "default_action": "deny"
+    }
+  }
+}

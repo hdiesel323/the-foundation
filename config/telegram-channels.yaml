@@ -1,0 +1,365 @@
+# ============================================================
+# Telegram Channel Configuration
+#
+# Department channels, agent routing, and reaction protocol
+# for the OpenClaw multi-agent system.
+# ============================================================
+
+channels:
+  clawd_ceo:
+    name: "@clawd_ceo"
+    description: "CEO direct channel — human-to-Seldon primary interface"
+    type: private
+    division: command
+    primary_agent: seldon
+    purpose: "Direct commands, strategic decisions, escalations"
+    routing:
+      default_agent: seldon
+      escalation_target: human
+
+  clawd_apex:
+    name: "@clawd_apex"
+    description: "Executive briefings, cross-division coordination"
+    type: group
+    division: command
+    primary_agent: seldon
+    purpose: "Daily briefings, division reports, strategic updates"
+    members:
+      - seldon
+      - demerzel
+      - venabili
+    routing:
+      default_agent: seldon
+      mention_routing: true
+
+  clawd_ops:
+    name: "@clawd_ops"
+    description: "Operations and infrastructure alerts"
+    type: group
+    division: operations
+    primary_agent: daneel
+    purpose: "System health, deployments, incident response"
+    members:
+      - daneel
+      - hardin
+      - magnifico
+      - arkady
+    routing:
+      default_agent: daneel
+      alert_threshold: warning
+      mention_routing: true
+
+  clawd_revenue:
+    name: "@clawd_revenue"
+    description: "Commerce and revenue operations"
+    type: group
+    division: commerce
+    primary_agent: mallow
+    purpose: "Revenue tracking, pipeline updates, campaign performance, trading signals"
+    members:
+      - mallow
+      - preem
+      - riose
+      - trader
+    routing:
+      default_agent: mallow
+      mention_routing: true
+    alert_config:
+      revenue_alerts:
+        priority: P0
+        description: "Revenue behind pace, target missed, major deal lost"
+        notify: [mallow, seldon]
+      pipeline_updates:
+        priority: P1
+        description: "Stale leads, at-risk deals, pipeline velocity issues"
+        notify: [preem, mallow]
+      campaign_performance:
+        priority: P1
+        description: "ROAS drop, budget overspend, auto-pause triggers"
+        notify: [riose, mallow]
+      trading_signals:
+        priority: P0
+        description: "Stop-loss breach, daily loss limit, position alerts"
+        notify: [trader, seldon]
+    message_format:
+      prefix: "[{agent_name}]"
+      tag_agent: true
+
+  clawd_tech:
+    name: "@clawd_tech"
+    description: "Intelligence, research, and technical discussions"
+    type: group
+    division: intelligence
+    primary_agent: demerzel
+    purpose: "Research findings, analysis reports, technical decisions"
+    members:
+      - demerzel
+      - gaal
+      - mis
+      - amaryl
+    routing:
+      default_agent: demerzel
+      mention_routing: true
+
+# ============================================================
+# Reaction Protocol
+# Standard emoji reactions agents use to signal status
+# ============================================================
+reaction_protocol:
+  eye:
+    emoji: "👁"
+    meaning: "Seen — message acknowledged"
+    used_by: "Any agent upon reading a message"
+
+  check:
+    emoji: "✅"
+    meaning: "Working — task accepted and in progress"
+    used_by: "Agent that claims the task"
+
+  rocket:
+    emoji: "🚀"
+    meaning: "Complete — task finished successfully"
+    used_by: "Agent that completed the task"
+
+  warning:
+    emoji: "⚠️"
+    meaning: "Blocked — needs human input or external dependency"
+    used_by: "Agent encountering a blocker"
+
+  x:
+    emoji: "❌"
+    meaning: "Failed — task could not be completed"
+    used_by: "Agent reporting failure"
+
+  brain:
+    emoji: "🧠"
+    meaning: "Analyzing — deep analysis or research in progress"
+    used_by: "Intelligence division agents during research"
+
+  clipboard:
+    emoji: "📋"
+    meaning: "Review — output ready for human review"
+    used_by: "Agent requesting human approval or feedback"
+
+# ============================================================
+# Agent @mention routing
+# Maps @mentions to specific agent handlers
+# ============================================================
+mention_routing:
+  "@seldon": seldon
+  "@daneel": daneel
+  "@hardin": hardin
+  "@mallow": mallow
+  "@preem": preem
+  "@riose": riose
+  "@trader": trader
+  "@demerzel": demerzel
+  "@gaal": gaal
+  "@mis": mis
+  "@amaryl": amaryl
+  "@magnifico": magnifico
+  "@venabili": venabili
+  "@arkady": arkady
+
+# ============================================================
+# Message formatting
+# ============================================================
+formatting:
+  agent_prefix: "[{agent_name}]"
+  timestamp_format: "HH:mm"
+  max_message_length: 4096
+  code_block_language: "auto"
+  status_update_template: |
+    [{agent}] {status_emoji} {summary}
+    Division: {division}
+    Task: {task_id}
+
+# ============================================================
+# Daily Standup Automation
+# Scheduled department standups with CEO brief aggregation
+# ============================================================
+daily_standup:
+  enabled: true
+  timezone: "UTC"
+
+  department_standups:
+    ops:
+      channel: clawd_ops
+      schedule: "0 9 * * *"
+      prompt: "Report system health, active incidents, and planned maintenance."
+      participants:
+        - daneel
+        - hardin
+        - magnifico
+        - arkady
+      format: |
+        **{division} Standup — {date}**
+        {agent_reports}
+
+    revenue:
+      channel: clawd_revenue
+      schedule: "0 9 * * *"
+      prompt: "Report active deals, revenue pipeline, and client deliverables."
+      participants:
+        - mallow
+        - preem
+        - riose
+        - trader
+      format: |
+        **{division} Standup — {date}**
+        {agent_reports}
+
+    tech:
+      channel: clawd_tech
+      schedule: "0 9 * * *"
+      prompt: "Report research progress, analysis findings, and intelligence updates."
+      participants:
+        - demerzel
+        - gaal
+        - mis
+        - amaryl
+      format: |
+        **{division} Standup — {date}**
+        {agent_reports}
+
+  ceo_brief:
+    channel: clawd_ceo
+    schedule: "30 9 * * *"
+    aggregated_from:
+      - ops
+      - revenue
+      - tech
+    presenter: seldon
+    format: |
+      **CEO Morning Brief — {date}**
+
+      **Operations:** {ops_summary}
+      **Revenue:** {revenue_summary}
+      **Intelligence:** {tech_summary}
+
+      **Priority Items:** {priority_items}
+      **Blocked:** {blocked_items}
+
+# ============================================================
+# Command State Machine
+# Tracks lifecycle of commands from receipt to completion
+# ============================================================
+command_state_machine:
+  states:
+    new:
+      description: "Command received, not yet routed"
+      transitions:
+        - routed
+      reaction: eye
+
+    routed:
+      description: "Command routed to target agent"
+      transitions:
+        - acknowledged
+      timeout_seconds: 30
+      timeout_escalation: seldon
+
+    acknowledged:
+      description: "Agent acknowledged receipt"
+      transitions:
+        - in_progress
+      reaction: eye
+
+    in_progress:
+      description: "Agent actively working on command"
+      transitions:
+        - review
+        - complete
+        - blocked
+        - failed
+      reaction: check
+
+    review:
+      description: "Output ready for human review"
+      transitions:
+        - complete
+        - in_progress
+      reaction: clipboard
+
+    blocked:
+      description: "Cannot proceed — needs human input or external dependency"
+      transitions:
+        - in_progress
+        - failed
+      reaction: warning
+      auto_escalate: true
+      escalation_target: seldon
+
+    failed:
+      description: "Command could not be completed"
+      transitions:
+        - new
+      reaction: x
+      notify: human
+
+    complete:
+      description: "Command successfully completed"
+      transitions: []
+      reaction: rocket
+
+  persistence:
+    file: "commands/state_log.json"
+    format: "jsonl"
+    retention_days: 90
+
+# ============================================================
+# Intent Detection for Routing
+# Keywords that determine which agent archetype handles a command
+# ============================================================
+intent_detection:
+  commander:
+    description: "Project management, coordination, operations"
+    keywords:
+      - project
+      - ops
+      - deploy
+      - coordinate
+      - manage
+      - plan
+      - schedule
+      - assign
+      - delegate
+      - status
+      - infrastructure
+    routes_to: seldon
+
+  closer:
+    description: "Revenue, sales, client work, commerce"
+    keywords:
+      - revenue
+      - sales
+      - invoice
+      - proposal
+      - client
+      - deal
+      - pricing
+      - contract
+      - payment
+      - money
+      - quote
+    routes_to: mallow
+
+  architect:
+    description: "Technical decisions, research, analysis"
+    keywords:
+      - technical
+      - code
+      - build
+      - architecture
+      - research
+      - analyze
+      - debug
+      - design
+      - implement
+      - api
+      - database
+    routes_to: demerzel
+
+  default:
+    description: "Unmatched intents route to orchestrator"
+    routes_to: seldon

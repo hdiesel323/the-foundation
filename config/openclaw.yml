@@ -1,0 +1,72 @@
+# config/openclaw.yml
+# OpenClaw v2 — Memory Configuration (PR #4669)
+# This is the most critical configuration. Without it, memory degrades exactly like v1.
+
+memory:
+  # Hybrid Search (BM25 + Vector, 70/30 ratio)
+  search:
+    enabled: true
+    hybridMode: true
+    vectorWeight: 0.7
+    textWeight: 0.3
+    expandedCandidates: true
+
+  # Embedding Cache (prevents re-embedding unchanged text)
+  embeddingCache:
+    enabled: true
+    backend: sqlite
+    path: /app/data/embedding_cache.db
+    ttl: 604800  # 7 days
+
+  # Pre-Compaction Memory Flush (THE FIX — PR #4669)
+  # Writes durable notes BEFORE context truncation
+  compaction:
+    preFlushEnabled: true
+    flushTriggerThreshold: 0.75
+    silentAgentTurns: true
+    memoryFlush:
+      enabled: true  # Ariel's exact field name for the pre-flush fix
+
+  # Session Memory Search (Ariel's exact field name)
+  memorySearch:
+    experimental:
+      sessionMemory:
+        enabled: true
+        sources:
+          - memory
+          - sessions
+
+  # Session Transcript Search
+  transcripts:
+    indexEnabled: true
+    indexThreshold: 100
+    searchableHistory: 90  # days
+
+# Top-level compaction alias (Ariel's exact field name for pre-flush fix)
+# This is the same setting as memory.compaction.preFlushEnabled — both must be true
+compaction:
+  memoryFlush:
+    enabled: true
+
+# Top-level memorySearch alias (Ariel's exact field name)
+# Same setting as memory.memorySearch.experimental.sessionMemory
+memorySearch:
+  experimental:
+    sessionMemory: true
+    sources:
+      - memory
+      - sessions
+
+# Session management
+session:
+  autoCompact: true
+  compactThreshold: 0.8
+  keepRecentMessages: 20
+  reserveTokens: 4000
+
+# memory-lancedb plugin for auto-recall
+plugins:
+  memory-lancedb:
+    enabled: true
+    autoRecall: true
+    autoCapture: true

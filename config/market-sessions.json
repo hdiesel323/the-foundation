@@ -1,0 +1,81 @@
+{
+  "sessions": {
+    "asia": {
+      "label": "Asia Session Close",
+      "markets": ["Nikkei 225", "Hang Seng", "Shanghai Composite", "ASX 200", "KOSPI"],
+      "close_time_utc": "08:00",
+      "summary_trigger_utc": "08:15",
+      "timezone_display": "Asia/Tokyo",
+      "indices": ["^N225", "^HSI", "000001.SS", "^AXJO", "^KS11"],
+      "fx_pairs": ["USD/JPY", "AUD/USD", "USD/CNH"],
+      "summary_includes": [
+        "index_performance",
+        "portfolio_impact",
+        "notable_movers",
+        "overnight_gap_risk",
+        "fx_impact"
+      ]
+    },
+    "europe": {
+      "label": "Europe Session Close",
+      "markets": ["FTSE 100", "DAX", "CAC 40", "Euro Stoxx 50", "SMI"],
+      "close_time_utc": "16:30",
+      "summary_trigger_utc": "16:45",
+      "timezone_display": "Europe/London",
+      "indices": ["^FTSE", "^GDAXI", "^FCHI", "^STOXX50E", "^SSMI"],
+      "fx_pairs": ["EUR/USD", "GBP/USD", "EUR/GBP"],
+      "summary_includes": [
+        "index_performance",
+        "portfolio_impact",
+        "notable_movers",
+        "sector_rotation",
+        "fx_impact"
+      ]
+    },
+    "us_premarket": {
+      "label": "US Pre-Market",
+      "markets": ["S&P 500 Futures", "NASDAQ Futures", "Dow Futures"],
+      "open_time_utc": "13:30",
+      "summary_trigger_utc": "13:00",
+      "timezone_display": "America/New_York",
+      "indices": ["ES=F", "NQ=F", "YM=F"],
+      "summary_includes": [
+        "futures_direction",
+        "overnight_gap",
+        "earnings_premarket",
+        "economic_data_releases",
+        "key_levels"
+      ]
+    },
+    "us_close": {
+      "label": "US Market Close",
+      "markets": ["S&P 500", "NASDAQ", "Dow Jones", "Russell 2000"],
+      "close_time_utc": "21:00",
+      "summary_trigger_utc": "21:15",
+      "timezone_display": "America/New_York",
+      "indices": ["^GSPC", "^IXIC", "^DJI", "^RUT"],
+      "fx_pairs": ["DXY", "EUR/USD", "USD/JPY"],
+      "summary_includes": [
+        "index_performance",
+        "portfolio_impact",
+        "daily_pnl",
+        "notable_movers",
+        "sector_performance",
+        "volume_analysis",
+        "after_hours_earnings"
+      ]
+    }
+  },
+  "delivery": {
+    "channel": "telegram",
+    "telegram_channel": "@clawd_tech",
+    "format": "markdown",
+    "include_portfolio_positions": true,
+    "include_watchlist": true
+  },
+  "portfolio_impact": {
+    "alert_threshold_pct": 1.0,
+    "currency": "USD",
+    "include_crypto": true
+  }
+}

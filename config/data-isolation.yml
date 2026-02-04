@@ -1,0 +1,34 @@
+isolation:
+  sensitive_patterns:
+    - bank_account
+    - ssn
+    - credit_card
+    - api_key
+    - password
+    - auth_token
+    - private_key
+    - secret_key
+
+  summarization_rules:
+    bank_balance:
+      template: "Account ending in {last4} has balance {range}"
+      fields_redacted:
+        - full_account_number
+        - routing_number
+    email_content:
+      template: "Email from {sender} re: {subject} ({word_count} words)"
+      fields_redacted:
+        - body
+        - attachments
+    calendar_event:
+      template: "Event: {title} on {date} at {time} ({duration})"
+      fields_redacted:
+        - attendee_emails
+        - meeting_link
+        - notes
+
+  audit:
+    log_all_access: true
+    log_summarization: true
+    alert_on_bypass_attempt: true
+    retention_days: 90

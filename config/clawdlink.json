@@ -1,0 +1,104 @@
+{
+  "clawdlink": {
+    "version": "0.1.0",
+    "description": "Agent-to-agent encrypted messaging configuration",
+
+    "identity_path_template": "agents/{agent_id}/clawdlink/identity.json",
+    "relay_dir": "/opt/openclaw/data/clawdlink/relay",
+
+    "key_exchange": {
+      "algorithm": "X25519",
+      "description": "Derives shared secrets between agent pairs for symmetric encryption"
+    },
+
+    "encryption": {
+      "algorithm": "XChaCha20-Poly1305",
+      "library": "tweetnacl",
+      "nonce_bytes": 24
+    },
+
+    "signatures": {
+      "algorithm": "Ed25519",
+      "description": "All messages signed before encryption for authenticity"
+    },
+
+    "message_policy": {
+      "ttl_days": 7,
+      "auto_expiration": true,
+      "max_message_size_bytes": 65536
+    },
+
+    "agents": {
+      "seldon": {
+        "quiet_hours": null,
+        "delivery_preference": "immediate",
+        "priority": "critical"
+      },
+      "daneel": {
+        "quiet_hours": null,
+        "delivery_preference": "immediate",
+        "priority": "high"
+      },
+      "hardin": {
+        "quiet_hours": null,
+        "delivery_preference": "immediate",
+        "priority": "high"
+      },
+      "mallow": {
+        "quiet_hours": "22:00-08:00",
+        "delivery_preference": "immediate",
+        "priority": "standard"
+      },
+      "preem": {
+        "quiet_hours": "22:00-08:00",
+        "delivery_preference": "immediate",
+        "priority": "standard"
+      },
+      "riose": {
+        "quiet_hours": "22:00-08:00",
+        "delivery_preference": "immediate",
+        "priority": "standard"
+      },
+      "trader": {
+        "quiet_hours": "23:00-07:00",
+        "delivery_preference": "immediate",
+        "priority": "standard"
+      },
+      "demerzel": {
+        "quiet_hours": "01:00-06:00",
+        "delivery_preference": "immediate",
+        "priority": "high"
+      },
+      "gaal": {
+        "quiet_hours": "22:00-08:00",
+        "delivery_preference": "batch",
+        "priority": "standard"
+      },
+      "mis": {
+        "quiet_hours": "22:00-08:00",
+        "delivery_preference": "batch",
+        "priority": "standard"
+      },
+      "amaryl": {
+        "quiet_hours": "22:00-08:00",
+        "delivery_preference": "batch",
+        "priority": "standard"
+      },
+      "magnifico": {
+        "quiet_hours": "23:00-07:00",
+        "delivery_preference": "immediate",
+        "priority": "standard"
+      },
+      "venabili": {
+        "quiet_hours": "22:00-08:00",
+        "delivery_preference": "immediate",
+        "priority": "standard"
+      },
+      "arkady": {
+        "quiet_hours": "22:00-08:00",
+        "delivery_preference": "batch",
+        "priority": "standard"
+      }
+    }
+  }
+}

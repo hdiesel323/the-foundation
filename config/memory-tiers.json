@@ -1,0 +1,108 @@
+{
+  "memory_tiers": {
+    "L1": {
+      "name": "Hot",
+      "description": "Always loaded at session start. Core identity and context files.",
+      "storage": "filesystem",
+      "latency": "<1ms",
+      "sources": [
+        "SOUL.md",
+        "AGENTS.md",
+        "USER.md",
+        "MEMORY.md",
+        "DECISIONS.md"
+      ],
+      "load_strategy": "eager",
+      "ttl": null
+    },
+    "L2": {
+      "name": "Warm",
+      "description": "Business knowledge via graph and document search. Queried on demand.",
+      "storage": "hybrid",
+      "latency": "<100ms",
+      "sources": [
+        {
+          "name": "GraphMem",
+          "type": "graph",
+          "description": "Graph-based knowledge (entities, relationships, triples)",
+          "backend": "postgresql",
+          "query_types": ["entity_lookup", "relationship_traversal", "triple_search"]
+        },
+        {
+          "name": "QMD",
+          "type": "document",
+          "description": "Local hybrid search (BM25 + vector) for business documents",
+          "backend": "lancedb",
+          "query_types": ["keyword_search", "semantic_search", "hybrid_search"]
+        }
+      ],
+      "load_strategy": "on_demand",
+      "ttl": 604800
+    },
+    "L3": {
+      "name": "Business Intel",
+      "description": "PostgreSQL structured data for operational queries.",
+      "storage": "postgresql",
+      "latency": "<50ms",
+      "sources": [
+        "preferences",
+        "facts",
+        "tasks",
+        "conversations",
+        "insights",
+        "projects",
+        "routing_decisions",
+        "activities"
+      ],
+      "query_types": ["sql", "structured_lookup", "aggregate"],
+      "load_strategy": "on_demand",
+      "ttl": null
+    },
+    "L4": {
+      "name": "Archive",
+      "description": "Cloud document sync for long-term storage and external knowledge.",
+      "storage": "cloud",
+      "latency": "<500ms",
+      "sources": [
+        {
+          "name": "SuperMemory",
+          "type": "cloud_sync",
+          "status": "future",
+          "description": "Cloud-synced document archive for cross-session persistence"
+        },
+        {
+          "name": "TranscriptArchive",
+          "type": "searchable_history",
+          "description": "90-day searchable conversation transcripts",
+          "backend": "postgresql"
+        }
+      ],
+      "load_strategy": "on_demand",
+      "ttl": 7776000
+    },
+    "L5": {
+      "name": "Code Structure",
+      "description": "Codebase knowledge via Cartographer mapping.",
+      "storage": "filesystem",
+      "latency": "<200ms",
+      "sources": [
+        {
+          "name": "Cartographer",
+          "type": "codebase_map",
+          "description": "Structural analysis of code: files, functions, dependencies, patterns",
+          "output": "docs/CODEBASE_MAP.md"
+        }
+      ],
+      "load_strategy": "on_demand",
+      "ttl": 86400
+    }
+  },
+  "query_routing": {
+    "identity_questions": "L1",
+    "business_knowledge": "L2",
+    "operational_data": "L3",
+    "historical_context": "L4",
+    "code_questions": "L5",
+    "fallback": "L3"
+  }
+}

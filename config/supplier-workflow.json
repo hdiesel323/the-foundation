@@ -1,0 +1,128 @@
+{
+  "stages": {
+    "sourcing": {
+      "order": 1,
+      "label": "Sourcing & Discovery",
+      "description": "Identify potential suppliers based on product requirements",
+      "actions": [
+        "Search Alibaba, Global Sources, and industry directories",
+        "Check supplier ratings, certifications, and trade assurance",
+        "Verify MOQ, lead time, and production capacity",
+        "Compare 3-5 suppliers per product category"
+      ],
+      "criteria": {
+        "min_supplier_rating": 4.0,
+        "required_certs": ["ISO9001", "CE", "FCC", "RoHS"],
+        "max_lead_time_days": 30,
+        "preferred_regions": ["China-Guangdong", "China-Zhejiang", "Taiwan"]
+      },
+      "escalation": {
+        "if_no_supplier_found": "Expand search to trade shows and agent networks",
+        "timeout_days": 7
+      },
+      "templates": {
+        "initial_inquiry": "Hi, I'm sourcing {{product_type}} for our brand. Could you provide: (1) product catalog with specs, (2) MOQ and pricing tiers, (3) lead time for samples and bulk, (4) certifications available. Thank you."
+      }
+    },
+    "sample_request": {
+      "order": 2,
+      "label": "Sample Request & Evaluation",
+      "description": "Request and evaluate product samples from shortlisted suppliers",
+      "actions": [
+        "Request 2-3 samples per shortlisted supplier",
+        "Specify exact requirements: color temp range, CRI, build quality",
+        "Track sample shipment and delivery",
+        "Document sample costs and terms"
+      ],
+      "criteria": {
+        "max_sample_cost": 200,
+        "max_sample_lead_time_days": 14,
+        "samples_per_supplier": 3
+      },
+      "escalation": {
+        "if_sample_delayed": "Contact supplier for tracking update after 10 days",
+        "if_sample_fails": "Request replacement or move to next supplier"
+      }
+    },
+    "evaluation": {
+      "order": 3,
+      "label": "Evaluation & Scoring",
+      "description": "Evaluate samples against quality standards and score suppliers",
+      "actions": [
+        "Test product against specifications (color accuracy, build, heat)",
+        "Score supplier on evaluation matrix",
+        "Compare all evaluated suppliers side-by-side",
+        "Select top 1-2 suppliers for negotiation"
+      ],
+      "scoring": {
+        "price": { "weight": 25, "description": "Unit cost competitiveness" },
+        "quality": { "weight": 25, "description": "Build quality, CRI accuracy, durability" },
+        "communication": { "weight": 15, "description": "Response time, English proficiency, proactiveness" },
+        "lead_time": { "weight": 15, "description": "Production and shipping speed" },
+        "moq": { "weight": 10, "description": "Minimum order flexibility" },
+        "terms": { "weight": 10, "description": "Payment terms, warranty, return policy" }
+      },
+      "criteria": {
+        "min_overall_score": 70,
+        "min_quality_score": 80,
+        "pass_fail_checks": ["certification_valid", "sample_matches_spec", "communication_responsive"]
+      }
+    },
+    "negotiation": {
+      "order": 4,
+      "label": "Negotiation & Terms",
+      "description": "Negotiate pricing, terms, and finalize supplier agreement",
+      "actions": [
+        "Negotiate unit price based on volume tiers",
+        "Agree on payment terms (30% deposit, 70% before shipment typical)",
+        "Confirm quality control process and inspection rights",
+        "Agree on packaging, labeling, and branding requirements",
+        "Establish defect rate tolerance and replacement policy"
+      ],
+      "criteria": {
+        "target_margin_pct": 65,
+        "max_deposit_pct": 30,
+        "defect_tolerance_pct": 2,
+        "inspection_rights": "pre_shipment_required"
+      },
+      "escalation": {
+        "if_price_too_high": "Counter with volume commitment or multi-product bundle",
+        "if_terms_unacceptable": "Escalate to alternative supplier or negotiate split terms"
+      },
+      "templates": {
+        "price_counter": "Thank you for the quote. Based on our volume projection of {{qty}} units/month, we'd like to propose {{target_price}} per unit. We can commit to a {{months}}-month purchase agreement."
+      }
+    },
+    "purchase_order": {
+      "order": 5,
+      "label": "Purchase Order & Fulfillment",
+      "description": "Issue PO, track production, arrange inspection and shipment",
+      "actions": [
+        "Issue formal purchase order with all agreed terms",
+        "Process deposit payment",
+        "Schedule pre-shipment inspection (PSI)",
+        "Arrange freight forwarding and customs clearance",
+        "Track shipment to warehouse",
+        "Receive and verify inventory count"
+      ],
+      "criteria": {
+        "psi_required": true,
+        "insurance_required": true,
+        "shipping_method": "sea_freight_standard",
+        "customs_broker": "freight_forwarder_managed"
+      },
+      "escalation": {
+        "if_psi_fails": "Hold shipment, request rework or replacement",
+        "if_shipment_delayed": "Contact supplier and freight forwarder for updated ETA",
+        "timeout_days": 45
+      }
+    }
+  },
+  "general_rules": {
+    "always_get_3_quotes": true,
+    "never_pay_100_upfront": true,
+    "document_all_communications": true,
+    "use_trade_assurance": true,
+    "verify_business_license": true
+  }
+}

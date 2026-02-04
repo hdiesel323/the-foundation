@@ -1,0 +1,2028 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Command Center - OpenClaw v2</title>
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            :root {
+                --bg-primary: #0f1117;
+                --bg-secondary: #161822;
+                --bg-card: #1a1d2e;
+                --bg-card-hover: #1e2240;
+                --bg-sidebar: #0c0e16;
+                --border: #252940;
+                --border-active: #4f46e5;
+                --text-primary: #e2e8f0;
+                --text-secondary: #8892b0;
+                --text-muted: #5a6178;
+                --accent: #4f46e5;
+                --accent-hover: #6366f1;
+                --green: #22c55e;
+                --yellow: #eab308;
+                --red: #ef4444;
+                --orange: #f97316;
+                --blue: #3b82f6;
+                --purple: #a855f7;
+                --pink: #ec4899;
+                --cyan: #06b6d4;
+                --sidebar-width: 220px;
+            }
+
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    sans-serif;
+                background: var(--bg-primary);
+                color: var(--text-primary);
+                min-height: 100vh;
+                display: flex;
+            }
+
+            /* Sidebar */
+            .sidebar {
+                width: var(--sidebar-width);
+                min-height: 100vh;
+                background: var(--bg-sidebar);
+                border-right: 1px solid var(--border);
+                display: flex;
+                flex-direction: column;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 100;
+            }
+
+            .sidebar-header {
+                padding: 20px 16px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .sidebar-logo {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+                background: var(--accent);
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+            }
+
+            .logo-text h2 {
+                font-size: 14px;
+                font-weight: 600;
+                color: var(--text-primary);
+            }
+
+            .logo-text span {
+                font-size: 11px;
+                color: var(--text-muted);
+            }
+
+            .sidebar-nav {
+                flex: 1;
+                padding: 12px 8px;
+            }
+
+            .nav-item {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 12px;
+                border-radius: 6px;
+                color: var(--text-secondary);
+                cursor: pointer;
+                font-size: 13px;
+                transition: all 0.15s;
+                margin-bottom: 2px;
+            }
+
+            .nav-item:hover {
+                background: rgba(79, 70, 229, 0.08);
+                color: var(--text-primary);
+            }
+
+            .nav-item.active {
+                background: rgba(79, 70, 229, 0.15);
+                color: var(--accent);
+            }
+
+            .nav-item svg {
+                width: 18px;
+                height: 18px;
+                flex-shrink: 0;
+            }
+
+            .sidebar-footer {
+                padding: 12px 8px;
+                border-top: 1px solid var(--border);
+            }
+
+            /* Main */
+            .main {
+                margin-left: var(--sidebar-width);
+                flex: 1;
+                min-height: 100vh;
+            }
+
+            /* Top bar */
+            .topbar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 28px;
+                border-bottom: 1px solid var(--border);
+                background: var(--bg-secondary);
+            }
+
+            .topbar h1 {
+                font-size: 18px;
+                font-weight: 600;
+            }
+
+            .topbar-right {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .topbar-search {
+                background: var(--bg-primary);
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                padding: 7px 14px 7px 34px;
+                color: var(--text-primary);
+                font-size: 13px;
+                width: 240px;
+                outline: none;
+            }
+
+            .topbar-search:focus {
+                border-color: var(--accent);
+            }
+
+            .topbar-search-wrap {
+                position: relative;
+            }
+
+            .topbar-search-wrap svg {
+                position: absolute;
+                left: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 16px;
+                height: 16px;
+                color: var(--text-muted);
+            }
+
+            .notification-btn {
+                width: 36px;
+                height: 36px;
+                background: none;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                color: var(--text-secondary);
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: var(--accent);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 14px;
+                cursor: pointer;
+            }
+
+            /* Content */
+            .content {
+                padding: 24px 28px;
+            }
+
+            /* Page sections */
+            .page {
+                display: none;
+            }
+            .page.active {
+                display: block;
+            }
+
+            /* Stats row */
+            .stats-row {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 16px;
+                margin-bottom: 24px;
+            }
+
+            .stat-card {
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 18px 20px;
+                transition: border-color 0.15s;
+            }
+
+            .stat-card:hover {
+                border-color: var(--border-active);
+            }
+
+            .stat-label {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 12px;
+                color: var(--text-muted);
+                margin-bottom: 6px;
+            }
+
+            .stat-label .dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+            }
+
+            .stat-value {
+                font-size: 32px;
+                font-weight: 700;
+            }
+
+            /* Filter pills */
+            .filter-bar {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 24px;
+                flex-wrap: wrap;
+            }
+
+            .filter-search {
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                padding: 8px 14px;
+                color: var(--text-primary);
+                font-size: 13px;
+                width: 220px;
+                outline: none;
+                margin-right: 8px;
+            }
+
+            .filter-search:focus {
+                border-color: var(--accent);
+            }
+
+            .pill {
+                padding: 6px 14px;
+                border-radius: 16px;
+                font-size: 12px;
+                border: 1px solid var(--border);
+                background: transparent;
+                color: var(--text-secondary);
+                cursor: pointer;
+                transition: all 0.15s;
+            }
+
+            .pill:hover,
+            .pill.active {
+                background: var(--accent);
+                border-color: var(--accent);
+                color: white;
+            }
+
+            /* Division section */
+            .division-section {
+                margin-bottom: 32px;
+            }
+
+            .division-header {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 14px;
+            }
+
+            .division-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+            }
+
+            .division-name {
+                font-size: 13px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+            .division-count {
+                font-size: 11px;
+                color: var(--text-muted);
+                background: var(--bg-card);
+                padding: 2px 8px;
+                border-radius: 10px;
+            }
+
+            /* Agent grid */
+            .agent-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+                gap: 14px;
+            }
+
+            .agent-card {
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 16px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .agent-card:hover {
+                border-color: var(--border-active);
+                background: var(--bg-card-hover);
+                transform: translateY(-1px);
+            }
+
+            .agent-card-top {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 6px;
+            }
+
+            .agent-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                font-weight: 700;
+                flex-shrink: 0;
+            }
+
+            .agent-info {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .agent-name-row {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .agent-name {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .status-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+
+            .status-dot.online {
+                background: var(--green);
+                box-shadow: 0 0 6px rgba(34, 197, 94, 0.4);
+            }
+            .status-dot.idle {
+                background: var(--yellow);
+                box-shadow: 0 0 6px rgba(234, 179, 8, 0.4);
+            }
+            .status-dot.offline {
+                background: var(--red);
+                box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+            }
+
+            .agent-role {
+                font-size: 12px;
+                color: var(--text-muted);
+            }
+
+            .agent-desc {
+                font-size: 12px;
+                color: var(--text-secondary);
+                margin-top: 4px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .agent-port {
+                font-size: 10px;
+                color: var(--text-muted);
+                margin-top: 6px;
+            }
+
+            /* Agent expanded */
+            .agent-details {
+                display: none;
+                margin-top: 12px;
+                padding-top: 12px;
+                border-top: 1px solid var(--border);
+            }
+
+            .agent-card.expanded .agent-details {
+                display: block;
+            }
+
+            .detail-section {
+                margin-bottom: 10px;
+            }
+
+            .detail-label {
+                font-size: 10px;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                color: var(--text-muted);
+                margin-bottom: 4px;
+            }
+
+            .detail-tags {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+
+            .tag {
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 11px;
+                background: rgba(79, 70, 229, 0.12);
+                color: var(--accent);
+                border: 1px solid rgba(79, 70, 229, 0.2);
+            }
+
+            .tag.deny {
+                background: rgba(239, 68, 68, 0.1);
+                color: var(--red);
+                border-color: rgba(239, 68, 68, 0.2);
+            }
+
+            .tag.veto {
+                background: rgba(249, 115, 22, 0.1);
+                color: var(--orange);
+                border-color: rgba(249, 115, 22, 0.2);
+            }
+
+            .detail-text {
+                font-size: 12px;
+                color: var(--text-secondary);
+            }
+
+            /* Dashboard page */
+            .health-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+
+            .health-card {
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                padding: 14px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .health-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+
+            .health-name {
+                font-size: 13px;
+                font-weight: 500;
+            }
+            .health-port {
+                font-size: 11px;
+                color: var(--text-muted);
+                margin-left: auto;
+            }
+
+            /* Section headings */
+            .section-title {
+                font-size: 14px;
+                font-weight: 600;
+                margin-bottom: 14px;
+                color: var(--text-primary);
+            }
+
+            /* Handoff/task list */
+            .item-list {
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                overflow: hidden;
+                margin-bottom: 24px;
+            }
+
+            .item-row {
+                display: flex;
+                align-items: center;
+                padding: 12px 16px;
+                border-bottom: 1px solid var(--border);
+                font-size: 13px;
+                gap: 12px;
+            }
+
+            .item-row:last-child {
+                border-bottom: none;
+            }
+
+            .item-from,
+            .item-to {
+                font-weight: 500;
+                min-width: 70px;
+            }
+
+            .item-arrow {
+                color: var(--text-muted);
+            }
+
+            .item-context {
+                flex: 1;
+                color: var(--text-secondary);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .item-status {
+                font-size: 11px;
+                padding: 2px 8px;
+                border-radius: 4px;
+            }
+
+            .item-status.pending {
+                background: rgba(234, 179, 8, 0.1);
+                color: var(--yellow);
+            }
+
+            .item-status.completed {
+                background: rgba(34, 197, 94, 0.1);
+                color: var(--green);
+            }
+
+            .item-status.in_progress {
+                background: rgba(59, 130, 246, 0.1);
+                color: var(--accent);
+            }
+
+            .item-status.failed {
+                background: rgba(239, 68, 68, 0.1);
+                color: var(--red);
+            }
+
+            .item-status.awaiting_approval {
+                background: rgba(168, 85, 247, 0.15);
+                color: #a855f7;
+                animation: pulse-glow 2s ease-in-out infinite;
+            }
+
+            .item-status.cancelled {
+                background: rgba(100, 116, 139, 0.1);
+                color: var(--text-muted);
+                text-decoration: line-through;
+            }
+
+            @keyframes pulse-glow {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.6;
+                }
+            }
+
+            .task-row {
+                display: flex;
+                align-items: center;
+                padding: 10px 16px;
+                border-bottom: 1px solid var(--border);
+                font-size: 13px;
+                gap: 10px;
+            }
+
+            .task-row:last-child {
+                border-bottom: none;
+            }
+
+            .task-priority {
+                font-size: 10px;
+                font-weight: 700;
+                padding: 2px 6px;
+                border-radius: 3px;
+                min-width: 24px;
+                text-align: center;
+            }
+
+            .task-priority.p1 {
+                background: rgba(239, 68, 68, 0.15);
+                color: var(--red);
+            }
+            .task-priority.p2 {
+                background: rgba(234, 179, 8, 0.15);
+                color: var(--yellow);
+            }
+            .task-priority.p5 {
+                background: rgba(59, 130, 246, 0.1);
+                color: var(--accent);
+            }
+            .task-priority.p8 {
+                background: rgba(100, 116, 139, 0.1);
+                color: var(--text-secondary);
+            }
+
+            .task-name {
+                flex: 1;
+                font-weight: 500;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .task-agent {
+                font-size: 12px;
+                color: var(--text-secondary);
+                min-width: 60px;
+            }
+
+            .task-discord-link {
+                font-size: 11px;
+                color: #5865f2;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                opacity: 0.8;
+                transition: opacity 0.15s;
+            }
+
+            .task-discord-link:hover {
+                opacity: 1;
+            }
+
+            .task-participants {
+                font-size: 11px;
+                color: var(--text-muted);
+            }
+
+            .empty-state {
+                padding: 32px;
+                text-align: center;
+                color: var(--text-muted);
+                font-size: 13px;
+            }
+
+            /* Settings page */
+            .settings-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 16px;
+            }
+
+            .settings-card {
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                padding: 20px;
+            }
+
+            .settings-card h3 {
+                font-size: 14px;
+                font-weight: 600;
+                margin-bottom: 12px;
+            }
+
+            .settings-row {
+                display: flex;
+                justify-content: space-between;
+                padding: 6px 0;
+                font-size: 13px;
+            }
+
+            .settings-row .label {
+                color: var(--text-secondary);
+            }
+            .settings-row .value {
+                color: var(--text-primary);
+                font-weight: 500;
+            }
+
+            /* Refresh indicator */
+            .refresh-indicator {
+                font-size: 11px;
+                color: var(--text-muted);
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .pulse {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: var(--green);
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.3;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="logo-icon">&#9670;</div>
+                    <div class="logo-text">
+                        <h2>Command Center</h2>
+                        <span>Operations Hub</span>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-nav">
+                <div
+                    class="nav-item active"
+                    data-page="dashboard"
+                    onclick="switchPage('dashboard')"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                    </svg>
+                    Dashboard
+                </div>
+                <div
+                    class="nav-item"
+                    data-page="team"
+                    onclick="switchPage('team')"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                    Team
+                </div>
+                <div
+                    class="nav-item"
+                    data-page="settings"
+                    onclick="switchPage('settings')"
+                >
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <circle cx="12" cy="12" r="3" />
+                        <path
+                            d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                        />
+                    </svg>
+                    Settings
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <div class="refresh-indicator">
+                    <span class="pulse"></span>
+                    <span id="last-refresh">Live</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main content -->
+        <div class="main">
+            <!-- Top bar -->
+            <div class="topbar">
+                <h1 id="page-title">Dashboard</h1>
+                <div class="topbar-right">
+                    <div class="topbar-search-wrap">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg>
+                        <input
+                            type="text"
+                            class="topbar-search"
+                            placeholder="Search..."
+                            id="global-search"
+                            oninput="handleSearch()"
+                        />
+                    </div>
+                    <button class="notification-btn" title="Notifications">
+                        <svg
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"
+                            />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                    </button>
+                    <div class="avatar" title="Admin">A</div>
+                </div>
+            </div>
+
+            <div class="content">
+                <!-- DASHBOARD PAGE -->
+                <div class="page active" id="page-dashboard">
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-label">
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                                    />
+                                    <circle cx="9" cy="7" r="4" />
+                                </svg>
+                                People
+                            </div>
+                            <div class="stat-value" id="stat-people">1</div>
+                        </div>
+                        <div
+                            class="stat-card"
+                            style="border-color: var(--accent)"
+                        >
+                            <div class="stat-label">
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <rect
+                                        x="4"
+                                        y="4"
+                                        width="16"
+                                        height="16"
+                                        rx="2"
+                                    />
+                                    <circle cx="9" cy="10" r="1.5" />
+                                    <circle cx="15" cy="10" r="1.5" />
+                                    <path d="M8 15c0 0 1.5 2 4 2s4-2 4-2" />
+                                </svg>
+                                Bots
+                            </div>
+                            <div class="stat-value" id="stat-bots">14</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">
+                                <span
+                                    class="dot"
+                                    style="background: var(--green)"
+                                ></span>
+                                Online
+                            </div>
+                            <div
+                                class="stat-value"
+                                id="stat-online"
+                                style="color: var(--green)"
+                            >
+                                0
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg>
+                                Total
+                            </div>
+                            <div class="stat-value" id="stat-total">15</div>
+                        </div>
+                    </div>
+
+                    <div class="section-title">Service Health</div>
+                    <div class="health-grid" id="health-grid"></div>
+
+                    <div class="section-title">Recent Handoffs</div>
+                    <div class="item-list" id="handoffs-list">
+                        <div class="empty-state">No recent handoffs</div>
+                    </div>
+
+                    <div
+                        class="section-title"
+                        style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                        "
+                    >
+                        <span>Tasks</span>
+                        <div style="display: flex; gap: 6px">
+                            <button
+                                class="pill active"
+                                data-task-filter="active"
+                                onclick="filterTasks('active', this)"
+                                style="font-size: 11px; padding: 3px 10px"
+                            >
+                                Active
+                            </button>
+                            <button
+                                class="pill"
+                                data-task-filter="completed"
+                                onclick="filterTasks('completed', this)"
+                                style="font-size: 11px; padding: 3px 10px"
+                            >
+                                Done
+                            </button>
+                            <button
+                                class="pill"
+                                data-task-filter="all"
+                                onclick="filterTasks('all', this)"
+                                style="font-size: 11px; padding: 3px 10px"
+                            >
+                                All
+                            </button>
+                        </div>
+                    </div>
+                    <div class="item-list" id="tasks-list">
+                        <div class="empty-state">No active tasks</div>
+                    </div>
+                </div>
+
+                <!-- TEAM PAGE -->
+                <div class="page" id="page-team">
+                    <div class="stats-row">
+                        <div class="stat-card">
+                            <div class="stat-label">
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"
+                                    />
+                                    <circle cx="9" cy="7" r="4" />
+                                </svg>
+                                People
+                            </div>
+                            <div class="stat-value" id="stat-people-2">1</div>
+                        </div>
+                        <div
+                            class="stat-card"
+                            style="border-color: var(--accent)"
+                        >
+                            <div class="stat-label">
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <rect
+                                        x="4"
+                                        y="4"
+                                        width="16"
+                                        height="16"
+                                        rx="2"
+                                    />
+                                    <circle cx="9" cy="10" r="1.5" />
+                                    <circle cx="15" cy="10" r="1.5" />
+                                    <path d="M8 15c0 0 1.5 2 4 2s4-2 4-2" />
+                                </svg>
+                                Bots
+                            </div>
+                            <div class="stat-value" id="stat-bots-2">14</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">
+                                <span
+                                    class="dot"
+                                    style="background: var(--green)"
+                                ></span>
+                                Online
+                            </div>
+                            <div
+                                class="stat-value"
+                                id="stat-online-2"
+                                style="color: var(--green)"
+                            >
+                                0
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">
+                                <svg
+                                    width="14"
+                                    height="14"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg>
+                                Total
+                            </div>
+                            <div class="stat-value" id="stat-total-2">15</div>
+                        </div>
+                    </div>
+
+                    <div class="filter-bar">
+                        <input
+                            type="text"
+                            class="filter-search"
+                            placeholder="Search team..."
+                            id="team-search"
+                            oninput="handleTeamSearch()"
+                        />
+                        <button
+                            class="pill active"
+                            data-filter="all"
+                            onclick="filterDivision('all', this)"
+                        >
+                            All
+                        </button>
+                    </div>
+
+                    <div id="team-divisions"></div>
+                </div>
+
+                <!-- SETTINGS PAGE -->
+                <div class="page" id="page-settings">
+                    <div class="section-title">System Configuration</div>
+                    <div class="settings-grid" id="settings-grid"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // ========================================
+            // Embedded agent data (fallback if API unavailable)
+            // ========================================
+            const AGENTS_DATA = {
+                seldon: {
+                    port: 18789,
+                    role: "Orchestrator",
+                    division: "command",
+                    location: "mac-mini",
+                    tools_allow: [
+                        "route",
+                        "coordinate",
+                        "delegate",
+                        "monitor",
+                        "gateway",
+                        "broadcast",
+                        "handoff",
+                        "spawn",
+                        "validate",
+                    ],
+                    tools_deny: [
+                        "exec",
+                        "ssh",
+                        "deploy",
+                        "financial",
+                        "write_content",
+                    ],
+                    authority: null,
+                    patrol: null,
+                    description:
+                        "Central command. Routes all requests, coordinates cross-division work, manages escalations.",
+                },
+                daneel: {
+                    port: 18790,
+                    role: "SysAdmin",
+                    division: "infrastructure",
+                    location: "vps-1",
+                    tools_allow: ["exec", "ssh", "docker", "deploy", "monitor"],
+                    tools_deny: ["financial", "ads"],
+                    authority: null,
+                    patrol: null,
+                    description:
+                        "System operations. Manages Docker, deployment, monitoring, and server health.",
+                },
+                hardin: {
+                    port: 18791,
+                    role: "Security Critic",
+                    division: "infrastructure",
+                    location: "vps-1",
+                    tools_allow: [
+                        "scan",
+                        "firewall",
+                        "audit",
+                        "alert",
+                        "review",
+                        "security_check",
+                    ],
+                    tools_deny: ["deploy", "financial"],
+                    authority: { level: "veto", scope: "security" },
+                    patrol: null,
+                    description:
+                        "Security gatekeeper. VETO authority on all security-sensitive operations.",
+                },
+                magnifico: {
+                    port: 18792,
+                    role: "Creative Director",
+                    division: "operations",
+                    location: "vps-1",
+                    tools_allow: [
+                        "creative",
+                        "brand",
+                        "ad_copy",
+                        "visual_direction",
+                        "communication",
+                    ],
+                    tools_deny: ["ssh", "deploy", "financial"],
+                    authority: null,
+                    patrol: null,
+                    description:
+                        "Brand voice and creative direction. Manages communications and visual identity.",
+                },
+                trader: {
+                    port: 18793,
+                    role: "Trading Operations",
+                    division: "commerce",
+                    location: "vps-1",
+                    tools_allow: [
+                        "trades",
+                        "positions",
+                        "risk",
+                        "market_data",
+                        "alpaca",
+                    ],
+                    tools_deny: ["deploy", "ssh"],
+                    authority: null,
+                    patrol: { interval: "30m" },
+                    description:
+                        "Trading operations. Position monitoring, stop-loss enforcement, P&L alerts.",
+                },
+                gaal: {
+                    port: 18794,
+                    role: "Factual Critic",
+                    division: "intelligence",
+                    location: "vps-1",
+                    tools_allow: [
+                        "web_search",
+                        "analysis",
+                        "reports",
+                        "deep_research",
+                        "review",
+                        "fact_check",
+                        "verify",
+                        "cite",
+                    ],
+                    tools_deny: ["deploy", "ssh", "financial"],
+                    authority: { level: "veto", scope: "factual" },
+                    patrol: null,
+                    description:
+                        "Factual accuracy gatekeeper. VETO authority on unverified claims and data.",
+                },
+                demerzel: {
+                    port: 18795,
+                    role: "Chief Intelligence",
+                    division: "intelligence",
+                    location: "vps-1",
+                    tools_allow: [
+                        "intelligence",
+                        "synthesis",
+                        "briefing",
+                        "strategic_analysis",
+                        "competitive_intel",
+                        "reports",
+                    ],
+                    tools_deny: ["deploy", "ssh", "exec", "financial"],
+                    authority: null,
+                    patrol: { interval: "4h" },
+                    description:
+                        "Cross-division intelligence synthesis. Strategic alerts and digest generation.",
+                },
+                venabili: {
+                    port: 18796,
+                    role: "Project Manager",
+                    division: "operations",
+                    location: "vps-1",
+                    tools_allow: [
+                        "project_management",
+                        "task_tracking",
+                        "milestone_planning",
+                        "scheduling",
+                        "sprint_planning",
+                    ],
+                    tools_deny: ["deploy", "ssh", "financial", "exec"],
+                    authority: null,
+                    patrol: { interval: "4h" },
+                    description:
+                        "Project coordination. Deadline tracking, blocker detection, sprint health.",
+                },
+                preem: {
+                    port: 18797,
+                    role: "VP Sales",
+                    division: "commerce",
+                    location: "vps-1",
+                    tools_allow: [
+                        "outreach",
+                        "crm",
+                        "pipeline",
+                        "lead_qualification",
+                        "prospecting",
+                    ],
+                    tools_deny: ["deploy", "ssh"],
+                    authority: null,
+                    patrol: { interval: "4h" },
+                    description:
+                        "Sales pipeline management. Lead qualification, outreach, deal progression.",
+                },
+                arkady: {
+                    port: 18798,
+                    role: "Content Writer",
+                    division: "operations",
+                    location: "vps-1",
+                    tools_allow: [
+                        "writing",
+                        "seo",
+                        "email",
+                        "social_media",
+                        "blog",
+                        "landing_pages",
+                    ],
+                    tools_deny: ["deploy", "ssh", "financial", "exec"],
+                    authority: null,
+                    patrol: { interval: "6h" },
+                    description:
+                        "Content creation. Blog posts, social media, email campaigns, landing pages.",
+                },
+                mallow: {
+                    port: 18799,
+                    role: "Revenue Ops VP",
+                    division: "commerce",
+                    location: "vps-1",
+                    tools_allow: [
+                        "revenue",
+                        "pipeline",
+                        "campaigns",
+                        "retreaver",
+                        "analytics",
+                        "forecasting",
+                    ],
+                    tools_deny: ["deploy", "ssh", "exec"],
+                    authority: null,
+                    patrol: { interval: "1h" },
+                    description:
+                        "Revenue operations. Pipeline health, campaign spend, Retreaver volume, forecasting.",
+                },
+                riose: {
+                    port: 18800,
+                    role: "Paid Media Director",
+                    division: "commerce",
+                    location: "vps-1",
+                    tools_allow: [
+                        "ads",
+                        "campaigns",
+                        "spend_optimization",
+                        "creative_review",
+                        "audience_targeting",
+                    ],
+                    tools_deny: ["deploy", "ssh", "exec"],
+                    authority: null,
+                    patrol: { interval: "2h" },
+                    description:
+                        "Paid media campaigns. Spend optimization, ROAS tracking, ad management.",
+                },
+                mis: {
+                    port: 18801,
+                    role: "VP Research",
+                    division: "intelligence",
+                    location: "vps-1",
+                    tools_allow: [
+                        "research",
+                        "market_intel",
+                        "competitive_analysis",
+                        "serp_analysis",
+                        "web_search",
+                        "reports",
+                    ],
+                    tools_deny: ["deploy", "ssh", "financial", "exec"],
+                    authority: null,
+                    patrol: { interval: "4h" },
+                    description:
+                        "Market research and competitive intelligence. SERP analysis, trend tracking.",
+                },
+                amaryl: {
+                    port: 18802,
+                    role: "Quant Analyst",
+                    division: "intelligence",
+                    location: "vps-1",
+                    tools_allow: [
+                        "analysis",
+                        "modeling",
+                        "predictions",
+                        "backtesting",
+                        "risk_metrics",
+                        "data_viz",
+                    ],
+                    tools_deny: ["deploy", "ssh", "exec", "trades"],
+                    authority: null,
+                    patrol: { interval: "2h" },
+                    description:
+                        "Quantitative analysis. Modeling, predictions, backtesting, anomaly detection.",
+                },
+            };
+
+            const DIVISIONS_DATA = {
+                command: {
+                    label: "Command",
+                    color: "#3b82f6",
+                    head: "seldon",
+                    agents: ["seldon"],
+                },
+                infrastructure: {
+                    label: "Infrastructure",
+                    color: "#ef4444",
+                    head: "daneel",
+                    agents: ["daneel", "hardin"],
+                },
+                commerce: {
+                    label: "Commerce",
+                    color: "#22c55e",
+                    head: "mallow",
+                    agents: ["mallow", "preem", "riose", "trader"],
+                },
+                intelligence: {
+                    label: "Intelligence",
+                    color: "#eab308",
+                    head: "demerzel",
+                    agents: ["gaal", "demerzel", "mis", "amaryl"],
+                },
+                operations: {
+                    label: "Operations",
+                    color: "#a855f7",
+                    head: "venabili",
+                    agents: ["magnifico", "venabili", "arkady"],
+                },
+            };
+
+            const SERVICES = [
+                {
+                    name: "PostgreSQL",
+                    port: 5434,
+                    container: "openclaw-postgres",
+                },
+                {
+                    name: "OpenClaw Core",
+                    port: 18789,
+                    container: "openclaw-core",
+                },
+                {
+                    name: "MCP Gateway",
+                    port: 3000,
+                    container: "openclaw-mcp-gateway",
+                },
+                {
+                    name: "Prometheus",
+                    port: 9090,
+                    container: "openclaw-prometheus",
+                },
+                { name: "Grafana", port: 3001, container: "openclaw-grafana" },
+                { name: "Loki", port: 3100, container: "openclaw-loki" },
+                {
+                    name: "Promtail",
+                    port: null,
+                    container: "openclaw-promtail",
+                },
+                {
+                    name: "Cloudflared",
+                    port: null,
+                    container: "openclaw-tunnel",
+                },
+            ];
+
+            const MCP_SERVERS = [
+                "memory",
+                "filesystem",
+                "calendar",
+                "slack",
+                "brave-search",
+                "graphmem",
+                "memory-bank",
+                "alpaca",
+                "retreaver",
+                "airtable",
+                "qmd",
+                "shopify",
+            ];
+            const PATROL_CONFIGS = [
+                "daneel",
+                "hardin",
+                "demerzel",
+                "preem",
+                "mallow",
+                "riose",
+                "trader",
+                "amaryl",
+                "mis",
+                "foundry",
+                "cartographer",
+                "agent-metrics",
+            ];
+            const MEMORY_TIERS = [
+                "L1 Hot Context",
+                "L2 Warm Memory",
+                "L3 Business Intel",
+                "L4 Archive",
+                "L5 Cartographer",
+            ];
+
+            const AGENT_ICONS = {
+                seldon: "S",
+                daneel: "D",
+                hardin: "H",
+                magnifico: "M",
+                trader: "T",
+                gaal: "G",
+                demerzel: "Z",
+                venabili: "V",
+                preem: "P",
+                arkady: "A",
+                mallow: "W",
+                riose: "R",
+                mis: "I",
+                amaryl: "Q",
+            };
+
+            const ICON_COLORS = {
+                command: "#3b82f6",
+                infrastructure: "#ef4444",
+                commerce: "#22c55e",
+                intelligence: "#eab308",
+                operations: "#a855f7",
+            };
+
+            // State
+            let agentStatuses = {}; // agent_id -> { status, last_heartbeat }
+            let currentFilter = "all";
+            let searchQuery = "";
+
+            // ========================================
+            // Render functions
+            // ========================================
+
+            function getStatusClass(agentId) {
+                const info = agentStatuses[agentId];
+                if (!info || !info.last_heartbeat) return "offline";
+                const age =
+                    (Date.now() - new Date(info.last_heartbeat).getTime()) /
+                    1000;
+                if (age < 60) return "online";
+                if (age < 300) return "idle";
+                return "offline";
+            }
+
+            function countOnline() {
+                return Object.keys(AGENTS_DATA).filter(
+                    (id) => getStatusClass(id) === "online",
+                ).length;
+            }
+
+            function updateStats() {
+                const online = countOnline();
+                const bots = Object.keys(AGENTS_DATA).length;
+                const total = 1 + bots; // 1 human + bots
+                ["", "-2"].forEach((suffix) => {
+                    const el = (id) => document.getElementById(id);
+                    if (el("stat-online" + suffix))
+                        el("stat-online" + suffix).textContent = online;
+                    if (el("stat-bots" + suffix))
+                        el("stat-bots" + suffix).textContent = bots;
+                    if (el("stat-total" + suffix))
+                        el("stat-total" + suffix).textContent = total;
+                    if (el("stat-people" + suffix))
+                        el("stat-people" + suffix).textContent = "1";
+                });
+            }
+
+            function renderTeamPage() {
+                const container = document.getElementById("team-divisions");
+                container.innerHTML = "";
+
+                // Add division filter pills
+                const filterBar = document.querySelector(".filter-bar");
+                const existingPills = filterBar.querySelectorAll(
+                    '.pill[data-filter]:not([data-filter="all"])',
+                );
+                existingPills.forEach((p) => p.remove());
+                for (const [divId, div] of Object.entries(DIVISIONS_DATA)) {
+                    const pill = document.createElement("button");
+                    pill.className =
+                        "pill" + (currentFilter === divId ? " active" : "");
+                    pill.dataset.filter = divId;
+                    pill.textContent = div.label;
+                    pill.onclick = function () {
+                        filterDivision(divId, this);
+                    };
+                    filterBar.appendChild(pill);
+                }
+
+                // Render each division
+                const divOrder = [
+                    "command",
+                    "infrastructure",
+                    "commerce",
+                    "intelligence",
+                    "operations",
+                ];
+                for (const divId of divOrder) {
+                    if (currentFilter !== "all" && currentFilter !== divId)
+                        continue;
+                    const div = DIVISIONS_DATA[divId];
+                    const agents = div.agents.filter((id) => {
+                        if (!searchQuery) return true;
+                        const a = AGENTS_DATA[id];
+                        const q = searchQuery.toLowerCase();
+                        return (
+                            id.includes(q) ||
+                            a.role.toLowerCase().includes(q) ||
+                            a.description.toLowerCase().includes(q)
+                        );
+                    });
+                    if (agents.length === 0 && searchQuery) continue;
+
+                    const section = document.createElement("div");
+                    section.className = "division-section";
+                    section.innerHTML = `
+      <div class="division-header">
+        <div class="division-dot" style="background: ${div.color}"></div>
+        <span class="division-name">${div.label}</span>
+        <span class="division-count">${agents.length}</span>
+      </div>
+      <div class="agent-grid" id="grid-${divId}"></div>
+    `;
+                    container.appendChild(section);
+
+                    const grid = section.querySelector(".agent-grid");
+                    for (const agentId of agents) {
+                        const agent = AGENTS_DATA[agentId];
+                        const statusClass = getStatusClass(agentId);
+                        const card = document.createElement("div");
+                        card.className = "agent-card";
+                        card.onclick = function () {
+                            this.classList.toggle("expanded");
+                        };
+
+                        const toolsHtml = agent.tools_allow
+                            .map((t) => `<span class="tag">${t}</span>`)
+                            .join("");
+                        const denyHtml = agent.tools_deny
+                            .map((t) => `<span class="tag deny">${t}</span>`)
+                            .join("");
+                        const authorityHtml = agent.authority
+                            ? `<div class="detail-section"><div class="detail-label">Authority</div><span class="tag veto">VETO: ${agent.authority.scope}</span></div>`
+                            : "";
+                        const patrolHtml = agent.patrol
+                            ? `<div class="detail-section"><div class="detail-label">Patrol</div><div class="detail-text">Every ${agent.patrol.interval}</div></div>`
+                            : "";
+
+                        card.innerHTML = `
+        <div class="agent-card-top">
+          <div class="agent-icon" style="background: ${ICON_COLORS[agent.division]}22; color: ${ICON_COLORS[agent.division]}">${AGENT_ICONS[agentId]}</div>
+          <div class="agent-info">
+            <div class="agent-name-row">
+              <span class="agent-name">${agentId.charAt(0).toUpperCase() + agentId.slice(1)}</span>
+              <span class="status-dot ${statusClass}"></span>
+            </div>
+            <div class="agent-role">${agent.role}</div>
+          </div>
+        </div>
+        <div class="agent-desc">${agent.description}</div>
+        <div class="agent-port">:${agent.port} &middot; ${agent.location}</div>
+        <div class="agent-details">
+          ${authorityHtml}
+          ${patrolHtml}
+          <div class="detail-section">
+            <div class="detail-label">Allowed Tools</div>
+            <div class="detail-tags">${toolsHtml}</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-label">Denied Tools</div>
+            <div class="detail-tags">${denyHtml}</div>
+          </div>
+        </div>
+      `;
+                        grid.appendChild(card);
+                    }
+                }
+            }
+
+            function renderHealthGrid() {
+                const grid = document.getElementById("health-grid");
+                grid.innerHTML = "";
+                for (const svc of SERVICES) {
+                    const card = document.createElement("div");
+                    card.className = "health-card";
+                    card.innerHTML = `
+      <div class="health-dot" style="background: var(--text-muted)" id="health-${svc.container}"></div>
+      <span class="health-name">${svc.name}</span>
+      ${svc.port ? `<span class="health-port">:${svc.port}</span>` : ""}
+    `;
+                    grid.appendChild(card);
+                }
+            }
+
+            function renderSettings() {
+                const grid = document.getElementById("settings-grid");
+                grid.innerHTML = `
+    <div class="settings-card">
+      <h3>Infrastructure</h3>
+      <div class="settings-row"><span class="label">Docker Services</span><span class="value">${SERVICES.length}</span></div>
+      <div class="settings-row"><span class="label">Agents</span><span class="value">${Object.keys(AGENTS_DATA).length}</span></div>
+      <div class="settings-row"><span class="label">Divisions</span><span class="value">${Object.keys(DIVISIONS_DATA).length}</span></div>
+      <div class="settings-row"><span class="label">VPS</span><span class="value">Hetzner CPX21</span></div>
+      <div class="settings-row"><span class="label">Networking</span><span class="value">Cloudflare Tunnel</span></div>
+    </div>
+    <div class="settings-card">
+      <h3>MCP Servers (${MCP_SERVERS.length})</h3>
+      ${MCP_SERVERS.map((s) => `<div class="settings-row"><span class="label">${s}</span><span class="value">configured</span></div>`).join("")}
+    </div>
+    <div class="settings-card">
+      <h3>Patrol Configs (${PATROL_CONFIGS.length})</h3>
+      ${PATROL_CONFIGS.map((p) => `<div class="settings-row"><span class="label">${p}</span><span class="value">active</span></div>`).join("")}
+    </div>
+    <div class="settings-card">
+      <h3>Memory Tiers</h3>
+      ${MEMORY_TIERS.map((t) => `<div class="settings-row"><span class="label">${t}</span><span class="value">configured</span></div>`).join("")}
+    </div>
+    <div class="settings-card">
+      <h3>Critic Chains</h3>
+      <div class="settings-row"><span class="label">Security</span><span class="value">hardin (VETO)</span></div>
+      <div class="settings-row"><span class="label">Factual</span><span class="value">gaal (VETO)</span></div>
+      <div class="settings-row"><span class="label">Financial</span><span class="value">mallow + gaal</span></div>
+      <div class="settings-row"><span class="label">Content</span><span class="value">magnifico + gaal</span></div>
+      <div class="settings-row"><span class="label">Trading</span><span class="value">hardin + amaryl</span></div>
+      <div class="settings-row"><span class="label">Infrastructure</span><span class="value">hardin + daneel</span></div>
+    </div>
+    <div class="settings-card">
+      <h3>Database</h3>
+      <div class="settings-row"><span class="label">Engine</span><span class="value">PostgreSQL 16</span></div>
+      <div class="settings-row"><span class="label">Tables</span><span class="value">20</span></div>
+      <div class="settings-row"><span class="label">Indexes</span><span class="value">98+</span></div>
+      <div class="settings-row"><span class="label">Port</span><span class="value">5434 (host)</span></div>
+    </div>
+  `;
+            }
+
+            // ========================================
+            // Navigation
+            // ========================================
+
+            function switchPage(pageId) {
+                document
+                    .querySelectorAll(".page")
+                    .forEach((p) => p.classList.remove("active"));
+                document
+                    .querySelectorAll(".nav-item")
+                    .forEach((n) => n.classList.remove("active"));
+                document
+                    .getElementById("page-" + pageId)
+                    .classList.add("active");
+                document
+                    .querySelector(`.nav-item[data-page="${pageId}"]`)
+                    .classList.add("active");
+                const titles = {
+                    dashboard: "Dashboard",
+                    team: "Team",
+                    settings: "Settings",
+                };
+                document.getElementById("page-title").textContent =
+                    titles[pageId] || pageId;
+            }
+
+            function filterDivision(divId, btn) {
+                currentFilter = divId;
+                document
+                    .querySelectorAll(".filter-bar .pill")
+                    .forEach((p) => p.classList.remove("active"));
+                if (btn) btn.classList.add("active");
+                renderTeamPage();
+            }
+
+            function handleSearch() {
+                searchQuery = document.getElementById("global-search").value;
+                renderTeamPage();
+            }
+
+            function handleTeamSearch() {
+                searchQuery = document.getElementById("team-search").value;
+                renderTeamPage();
+            }
+
+            // ========================================
+            // API polling
+            // ========================================
+
+            async function fetchAgentStatus() {
+                try {
+                    const res = await fetch("/seldon/agents");
+                    if (!res.ok) throw new Error("API unavailable");
+                    const data = await res.json();
+                    for (const agent of data.agents || []) {
+                        agentStatuses[agent.id] = {
+                            status: agent.status,
+                            last_heartbeat: agent.last_heartbeat,
+                        };
+                    }
+                } catch {
+                    // API unavailable, use fallback — all agents show as offline
+                }
+
+                try {
+                    const res = await fetch("/seldon/status");
+                    if (res.ok) {
+                        const data = await res.json();
+                        // Update health dots
+                        for (const svc of data.services || []) {
+                            const dot = document.getElementById(
+                                "health-" + svc.container,
+                            );
+                            if (dot) {
+                                dot.style.background = svc.healthy
+                                    ? "var(--green)"
+                                    : "var(--red)";
+                            }
+                        }
+                    }
+                } catch {
+                    // Status endpoint unavailable
+                }
+
+                try {
+                    const res = await fetch(
+                        "/seldon/handoffs/seldon?status=pending",
+                    );
+                    if (res.ok) {
+                        const data = await res.json();
+                        renderHandoffs(data.handoffs || []);
+                    }
+                } catch {
+                    // Handoffs unavailable
+                }
+
+                updateStats();
+                renderTeamPage();
+
+                const now = new Date();
+                document.getElementById("last-refresh").textContent =
+                    `Updated ${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}:${now.getSeconds().toString().padStart(2, "0")}`;
+            }
+
+            // ========================================
+            // Task management with Discord thread links
+            // ========================================
+
+            let allTasks = [];
+            let taskFilter = "active";
+
+            async function fetchTasks() {
+                try {
+                    const res = await fetch("/seldon/tasks?limit=50");
+                    if (!res.ok) return;
+                    const data = await res.json();
+                    allTasks = data.tasks || [];
+                    renderTasks();
+                } catch {
+                    // Tasks endpoint unavailable
+                }
+            }
+
+            function filterTasks(filter, btn) {
+                taskFilter = filter;
+                // Update pill buttons
+                document
+                    .querySelectorAll("[data-task-filter]")
+                    .forEach((b) => b.classList.remove("active"));
+                if (btn) btn.classList.add("active");
+                renderTasks();
+            }
+
+            function renderTasks() {
+                const list = document.getElementById("tasks-list");
+                let tasks = allTasks;
+
+                if (taskFilter === "active") {
+                    tasks = tasks.filter(
+                        (t) =>
+                            t.status === "pending" ||
+                            t.status === "in_progress" ||
+                            t.status === "awaiting_approval",
+                    );
+                } else if (taskFilter === "completed") {
+                    tasks = tasks.filter((t) => t.status === "completed");
+                }
+
+                if (!tasks.length) {
+                    const msg =
+                        taskFilter === "active"
+                            ? "No active tasks"
+                            : taskFilter === "completed"
+                              ? "No completed tasks"
+                              : "No tasks";
+                    list.innerHTML = `<div class="empty-state">${msg}</div>`;
+                    return;
+                }
+
+                list.innerHTML = tasks
+                    .slice(0, 20)
+                    .map((t) => {
+                        const pClass = "p" + (t.priority || 5);
+                        const pLabel =
+                            { 1: "P0", 2: "P1", 5: "P2", 8: "P3" }[
+                                t.priority
+                            ] || "P" + t.priority;
+                        const statusLabel = (t.status || "pending").replace(
+                            "_",
+                            " ",
+                        );
+
+                        // Discord thread link
+                        let discordHtml = "";
+                        if (t.discord_message_url) {
+                            discordHtml = `<a href="${t.discord_message_url}" target="_blank" class="task-discord-link" title="Open Discord thread">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        Thread
+      </a>`;
+                        } else if (t.discord_thread_id) {
+                            discordHtml = `<span class="task-discord-link" style="cursor:default;opacity:0.5;" title="Thread: ${t.discord_thread_id}">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+        Linked
+      </span>`;
+                        }
+
+                        // Participating agents
+                        const participants = (
+                            t.participating_agents || []
+                        ).filter(Boolean);
+                        const participantsHtml =
+                            participants.length > 0
+                                ? `<span class="task-participants" title="${participants.join(", ")}">${participants.length} agent${participants.length > 1 ? "s" : ""}</span>`
+                                : "";
+
+                        // Time info
+                        let timeHtml = "";
+                        if (t.status === "completed" && t.completed_at) {
+                            const ago = timeAgo(new Date(t.completed_at));
+                            timeHtml = `<span style="font-size:11px;color:var(--text-muted);">${ago}</span>`;
+                        } else if (t.started_at) {
+                            const ago = timeAgo(new Date(t.started_at));
+                            timeHtml = `<span style="font-size:11px;color:var(--text-muted);">started ${ago}</span>`;
+                        }
+
+                        return `<div class="task-row">
+      <span class="task-priority ${pClass}">${pLabel}</span>
+      <span class="task-name" title="${(t.name || "").replace(/"/g, "&quot;")}">${t.name || "Untitled"}</span>
+      <span class="task-agent">${t.lead_agent || t.agent_id || "?"}</span>
+      ${discordHtml}
+      ${participantsHtml}
+      ${timeHtml}
+      <span class="item-status ${t.status}">${statusLabel}</span>
+    </div>`;
+                    })
+                    .join("");
+            }
+
+            function timeAgo(date) {
+                const seconds = Math.floor((new Date() - date) / 1000);
+                if (seconds < 60) return "just now";
+                const minutes = Math.floor(seconds / 60);
+                if (minutes < 60) return minutes + "m ago";
+                const hours = Math.floor(minutes / 60);
+                if (hours < 24) return hours + "h ago";
+                const days = Math.floor(hours / 24);
+                return days + "d ago";
+            }
+
+            function renderHandoffs(handoffs) {
+                const list = document.getElementById("handoffs-list");
+                if (!handoffs.length) {
+                    list.innerHTML =
+                        '<div class="empty-state">No recent handoffs</div>';
+                    return;
+                }
+                list.innerHTML = handoffs
+                    .slice(0, 10)
+                    .map((h) => {
+                        const ctx =
+                            typeof h.context === "string"
+                                ? h.context
+                                : JSON.stringify(h.context).slice(0, 80);
+                        return `<div class="item-row">
+      <span class="item-from">${h.from_agent}</span>
+      <span class="item-arrow">&rarr;</span>
+      <span class="item-to">${h.to_agent}</span>
+      <span class="item-context">${ctx}</span>
+      <span class="item-status ${h.status}">${h.status}</span>
+    </div>`;
+                    })
+                    .join("");
+            }
+
+            // ========================================
+            // Init
+            // ========================================
+
+            function init() {
+                renderHealthGrid();
+                renderSettings();
+                updateStats();
+                renderTeamPage();
+                fetchAgentStatus();
+                fetchTasks();
+
+                // Poll every 30 seconds
+                setInterval(fetchAgentStatus, 30000);
+                setInterval(fetchTasks, 30000);
+            }
+
+            init();
+        </script>
+    </body>
+</html>

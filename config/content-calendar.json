@@ -1,0 +1,86 @@
+{
+  "content_types": {
+    "blog": {
+      "label": "Blog Post",
+      "frequency": "2_per_week",
+      "author_agent": "arkady",
+      "review_agent": "magnifico",
+      "fact_check_agent": "gaal",
+      "word_count_target": "1200-2000",
+      "seo_required": true,
+      "channels": ["website", "medium"]
+    },
+    "social_post": {
+      "label": "Social Media Post",
+      "frequency": "daily",
+      "author_agent": "arkady",
+      "review_agent": "magnifico",
+      "platforms": ["instagram", "tiktok", "linkedin", "x"],
+      "batch_creation": true,
+      "batch_size": 7
+    },
+    "email_sequence": {
+      "label": "Email Sequence",
+      "frequency": "1_per_month",
+      "author_agent": "arkady",
+      "review_agent": "magnifico",
+      "fact_check_agent": "gaal",
+      "sequence_length": "5-7_emails",
+      "channels": ["email"]
+    },
+    "landing_page": {
+      "label": "Landing Page",
+      "frequency": "2_per_month",
+      "author_agent": "arkady",
+      "review_agent": "magnifico",
+      "conversion_focused": true,
+      "channels": ["website"]
+    }
+  },
+  "schedule_template": {
+    "rolling_weeks": 12,
+    "weeks": [
+      {
+        "week": 1,
+        "theme": "{{theme}}",
+        "blog_topics": ["{{topic_1}}", "{{topic_2}}"],
+        "social_focus": "{{social_theme}}",
+        "email": null,
+        "landing_page": null,
+        "assigned_agents": {
+          "draft": "arkady",
+          "creative_review": "magnifico",
+          "fact_check": "gaal"
+        }
+      }
+    ]
+  },
+  "topics_by_vertical": {
+    "lighting": [
+      "Best ring lights for YouTube in 2026",
+      "How to light your streaming setup on a budget",
+      "Ring light vs panel light: which is right for you",
+      "5 lighting mistakes content creators make",
+      "Color temperature explained for beginners"
+    ],
+    "lead_gen": [
+      "How AI is changing lead generation",
+      "5 ways to qualify leads faster",
+      "Why lead quality matters more than quantity",
+      "The future of pay-per-call advertising",
+      "Building a lead gen tech stack in 2026"
+    ],
+    "trading": [
+      "Paper trading strategies for beginners",
+      "How prediction markets work",
+      "Risk management basics for retail traders",
+      "Understanding ROAS in media buying",
+      "Using AI for market analysis"
+    ]
+  },
+  "brand_voice": {
+    "tone": ["confident", "helpful", "transparent", "nerdy-but-cool"],
+    "avoid": ["pushy sales", "clickbait", "unsubstantiated claims", "corporate jargon"],
+    "personality": "Smart friend who knows the industry — approachable expert, not ivory tower"
+  }
+}

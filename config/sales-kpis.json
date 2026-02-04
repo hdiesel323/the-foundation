@@ -1,0 +1,87 @@
+{
+  "targets": {
+    "daily": {
+      "outreach_sent": 20,
+      "responses": 5,
+      "qualified_leads": 4,
+      "deals_progressed": 1,
+      "revenue": 700
+    },
+    "weekly": {
+      "outreach_sent": 100,
+      "responses": 25,
+      "qualified_leads": 25,
+      "new_pipeline_value": 15000,
+      "deals_closed": 2,
+      "revenue": 5000
+    },
+    "monthly": {
+      "outreach_sent": 400,
+      "responses": 100,
+      "qualified_leads": 100,
+      "new_pipeline_value": 60000,
+      "deals_closed": 8,
+      "revenue": 20000,
+      "avg_deal_size": 2500,
+      "close_rate_pct": 8,
+      "pipeline_velocity_days": 14
+    }
+  },
+  "by_vertical": {
+    "insurance": {
+      "monthly_revenue_target": 5000,
+      "monthly_lead_target": 30,
+      "target_cpa": 25,
+      "target_roas": 3.0
+    },
+    "legal": {
+      "monthly_revenue_target": 6000,
+      "monthly_lead_target": 20,
+      "target_cpa": 75,
+      "target_roas": 4.0
+    },
+    "home_services": {
+      "monthly_revenue_target": 3000,
+      "monthly_lead_target": 25,
+      "target_cpa": 15,
+      "target_roas": 2.5
+    },
+    "funding": {
+      "monthly_revenue_target": 4000,
+      "monthly_lead_target": 15,
+      "target_cpa": 50,
+      "target_roas": 5.0
+    },
+    "cre": {
+      "monthly_revenue_target": 2000,
+      "monthly_lead_target": 10,
+      "target_cpa": 100,
+      "target_roas": 3.5
+    }
+  },
+  "alerts": {
+    "revenue_behind_pace_pct": 20,
+    "pipeline_low_threshold": 10000,
+    "lead_quality_drop_pct": 15,
+    "stale_deal_days": 7,
+    "no_outreach_hours": 8
+  },
+  "reporting": {
+    "daily_summary_time": "18:00",
+    "weekly_report_day": "friday",
+    "monthly_close_day": "last_business_day",
+    "metrics": [
+      "outreach_sent",
+      "responses",
+      "response_rate",
+      "qualified_leads",
+      "deals_closed",
+      "revenue",
+      "pipeline_value",
+      "avg_deal_size",
+      "close_rate",
+      "cpa",
+      "roas"
+    ]
+  }
+}

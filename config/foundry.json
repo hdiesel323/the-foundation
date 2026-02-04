@@ -1,0 +1,13 @@
+{
+  "foundry": {
+    "enabled": true,
+    "overseer": true,
+    "crystallizeAfter": 3,
+    "toolRegistry": "skills/custom/",
+    "learningsPath": "workspace/LEARNINGS.md",
+    "promotionPipeline": {
+      "reviewers": ["gaal", "hardin"],
+      "autoPromote": false
+    }
+  }
+}

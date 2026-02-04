@@ -1,0 +1,28 @@
+# patrol-agent-metrics.yml
+# Scheduled patrol: runs agent-metrics-collector.sh every 15 minutes.
+# Outputs Prometheus-format metrics to /tmp/agent_metrics.prom for node-exporter textfile collector.
+
+patrol:
+  name: agent-metrics
+  description: "Collect per-agent performance metrics from PostgreSQL for Prometheus"
+  agent: daneel
+  division: infrastructure
+  priority: P2
+
+  schedule:
+    interval: 15m
+    cron: "*/15 * * * *"   # Every 15 minutes
+
+  action:
+    command: "scripts/agent-metrics-collector.sh"
+    workdir: "/opt/openclaw"
+    timeout: 60s
+
+  output:
+    file: "/tmp/agent_metrics.prom"
+    format: prometheus
+
+  alerts:
+    on_failure:
+      channel: slack
+      message: "WARN: agent-metrics patrol failed — Prometheus agent metrics may be stale"

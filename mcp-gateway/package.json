@@ -1,0 +1,11 @@
+{
+  "name": "openclaw-mcp-gateway",
+  "version": "1.0.0",
+  "description": "MCP Gateway - tool integration hub for OpenClaw",
+  "main": "server.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {}
+}

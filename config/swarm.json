@@ -1,0 +1,277 @@
+{
+  "swarm": {
+    "enabled": true,
+    "description": "Cheap-model parallel execution for batch tasks using lightweight LLMs",
+
+    "models": {
+      "gemini_flash": {
+        "provider": "openrouter",
+        "model_id": "google/gemini-flash-1.5",
+        "cost_per_1k_input": 0.000075,
+        "cost_per_1k_output": 0.0003,
+        "max_tokens": 8192,
+        "requests_per_minute": 60,
+        "best_for": [
+          "classification",
+          "extraction",
+          "summarization",
+          "translation"
+        ]
+      },
+      "groq_llama": {
+        "provider": "groq",
+        "model_id": "llama-3.1-70b-versatile",
+        "cost_per_1k_input": 0.00059,
+        "cost_per_1k_output": 0.00079,
+        "max_tokens": 8192,
+        "requests_per_minute": 30,
+        "best_for": ["analysis", "code_review", "reasoning", "drafting"]
+      },
+      "groq_mixtral": {
+        "provider": "groq",
+        "model_id": "mixtral-8x7b-32768",
+        "cost_per_1k_input": 0.00024,
+        "cost_per_1k_output": 0.00024,
+        "max_tokens": 32768,
+        "requests_per_minute": 30,
+        "best_for": ["long_context", "document_analysis", "batch_processing"]
+      },
+      "deepseek_v3": {
+        "provider": "deepseek",
+        "model_id": "deepseek-chat",
+        "api_base": "https://api.deepseek.com",
+        "cost_per_1k_input": 0.00028,
+        "cost_per_1k_output": 0.00042,
+        "cost_per_1k_input_cached": 0.000028,
+        "max_tokens": 8192,
+        "context_window": 128000,
+        "requests_per_minute": 60,
+        "best_for": [
+          "content_writing",
+          "summarization",
+          "email_drafting",
+          "report_generation",
+          "data_extraction",
+          "lead_processing"
+        ]
+      },
+      "deepseek_r1": {
+        "provider": "deepseek",
+        "model_id": "deepseek-reasoner",
+        "api_base": "https://api.deepseek.com",
+        "cost_per_1k_input": 0.00012,
+        "cost_per_1k_output": 0.0002,
+        "max_tokens": 8192,
+        "context_window": 128000,
+        "requests_per_minute": 30,
+        "best_for": [
+          "deep_analysis",
+          "quantitative_reasoning",
+          "market_research",
+          "competitive_intel",
+          "pattern_detection",
+          "financial_modeling"
+        ]
+      },
+      "grok_fast": {
+        "provider": "xai",
+        "model_id": "grok-4-1-fast-non-reasoning",
+        "api_base": "https://api.x.ai/v1",
+        "cost_per_1k_input": 0.0002,
+        "cost_per_1k_output": 0.0005,
+        "max_tokens": 16384,
+        "context_window": 2000000,
+        "requests_per_minute": 60,
+        "best_for": [
+          "large_document_processing",
+          "bulk_classification",
+          "cross_reference",
+          "web_data_analysis",
+          "intel_synthesis"
+        ]
+      },
+      "grok_reasoning": {
+        "provider": "xai",
+        "model_id": "grok-4-1-fast-reasoning",
+        "api_base": "https://api.x.ai/v1",
+        "cost_per_1k_input": 0.0002,
+        "cost_per_1k_output": 0.0005,
+        "max_tokens": 16384,
+        "context_window": 2000000,
+        "requests_per_minute": 30,
+        "best_for": [
+          "complex_reasoning",
+          "long_document_analysis",
+          "research_synthesis",
+          "competitive_analysis"
+        ]
+      },
+      "openrouter_gemini_free": {
+        "provider": "openrouter",
+        "model_id": "google/gemini-2.5-pro-exp-03-25:free",
+        "api_base": "https://openrouter.ai/api/v1",
+        "cost_per_1k_input": 0,
+        "cost_per_1k_output": 0,
+        "max_tokens": 8192,
+        "context_window": 1000000,
+        "requests_per_minute": 20,
+        "daily_limit": 1000,
+        "best_for": [
+          "summarization",
+          "classification",
+          "drafting",
+          "general_tasks"
+        ]
+      },
+      "openrouter_llama4_free": {
+        "provider": "openrouter",
+        "model_id": "meta-llama/llama-4-maverick:free",
+        "api_base": "https://openrouter.ai/api/v1",
+        "cost_per_1k_input": 0,
+        "cost_per_1k_output": 0,
+        "max_tokens": 8192,
+        "requests_per_minute": 20,
+        "daily_limit": 1000,
+        "best_for": [
+          "content_writing",
+          "analysis",
+          "email_drafting",
+          "lead_qualification"
+        ]
+      },
+      "openrouter_deepseek_free": {
+        "provider": "openrouter",
+        "model_id": "deepseek/deepseek-chat-v3-0324:free",
+        "api_base": "https://openrouter.ai/api/v1",
+        "cost_per_1k_input": 0,
+        "cost_per_1k_output": 0,
+        "max_tokens": 8192,
+        "context_window": 128000,
+        "requests_per_minute": 20,
+        "daily_limit": 1000,
+        "best_for": [
+          "report_generation",
+          "data_extraction",
+          "summarization",
+          "code_review"
+        ]
+      },
+      "openrouter_r1_free": {
+        "provider": "openrouter",
+        "model_id": "deepseek/deepseek-r1-zero:free",
+        "api_base": "https://openrouter.ai/api/v1",
+        "cost_per_1k_input": 0,
+        "cost_per_1k_output": 0,
+        "max_tokens": 8192,
+        "requests_per_minute": 20,
+        "daily_limit": 1000,
+        "best_for": ["reasoning", "analysis", "math", "research"]
+      },
+      "openai_gpt4o": {
+        "provider": "openai",
+        "model_id": "gpt-4o",
+        "api_base": "https://api.openai.com/v1",
+        "cost_per_1k_input": 0.0025,
+        "cost_per_1k_output": 0.01,
+        "max_tokens": 16384,
+        "context_window": 128000,
+        "requests_per_minute": 60,
+        "best_for": [
+          "vision",
+          "function_calling",
+          "embeddings",
+          "structured_output",
+          "fallback"
+        ]
+      }
+    },
+
+    "execution": {
+      "max_parallel": 10,
+      "timeout_per_task_ms": 30000,
+      "retry_count": 2,
+      "backoff_ms": 1000
+    },
+
+    "integration_patterns": {
+      "swarm_as_frontline": {
+        "description": "Swarm handles all incoming requests, only escalates complex ones to full agents",
+        "flow": [
+          "1. Message arrives at foundation-router",
+          "2. Swarm model classifies intent and complexity (cost: ~$0.0001)",
+          "3. Simple tasks handled entirely by swarm (80% of volume)",
+          "4. Complex tasks routed to full agent with swarm-generated context",
+          "5. Results stored in memory for future swarm training"
+        ],
+        "best_for": "High-volume, mostly-simple workloads",
+        "estimated_cost_reduction": "60-80%"
+      },
+
+      "hybrid": {
+        "description": "Full agent orchestrates, delegates subtasks to swarm workers",
+        "flow": [
+          "1. Full agent (e.g. Seldon) receives complex task",
+          "2. Agent decomposes into parallel subtasks",
+          "3. Swarm executes subtasks concurrently (e.g., research 5 topics)",
+          "4. Agent synthesizes swarm results into final output",
+          "5. Cost tracked per swarm invocation"
+        ],
+        "best_for": "Complex tasks with parallelizable components",
+        "estimated_cost_reduction": "40-60%"
+      },
+
+      "swarm_plus_agent_pool": {
+        "description": "Swarm pre-processes, agent pool handles domain-specific work",
+        "flow": [
+          "1. Swarm batch-processes incoming queue (classification, extraction)",
+          "2. Results grouped by domain/agent specialty",
+          "3. Agent pool picks up pre-processed work with rich context",
+          "4. Agents focus on high-value reasoning only",
+          "5. Swarm handles post-processing (formatting, notifications)"
+        ],
+        "best_for": "Balanced workloads with mix of simple and complex",
+        "estimated_cost_reduction": "50-70%"
+      }
+    },
+
+    "cost_tracking": {
+      "enabled": true,
+      "log_to": "postgresql",
+      "table": "metrics",
+      "fields": {
+        "metric_name": "swarm_cost",
+        "labels": {
+          "model": "model_id used",
+          "task_type": "classification/extraction/summarization/etc",
+          "agent_id": "requesting agent",
+          "tokens_in": "input token count",
+          "tokens_out": "output token count",
+          "cost_usd": "estimated cost in USD"
+        }
+      },
+      "budget_alerts": {
+        "daily_limit_usd": 5.0,
+        "monthly_limit_usd": 100.0,
+        "alert_at_percent": 80
+      }
+    },
+
+    "synthesis": {
+      "description": "Swarm results are passed to full agent for synthesis",
+      "format": {
+        "type": "structured_json",
+        "fields": [
+          "task_id",
+          "model_used",
+          "input_summary",
+          "output",
+          "confidence",
+          "tokens_used",
+          "cost_usd"
+        ]
+      },
+      "synthesis_agent": "seldon",
+      "fallback_agent": "demerzel"
+    }
+  }
+}

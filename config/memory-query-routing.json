@@ -1,0 +1,88 @@
+{
+  "query_routing": {
+    "patterns": [
+      {
+        "pattern": "where is .* implemented",
+        "tier": "L5",
+        "source": "Cartographer",
+        "description": "Code location queries route to Cartographer codebase map"
+      },
+      {
+        "pattern": "how does .* work",
+        "tier": "L5",
+        "source": "Cartographer",
+        "description": "Code behavior queries route to codebase analysis"
+      },
+      {
+        "pattern": "what did we decide about",
+        "tier": "L2",
+        "source": "GraphMem",
+        "description": "Decision history routes to graph-based knowledge"
+      },
+      {
+        "pattern": "why did we choose",
+        "tier": "L2",
+        "source": "GraphMem",
+        "description": "Rationale queries route to decision triples"
+      },
+      {
+        "pattern": "find docs about",
+        "tier": "L2",
+        "source": "QMD",
+        "description": "Document search routes to QMD hybrid search"
+      },
+      {
+        "pattern": "search for .* in documents",
+        "tier": "L2",
+        "source": "QMD",
+        "description": "Document keyword search routes to QMD"
+      },
+      {
+        "pattern": "who offered",
+        "tier": "L3",
+        "source": "PostgreSQL",
+        "description": "Lead/contact queries route to structured business data"
+      },
+      {
+        "pattern": "which leads|contacts|offers",
+        "tier": "L3",
+        "source": "PostgreSQL",
+        "description": "Business entity queries route to structured data"
+      },
+      {
+        "pattern": "task status|sprint progress|overdue",
+        "tier": "L3",
+        "source": "PostgreSQL",
+        "description": "Operational queries route to task/project tables"
+      },
+      {
+        "pattern": "what happened yesterday|last week|earlier today",
+        "tier": "L4",
+        "source": "TranscriptArchive",
+        "description": "Historical context routes to transcript search"
+      },
+      {
+        "pattern": "who am i|what is my role|my personality",
+        "tier": "L1",
+        "source": "SOUL.md",
+        "description": "Identity queries route to hot memory"
+      },
+      {
+        "pattern": "what are my preferences|settings",
+        "tier": "L1",
+        "source": "MEMORY.md",
+        "description": "Preference queries route to hot memory"
+      }
+    ],
+    "fallback": {
+      "tier": "L3",
+      "source": "PostgreSQL",
+      "description": "Unmatched queries default to structured data search"
+    },
+    "cascade": {
+      "enabled": true,
+      "description": "If primary tier returns no results, try next tier in sequence",
+      "sequence": ["L1", "L2", "L3", "L4", "L5"]
+    }
+  }
+}

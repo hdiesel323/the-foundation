@@ -1,0 +1,16 @@
+{
+  "name": "check-disk-usage",
+  "description": "Check disk usage on the VPS and alert if any partition exceeds 85% capacity",
+  "command": "df -h | awk 'NR>1 && +$5 > 85 {print \"ALERT: \" $6 \" at \" $5}'",
+  "created_by": "foundry",
+  "observed_from": "daneel",
+  "usage_count": 0,
+  "_schema_notes": {
+    "name": "Unique tool name (VARCHAR 255), maps to foundry_tools.name",
+    "description": "What the tool does (TEXT), maps to foundry_tools.description",
+    "command": "Shell command or script to execute (TEXT), maps to foundry_tools.command",
+    "created_by": "Agent or system that created this tool (VARCHAR 100), default 'foundry'",
+    "observed_from": "Agent ID where the pattern was first observed (VARCHAR 100, FK to agents.id)",
+    "usage_count": "Number of times the tool has been used (INTEGER), incremented on each use"
+  }
+}

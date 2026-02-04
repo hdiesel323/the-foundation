@@ -1,0 +1,64 @@
+{
+  "escalation_chains": {
+    "command": {
+      "chain": ["seldon", "human"],
+      "description": "Seldon escalates directly to human for strategic decisions"
+    },
+    "infrastructure": {
+      "chain": ["agent", "daneel", "seldon", "human"],
+      "agents": ["daneel", "hardin"],
+      "description": "Infrastructure agents escalate through Daneel to Seldon",
+      "security_override": {
+        "agent": "hardin",
+        "authority": "VETO",
+        "escalates_directly_to": "seldon",
+        "note": "Security VETOs skip normal chain and go directly to Seldon"
+      }
+    },
+    "commerce": {
+      "chain": ["agent", "mallow", "seldon", "human"],
+      "agents": ["mallow", "preem", "riose", "trader"],
+      "description": "Commerce agents escalate through Mallow (Revenue Ops VP) to Seldon",
+      "p0_override": {
+        "events": ["stop_loss_breach", "daily_loss_limit", "revenue_emergency"],
+        "escalates_directly_to": "seldon",
+        "notify": ["human"],
+        "note": "P0 commerce events skip mallow and go directly to Seldon + human notification"
+      }
+    },
+    "intelligence": {
+      "chain": ["agent", "demerzel", "seldon", "human"],
+      "agents": ["gaal", "demerzel", "mis", "amaryl"],
+      "description": "Intelligence agents escalate through Demerzel to Seldon",
+      "factual_override": {
+        "agent": "gaal",
+        "authority": "VETO",
+        "escalates_directly_to": "seldon",
+        "note": "Factual VETOs skip normal chain and go directly to Seldon"
+      }
+    },
+    "operations": {
+      "chain": ["agent", "venabili", "seldon", "human"],
+      "agents": ["magnifico", "venabili", "arkady"],
+      "description": "Operations agents escalate through Venabili (PM) to Seldon"
+    }
+  },
+  "cross_division": {
+    "routing": "All cross-division requests route through Seldon",
+    "intelligence_requests": "Any division can request intelligence from Demerzel via Seldon",
+    "security_reviews": "Any action flagged as security-sensitive routes to Hardin",
+    "fact_checks": "Any content with factual claims routes to Gaal"
+  },
+  "human_escalation": {
+    "channels": ["telegram_@clawd_ceo", "slack_dm"],
+    "required_info": [
+      "escalation_reason",
+      "originating_agent",
+      "full_chain_traversed",
+      "attempted_resolutions",
+      "recommended_action"
+    ],
+    "auto_timeout_hours": 24,
+    "timeout_action": "Re-escalate with increased priority"
+  }
+}

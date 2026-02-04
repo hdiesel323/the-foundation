@@ -1,0 +1,112 @@
+{
+  "channels": {
+    "google_maps": {
+      "label": "Google Maps — Local Businesses",
+      "scan_frequency": "daily",
+      "scan_agent": "preem",
+      "query_templates": [
+        "{{vertical}} companies near {{city}}",
+        "{{service_type}} businesses in {{metro_area}}",
+        "top rated {{vertical}} in {{state}}"
+      ],
+      "scoring_criteria": {
+        "rating_min": 3.5,
+        "review_count_min": 10,
+        "has_website": true,
+        "has_phone": true
+      },
+      "extract_fields": ["business_name", "phone", "website", "rating", "review_count", "address", "category"],
+      "output": "leads_table",
+      "lead_source": "google_maps"
+    },
+    "yelp": {
+      "label": "Yelp — Service Providers",
+      "scan_frequency": "daily",
+      "scan_agent": "preem",
+      "query_templates": [
+        "{{vertical}} in {{city}}",
+        "best {{service_type}} {{metro_area}}"
+      ],
+      "scoring_criteria": {
+        "rating_min": 3.0,
+        "review_count_min": 5,
+        "claimed_listing": true
+      },
+      "extract_fields": ["business_name", "phone", "website", "rating", "review_count", "category", "price_range"],
+      "output": "leads_table",
+      "lead_source": "yelp"
+    },
+    "reddit": {
+      "label": "Reddit — Pain Points & Market Sentiment",
+      "scan_frequency": "twice_daily",
+      "scan_agent": "mis",
+      "query_templates": [
+        "r/{{subreddit}} {{pain_point_keyword}}",
+        "r/smallbusiness {{vertical}} problems",
+        "r/Entrepreneur {{vertical}} struggle"
+      ],
+      "scoring_criteria": {
+        "min_upvotes": 5,
+        "min_comments": 3,
+        "recency_days": 30
+      },
+      "extract_fields": ["title", "url", "subreddit", "upvotes", "comments", "sentiment", "pain_points"],
+      "output": "market_intelligence",
+      "subreddits": ["smallbusiness", "Entrepreneur", "insurance", "legaladvice", "HomeImprovement", "realestateinvesting"]
+    },
+    "x_twitter": {
+      "label": "X (Twitter) — Market Sentiment & Trends",
+      "scan_frequency": "every_4_hours",
+      "scan_agent": "mis",
+      "query_templates": [
+        "{{vertical}} lead generation",
+        "{{competitor_name}} pricing",
+        "{{product_category}} review",
+        "#{{industry_hashtag}}"
+      ],
+      "scoring_criteria": {
+        "min_engagement": 10,
+        "min_followers": 500,
+        "exclude_bots": true
+      },
+      "extract_fields": ["text", "author", "followers", "engagement", "sentiment", "url"],
+      "output": "market_intelligence",
+      "sentiment_tracking": true
+    },
+    "linkedin": {
+      "label": "LinkedIn — Decision Makers & Company Intel",
+      "scan_frequency": "daily",
+      "scan_agent": "preem",
+      "query_templates": [
+        "{{title}} at {{company_type}} in {{vertical}}",
+        "{{decision_maker_role}} {{industry}} {{location}}"
+      ],
+      "scoring_criteria": {
+        "title_match": true,
+        "company_size_min": 5,
+        "connection_degree_max": 3
+      },
+      "extract_fields": ["name", "title", "company", "location", "company_size", "industry"],
+      "output": "leads_table",
+      "lead_source": "linkedin"
+    }
+  },
+  "global_settings": {
+    "dedup_by": ["business_name", "phone", "email"],
+    "auto_score": true,
+    "auto_enrich": true,
+    "enrichment_sources": ["clearbit", "apollo", "hunter"],
+    "rate_limits": {
+      "google_maps": 100,
+      "yelp": 50,
+      "reddit": 200,
+      "x_twitter": 300,
+      "linkedin": 50
+    },
+    "compliance": {
+      "respect_robots_txt": true,
+      "rate_limit_delay_ms": 2000,
+      "gdpr_compliant": true
+    }
+  }
+}

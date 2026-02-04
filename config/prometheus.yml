@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'openclaw'
+    static_configs:
+      - targets: ['openclaw:8080']
+
+  - job_name: 'mcp-gateway'
+    static_configs:
+      - targets: ['mcp-gateway:3000']
+
+  - job_name: 'agent_metrics'
+    scrape_interval: 60s
+    static_configs:
+      - targets: ['node-exporter:9100']
+    metrics_path: /metrics

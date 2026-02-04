@@ -1,0 +1,20 @@
+{
+  "name": "agent-runtime",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Shared agent runtime framework (BaseRunner)",
+  "main": "base-runner.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "pg": "^8.13.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.0",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "critic_chains": {
+    "default": {
+      "layers": [
+        { "agent": "seldon", "scope": "format" }
+      ],
+      "require_unanimous": false,
+      "max_retries": 3,
+      "on_final_reject": "return_error"
+    },
+    "security": {
+      "layers": [
+        { "agent": "seldon", "scope": "format" },
+        { "agent": "hardin", "scope": "security", "authority": "VETO" }
+      ],
+      "require_unanimous": true,
+      "max_retries": 2,
+      "on_final_reject": "escalate_to_human"
+    },
+    "research": {
+      "layers": [
+        { "agent": "seldon", "scope": "format" },
+        { "agent": "gaal", "scope": "factual", "authority": "VETO" }
+      ],
+      "require_unanimous": true,
+      "max_retries": 3,
+      "on_final_reject": "escalate_to_human"
+    },
+    "infrastructure": {
+      "layers": [
+        { "agent": "seldon", "scope": "format" },
+        { "agent": "hardin", "scope": "security", "authority": "VETO" },
+        { "agent": "daneel", "scope": "operational" }
+      ],
+      "require_unanimous": true,
+      "max_retries": 2,
+      "on_final_reject": "escalate_to_human"
+    },
+    "financial": {
+      "layers": [
+        { "agent": "seldon", "scope": "format" },
+        { "agent": "mallow", "scope": "financial" },
+        { "agent": "gaal", "scope": "factual", "authority": "VETO" }
+      ],
+      "require_unanimous": true,
+      "max_retries": 1,
+      "on_final_reject": "escalate_to_human"
+    },
+    "content": {
+      "layers": [
+        { "agent": "magnifico", "scope": "creative" },
+        { "agent": "gaal", "scope": "factual", "authority": "VETO" }
+      ],
+      "require_unanimous": true,
+      "max_retries": 3,
+      "on_final_reject": "return_to_author"
+    },
+    "trading": {
+      "layers": [
+        { "agent": "seldon", "scope": "format" },
+        { "agent": "hardin", "scope": "security", "authority": "VETO" },
+        { "agent": "amaryl", "scope": "quantitative" }
+      ],
+      "require_unanimous": true,
+      "max_retries": 1,
+      "on_final_reject": "escalate_to_human"
+    }
+  },
+  "veto_agents": {
+    "hardin": {
+      "scope": "security",
+      "authority": "Can VETO any action that poses security risk",
+      "override": "Only human can override"
+    },
+    "gaal": {
+      "scope": "factual",
+      "authority": "Can VETO any content with factual errors or unverified claims",
+      "override": "Only human can override"
+    }
+  }
+}

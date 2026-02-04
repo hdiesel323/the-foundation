@@ -1,0 +1,478 @@
+{
+  "agents": {
+    "defaults": {
+      "model": "claude-sonnet-4-5-20250929",
+      "apiBaseUrl": "http://anthropic-router:3333",
+      "modelTiers": {
+        "claude": {
+          "model": "claude-sonnet-4-5-20250929",
+          "provider": "anthropic",
+          "apiBaseUrl": "http://anthropic-router:3333",
+          "apiKeySecret": "anthropic_key",
+          "billing": "flat-rate (Max subscription $100/mo)",
+          "use_for": "ALL agent work — primary tier for all 14 agents (flat-rate Max subscription)"
+        },
+        "deepseek_v3": {
+          "model": "deepseek-chat",
+          "provider": "deepseek",
+          "apiBaseUrl": "https://api.deepseek.com",
+          "apiKeySecret": "deepseek_key",
+          "cost_per_1m": { "input": 0.28, "output": 0.42, "cached": 0.028 },
+          "context_window": 128000,
+          "use_for": "SWARM ONLY — batch pre-processing via swarm.json, never as primary agent tier"
+        },
+        "deepseek_r1": {
+          "model": "deepseek-reasoner",
+          "provider": "deepseek",
+          "apiBaseUrl": "https://api.deepseek.com",
+          "apiKeySecret": "deepseek_key",
+          "cost_per_1m": { "input": 0.12, "output": 0.2 },
+          "context_window": 128000,
+          "use_for": "SWARM ONLY — deep reasoning batch jobs via swarm.json, never as primary agent tier"
+        },
+        "grok_fast": {
+          "model": "grok-4-1-fast-non-reasoning",
+          "provider": "xai",
+          "apiBaseUrl": "https://api.x.ai/v1",
+          "apiKeySecret": "xai_key",
+          "cost_per_1m": { "input": 0.2, "output": 0.5 },
+          "context_window": 2000000,
+          "use_for": "OVERFLOW ONLY — when input exceeds Claude's 200K context (2M window). Used by mis, demerzel as overflowTier"
+        },
+        "grok_reasoning": {
+          "model": "grok-4-1-fast-reasoning",
+          "provider": "xai",
+          "apiBaseUrl": "https://api.x.ai/v1",
+          "apiKeySecret": "xai_key",
+          "cost_per_1m": { "input": 0.2, "output": 0.5 },
+          "context_window": 2000000,
+          "use_for": "OVERFLOW ONLY — reasoning tasks exceeding Claude's 200K context. Used by mis as overflowTier"
+        },
+        "openai": {
+          "model": "gpt-4o",
+          "provider": "openai",
+          "apiBaseUrl": "https://api.openai.com/v1",
+          "apiKeySecret": "openai_key",
+          "cost_per_1m": { "input": 2.5, "output": 10.0 },
+          "use_for": "SPECIALTY ONLY — embeddings and vision tasks that require OpenAI-specific models"
+        },
+        "openrouter": {
+          "model": "auto",
+          "provider": "openrouter",
+          "apiBaseUrl": "https://openrouter.ai/api/v1",
+          "apiKeySecret": "openrouter_key",
+          "use_for": "LAST RESORT — fallback gateway when Claude and free tiers both unavailable"
+        },
+        "free": {
+          "model": "google/gemini-2.5-pro-exp-03-25:free",
+          "provider": "openrouter",
+          "apiBaseUrl": "https://openrouter.ai/api/v1",
+          "apiKeySecret": "openrouter_key",
+          "cost_per_1m": { "input": 0, "output": 0 },
+          "context_window": 1000000,
+          "rate_limit": "20 req/min, 1000/day (with $10 credit purchase)",
+          "alternatives": [
+            "meta-llama/llama-4-maverick:free",
+            "deepseek/deepseek-chat-v3-0324:free",
+            "deepseek/deepseek-r1-zero:free",
+            "meta-llama/llama-4-scout:free",
+            "mistralai/mistral-small-3.1-24b-instruct:free"
+          ],
+          "use_for": "RATE-LIMIT OVERFLOW — when Claude hits rate limits, parallel agent overflow, swarm batch jobs"
+        }
+      },
+      "modelFallbackChain": ["claude", "free", "openrouter"],
+      "routingStrategy": {
+        "primary": "claude",
+        "primaryNote": "Claude Max subscription — flat-rate unlimited. Use for ALL agent work.",
+        "fallbackToFree": "Only when Claude rate-limited or for parallel overflow",
+        "useGrokOnly": "When input exceeds 200K tokens (Grok has 2M context window)",
+        "useOpenAIOnly": "Embeddings and vision tasks that require OpenAI-specific models",
+        "swarmLayer": "Free/cheap models for batch pre-processing via swarm.json"
+      },
+      "memory": {
+        "preFlushEnabled": true,
+        "hybridSearch": true
+      },
+      "sandbox": {
+        "docker": {
+          "network": "openclaw-net",
+          "memory": "2G",
+          "readOnly": true
+        }
+      },
+      "hooks": {
+        "configPath": "config/session-hooks.json",
+        "pre_session": "scripts/session-start.sh",
+        "post_session": "scripts/session-end.sh"
+      }
+    },
+    "instances": {
+      "seldon": {
+        "port": 18789,
+        "role": "Orchestrator",
+        "modelTier": "claude",
+        "division": "command",
+        "location": "mac-mini",
+        "priority": 0,
+        "soulPath": "~/.openclaw/agents/seldon/SOUL.md",
+        "tools": {
+          "allow": [
+            "route",
+            "coordinate",
+            "delegate",
+            "monitor",
+            "gateway",
+            "broadcast",
+            "handoff",
+            "spawn",
+            "validate"
+          ],
+          "deny": ["exec", "ssh", "deploy", "financial", "write_content"]
+        },
+        "bindings": [
+          { "channel": "telegram", "primary": true },
+          { "channel": "slack", "delegateTo": "magnifico" }
+        ]
+      },
+      "daneel": {
+        "port": 18790,
+        "role": "SysAdmin",
+        "modelTier": "claude",
+        "division": "infrastructure",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/daneel/SOUL.md",
+        "tools": {
+          "allow": ["exec", "ssh", "docker", "deploy", "monitor"],
+          "deny": ["financial", "ads"]
+        }
+      },
+      "hardin": {
+        "port": 18791,
+        "role": "Security Critic",
+        "modelTier": "claude",
+        "division": "infrastructure",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/hardin/SOUL.md",
+        "authority": {
+          "level": "veto",
+          "scope": "security",
+          "can_reject": true,
+          "can_approve": true,
+          "cannot_modify": true
+        },
+        "validation_rules": [
+          "no_credentials_exposed",
+          "no_destructive_commands",
+          "no_public_exposure_without_auth",
+          "no_unencrypted_secrets",
+          "no_privilege_escalation"
+        ],
+        "on_veto": {
+          "return_to_originator": true,
+          "max_retries": 3,
+          "escalate_after_retries": "seldon"
+        },
+        "tools": {
+          "allow": [
+            "scan",
+            "firewall",
+            "audit",
+            "alert",
+            "review",
+            "security_check"
+          ],
+          "deny": ["deploy", "financial"]
+        }
+      },
+      "magnifico": {
+        "port": 18792,
+        "role": "Creative Director",
+        "modelTier": "claude",
+        "division": "operations",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/magnifico/SOUL.md",
+        "workspace": "~/.openclaw/agents/magnifico/workspace",
+        "tools": {
+          "allow": [
+            "creative",
+            "brand",
+            "ad_copy",
+            "visual_direction",
+            "communication"
+          ],
+          "deny": ["ssh", "deploy", "financial"]
+        },
+        "bindings": [
+          { "channel": "slack", "channelId": "#openclaw" },
+          { "channel": "telegram", "via": "seldon" }
+        ]
+      },
+      "trader": {
+        "port": 18793,
+        "role": "Trading Operations",
+        "modelTier": "claude",
+        "division": "commerce",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/trader/SOUL.md",
+        "patrol": {
+          "interval": "30m",
+          "actions": [
+            "position_monitoring",
+            "stop_loss_enforcement",
+            "pnl_alerts"
+          ]
+        },
+        "tools": {
+          "allow": ["trades", "positions", "risk", "market_data", "alpaca"],
+          "deny": ["deploy", "ssh"]
+        }
+      },
+      "gaal": {
+        "port": 18794,
+        "role": "Factual Critic",
+        "modelTier": "claude",
+        "division": "intelligence",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/gaal/SOUL.md",
+        "authority": {
+          "level": "veto",
+          "scope": "factual",
+          "can_reject": true,
+          "can_approve": true,
+          "cannot_modify": true
+        },
+        "validation_rules": [
+          "all_claims_sourced",
+          "statistics_verified",
+          "quotes_attributed",
+          "dates_current",
+          "no_hallucinated_facts"
+        ],
+        "on_veto": {
+          "return_to_originator": true,
+          "max_retries": 3,
+          "escalate_after_retries": "demerzel"
+        },
+        "tools": {
+          "allow": [
+            "web_search",
+            "analysis",
+            "reports",
+            "deep_research",
+            "review",
+            "fact_check",
+            "verify",
+            "cite"
+          ],
+          "deny": ["deploy", "ssh", "financial"]
+        }
+      },
+      "mallow": {
+        "port": 18799,
+        "role": "Revenue Ops VP",
+        "modelTier": "claude",
+        "division": "commerce",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/mallow/SOUL.md",
+        "patrol": {
+          "interval": "1h",
+          "actions": [
+            "pipeline_health",
+            "stale_deals",
+            "campaign_spend",
+            "retreaver_volume"
+          ]
+        },
+        "tools": {
+          "allow": [
+            "revenue",
+            "pipeline",
+            "campaigns",
+            "retreaver",
+            "analytics",
+            "forecasting"
+          ],
+          "deny": ["deploy", "ssh", "exec"]
+        }
+      },
+      "riose": {
+        "port": 18800,
+        "role": "Paid Media Director",
+        "modelTier": "claude",
+        "division": "commerce",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/riose/SOUL.md",
+        "patrol": {
+          "interval": "2h",
+          "actions": [
+            "campaign_spend_rate",
+            "roas_thresholds",
+            "budget_pacing",
+            "ad_disapprovals"
+          ]
+        },
+        "tools": {
+          "allow": [
+            "ads",
+            "campaigns",
+            "spend_optimization",
+            "creative_review",
+            "audience_targeting"
+          ],
+          "deny": ["deploy", "ssh", "exec"]
+        }
+      },
+      "preem": {
+        "port": 18797,
+        "role": "VP Sales",
+        "modelTier": "claude",
+        "division": "commerce",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/preem/SOUL.md",
+        "patrol": {
+          "interval": "4h",
+          "actions": ["stale_leads", "overdue_followups", "at_risk_deals"]
+        },
+        "tools": {
+          "allow": [
+            "outreach",
+            "crm",
+            "pipeline",
+            "lead_qualification",
+            "prospecting"
+          ],
+          "deny": ["deploy", "ssh"]
+        }
+      },
+      "mis": {
+        "port": 18801,
+        "role": "VP Research",
+        "modelTier": "claude",
+        "overflowTier": "grok_reasoning",
+        "overflowNote": "Falls back to Grok for 2M context window when document exceeds Claude's 200K limit",
+        "division": "intelligence",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/mis/SOUL.md",
+        "patrol": {
+          "interval": "4h",
+          "actions": ["competitor_alerts", "market_trends", "stale_research"]
+        },
+        "tools": {
+          "allow": [
+            "research",
+            "market_intel",
+            "competitive_analysis",
+            "serp_analysis",
+            "web_search",
+            "reports"
+          ],
+          "deny": ["deploy", "ssh", "financial", "exec"]
+        }
+      },
+      "amaryl": {
+        "port": 18802,
+        "role": "Quant Analyst",
+        "modelTier": "claude",
+        "division": "intelligence",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/amaryl/SOUL.md",
+        "patrol": {
+          "interval": "2h",
+          "actions": ["model_drift", "prediction_accuracy", "anomaly_alerts"]
+        },
+        "tools": {
+          "allow": [
+            "analysis",
+            "modeling",
+            "predictions",
+            "backtesting",
+            "risk_metrics",
+            "data_viz"
+          ],
+          "deny": ["deploy", "ssh", "exec", "trades"]
+        }
+      },
+      "arkady": {
+        "port": 18798,
+        "role": "Content Writer",
+        "modelTier": "claude",
+        "division": "operations",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/arkady/SOUL.md",
+        "patrol": {
+          "interval": "6h",
+          "actions": ["overdue_content", "stale_drafts", "calendar_gaps"]
+        },
+        "tools": {
+          "allow": [
+            "writing",
+            "seo",
+            "email",
+            "social_media",
+            "blog",
+            "landing_pages"
+          ],
+          "deny": ["deploy", "ssh", "financial", "exec"]
+        }
+      },
+      "demerzel": {
+        "port": 18795,
+        "role": "Chief Intelligence",
+        "modelTier": "claude",
+        "overflowTier": "grok_fast",
+        "overflowNote": "Falls back to Grok for 2M context window when synthesizing bulk intel exceeding Claude's 200K limit",
+        "division": "intelligence",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/demerzel/SOUL.md",
+        "patrol": {
+          "interval": "4h",
+          "actions": [
+            "cross_division_intel",
+            "digest_generation",
+            "strategic_alerts"
+          ]
+        },
+        "tools": {
+          "allow": [
+            "intelligence",
+            "synthesis",
+            "briefing",
+            "strategic_analysis",
+            "competitive_intel",
+            "reports"
+          ],
+          "deny": ["deploy", "ssh", "exec", "financial"]
+        }
+      },
+      "venabili": {
+        "port": 18796,
+        "role": "Project Manager",
+        "modelTier": "claude",
+        "division": "operations",
+        "location": "vps-1",
+        "soulPath": "~/.openclaw/agents/venabili/SOUL.md",
+        "patrol": {
+          "interval": "4h",
+          "actions": ["deadline_tracking", "blocker_detection", "sprint_health"]
+        },
+        "tools": {
+          "allow": [
+            "project_management",
+            "task_tracking",
+            "milestone_planning",
+            "scheduling",
+            "sprint_planning"
+          ],
+          "deny": ["deploy", "ssh", "financial", "exec"]
+        }
+      }
+    }
+  },
+  "subagents": {
+    "enabled": true,
+    "maxConcurrent": 5,
+    "spawnMethod": "sessions_spawn",
+    "allowedAgents": ["gaal", "arkady", "mis", "amaryl", "demerzel"]
+  }
+}

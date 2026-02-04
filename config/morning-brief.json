@@ -1,0 +1,79 @@
+{
+  "schedule": {
+    "trigger_time_utc": "12:00",
+    "trigger_time_local": "07:00",
+    "timezone": "America/New_York",
+    "days": ["monday", "tuesday", "wednesday", "thursday", "friday"],
+    "agent": "trader",
+    "delivery_channel": "telegram",
+    "telegram_channel": "@clawd_tech"
+  },
+  "sections": {
+    "overnight_activity": {
+      "enabled": true,
+      "include": [
+        "asia_session_summary",
+        "europe_session_summary",
+        "crypto_overnight_moves",
+        "futures_direction",
+        "vix_level"
+      ]
+    },
+    "key_levels": {
+      "enabled": true,
+      "include": [
+        "sp500_support_resistance",
+        "nasdaq_support_resistance",
+        "portfolio_position_levels",
+        "watchlist_levels"
+      ],
+      "lookback_period": "20D"
+    },
+    "earnings_calendar": {
+      "enabled": true,
+      "include": [
+        "pre_market_earnings",
+        "after_hours_earnings",
+        "portfolio_holdings_reporting",
+        "watchlist_reporting"
+      ],
+      "lookahead_days": 5
+    },
+    "macro_events": {
+      "enabled": true,
+      "include": [
+        "fed_speakers",
+        "economic_data_releases",
+        "fomc_meetings",
+        "options_expiry",
+        "ex_dividend_dates"
+      ],
+      "impact_filter": "medium_high"
+    },
+    "portfolio_snapshot": {
+      "enabled": true,
+      "include": [
+        "total_equity",
+        "daily_pnl_ytd",
+        "open_positions_summary",
+        "pending_orders",
+        "cash_available"
+      ]
+    },
+    "watchlist": {
+      "enabled": true,
+      "include": [
+        "price_vs_target",
+        "near_entry_alerts",
+        "technical_signals",
+        "news_sentiment"
+      ]
+    }
+  },
+  "format": {
+    "style": "concise_bullets",
+    "max_length": 2000,
+    "include_charts": false,
+    "include_links": true
+  }
+}

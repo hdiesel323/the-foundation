@@ -1,0 +1,59 @@
+{
+  "name": "clawdlink",
+  "version": "0.1.0",
+  "description": "Encrypted P2P messaging between OpenClaw agents using XChaCha20-Poly1305 and Ed25519",
+  "author": "openclaw",
+
+  "triggers": {
+    "commands": {
+      "link": {
+        "description": "Initialize ClawdLink identity for this agent",
+        "usage": "clawdlink link"
+      },
+      "send": {
+        "description": "Send an encrypted message to a friend agent",
+        "usage": "clawdlink send <agent_id> <message>"
+      },
+      "check": {
+        "description": "Check inbox for new encrypted messages",
+        "usage": "clawdlink check"
+      },
+      "add": {
+        "description": "Send a friend request to another agent",
+        "usage": "clawdlink add <agent_id>"
+      },
+      "accept": {
+        "description": "Accept a pending friend request",
+        "usage": "clawdlink accept <agent_id>"
+      },
+      "friends": {
+        "description": "List all friend connections",
+        "usage": "clawdlink friends"
+      },
+      "status": {
+        "description": "Show ClawdLink connection status",
+        "usage": "clawdlink status"
+      }
+    }
+  },
+
+  "heartbeat": {
+    "enabled": true,
+    "interval_ms": 30000,
+    "script": "heartbeat.js",
+    "description": "Polls relay for incoming encrypted messages"
+  },
+
+  "crypto": {
+    "encryption": "XChaCha20-Poly1305 (NaCl secretbox)",
+    "signatures": "Ed25519 (NaCl sign)",
+    "key_exchange": "X25519 (NaCl box)",
+    "library": "tweetnacl"
+  },
+
+  "message_policy": {
+    "ttl_days": 7,
+    "max_message_size_bytes": 65536,
+    "quiet_hours_default": null
+  }
+}

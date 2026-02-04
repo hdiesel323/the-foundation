@@ -1,0 +1,50 @@
+{
+  "landed_cost_formula": {
+    "components": [
+      { "name": "unit_cost", "description": "FOB unit cost from supplier" },
+      { "name": "shipping_per_unit", "description": "Sea freight / total units in shipment" },
+      { "name": "customs_duty", "description": "HS code tariff rate × unit_cost (typically 0-25%)" },
+      { "name": "customs_processing", "description": "Brokerage fee / total units" },
+      { "name": "packaging", "description": "Custom box + insert + poly bag + label" },
+      { "name": "inspection", "description": "PSI cost / total units" },
+      { "name": "insurance", "description": "Cargo insurance / total units" }
+    ],
+    "formula": "landed_cost = unit_cost + shipping_per_unit + customs_duty + customs_processing + packaging + inspection + insurance"
+  },
+  "margin_thresholds": {
+    "minimum_margin_pct": 40,
+    "target_margin_pct": 65,
+    "premium_margin_pct": 75,
+    "alert_below_pct": 45
+  },
+  "pricing_rules": {
+    "retail_multiplier_min": 2.5,
+    "retail_multiplier_target": 3.0,
+    "competitor_price_check": true,
+    "psychological_pricing": true,
+    "round_to": 0.99
+  },
+  "cost_assumptions": {
+    "shipping_method": "sea_freight",
+    "avg_shipping_per_unit": 3.50,
+    "customs_duty_rate_pct": 6.5,
+    "customs_processing_per_unit": 0.50,
+    "packaging_per_unit": 2.00,
+    "inspection_per_unit": 0.25,
+    "insurance_pct": 1.5
+  },
+  "example_calculation": {
+    "product": "BW-18 Pro Ring Light",
+    "unit_cost": 28.00,
+    "shipping_per_unit": 3.50,
+    "customs_duty": 1.82,
+    "customs_processing": 0.50,
+    "packaging": 2.00,
+    "inspection": 0.25,
+    "insurance": 0.42,
+    "landed_cost": 36.49,
+    "retail_price": 89.99,
+    "gross_margin": 53.50,
+    "gross_margin_pct": 59.4
+  }
+}

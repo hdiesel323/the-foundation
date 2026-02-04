@@ -1,0 +1,141 @@
+{
+  "verticals": {
+    "lighting": {
+      "label": "Lighting & Creator Equipment",
+      "competitors": [
+        {
+          "name": "Elgato",
+          "urls": {
+            "website": "https://www.elgato.com",
+            "pricing": "https://www.elgato.com/us/en/s/key-light",
+            "products": "https://www.elgato.com/us/en/s/lighting",
+            "careers": "https://www.elgato.com/us/en/s/careers"
+          },
+          "priority": 1,
+          "monitoring_frequency": "daily",
+          "strengths": ["brand recognition", "ecosystem lock-in", "premium positioning"],
+          "weaknesses": ["high price point", "limited product range", "no ring lights"],
+          "price_range": "$50-$300"
+        },
+        {
+          "name": "Neewer",
+          "urls": {
+            "website": "https://neewer.com",
+            "pricing": "https://neewer.com/collections/lighting",
+            "amazon": "https://www.amazon.com/stores/Neewer"
+          },
+          "priority": 2,
+          "monitoring_frequency": "weekly",
+          "strengths": ["aggressive pricing", "wide product range", "Amazon presence"],
+          "weaknesses": ["perceived lower quality", "weak brand", "minimal DTC"],
+          "price_range": "$15-$150"
+        },
+        {
+          "name": "Godox",
+          "urls": {
+            "website": "https://www.godox.com",
+            "products": "https://www.godox.com/product-c/LED.html"
+          },
+          "priority": 2,
+          "monitoring_frequency": "weekly",
+          "strengths": ["professional quality", "wide distribution", "strong photography market"],
+          "weaknesses": ["not creator-focused", "complex products", "higher price"],
+          "price_range": "$30-$500"
+        }
+      ]
+    },
+    "lead_gen": {
+      "label": "Lead Generation & Call Tracking",
+      "competitors": [
+        {
+          "name": "Invoca",
+          "urls": {
+            "website": "https://www.invoca.com",
+            "pricing": "https://www.invoca.com/pricing"
+          },
+          "priority": 2,
+          "monitoring_frequency": "weekly",
+          "strengths": ["enterprise features", "AI call analytics", "large customer base"],
+          "weaknesses": ["expensive", "enterprise-focused", "complex setup"],
+          "price_range": "Enterprise pricing"
+        },
+        {
+          "name": "Phonexa",
+          "urls": {
+            "website": "https://phonexa.com",
+            "pricing": "https://phonexa.com/pricing"
+          },
+          "priority": 3,
+          "monitoring_frequency": "biweekly",
+          "strengths": ["all-in-one platform", "pay-per-call", "affiliate features"],
+          "weaknesses": ["smaller market share", "UI complexity"],
+          "price_range": "$100-$1000/mo"
+        },
+        {
+          "name": "Boberdoo",
+          "urls": {
+            "website": "https://www.boberdoo.com"
+          },
+          "priority": 3,
+          "monitoring_frequency": "monthly",
+          "strengths": ["lead distribution", "ping-post", "established platform"],
+          "weaknesses": ["dated technology", "limited analytics"],
+          "price_range": "$500-$2000/mo"
+        }
+      ]
+    },
+    "trading": {
+      "label": "Quantitative Trading & Analysis",
+      "competitors": [
+        {
+          "name": "QuantConnect",
+          "urls": {
+            "website": "https://www.quantconnect.com",
+            "pricing": "https://www.quantconnect.com/pricing"
+          },
+          "priority": 2,
+          "monitoring_frequency": "weekly",
+          "strengths": ["cloud backtesting", "multi-asset", "large community"],
+          "weaknesses": ["complexity", "requires coding", "latency"],
+          "price_range": "$0-$500/mo"
+        },
+        {
+          "name": "Alpaca",
+          "urls": {
+            "website": "https://alpaca.markets",
+            "docs": "https://docs.alpaca.markets"
+          },
+          "priority": 1,
+          "monitoring_frequency": "daily",
+          "note": "Partner, not competitor — monitor API changes",
+          "strengths": ["commission-free", "great API", "paper trading"],
+          "price_range": "Free tier + paid data"
+        },
+        {
+          "name": "TradingView",
+          "urls": {
+            "website": "https://www.tradingview.com",
+            "pricing": "https://www.tradingview.com/pricing"
+          },
+          "priority": 3,
+          "monitoring_frequency": "monthly",
+          "strengths": ["charting", "social features", "Pine Script"],
+          "weaknesses": ["not automated trading", "social noise"],
+          "price_range": "$0-$60/mo"
+        }
+      ]
+    }
+  },
+  "monitoring_settings": {
+    "change_detection": {
+      "pricing_changes": { "significance": 9, "alert_channel": "seldon" },
+      "new_products": { "significance": 7, "alert_channel": "mis" },
+      "strategic_announcements": { "significance": 8, "alert_channel": "seldon" },
+      "hiring_signals": { "significance": 5, "alert_channel": "mis" },
+      "content_changes": { "significance": 3, "alert_channel": "arkady" }
+    },
+    "scan_agent": "mis",
+    "digest_frequency": "weekly",
+    "digest_day": "sunday"
+  }
+}

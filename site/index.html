@@ -1,0 +1,1102 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>The Foundation - Multi-Agent AI Orchestration Platform</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            :root {
+                --navy-900: #0f172a;
+                --navy-800: #1e293b;
+                --navy-700: #334155;
+                --indigo-600: #4f46e5;
+                --indigo-500: #6366f1;
+                --indigo-400: #818cf8;
+                --white: #ffffff;
+                --gray-100: #f1f5f9;
+                --gray-300: #cbd5e1;
+                --gray-400: #94a3b8;
+                --gray-600: #475569;
+            }
+
+            body {
+                font-family:
+                    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                    "Helvetica Neue", Arial, sans-serif;
+                background: var(--navy-900);
+                color: var(--white);
+                line-height: 1.6;
+                overflow-x: hidden;
+            }
+
+            /* Container */
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 24px;
+            }
+
+            .container-wide {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 0 24px;
+            }
+
+            /* Header */
+            header {
+                padding: 24px 0;
+                border-bottom: 1px solid var(--navy-700);
+            }
+
+            .header-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .logo {
+                font-size: 24px;
+                font-weight: 700;
+                color: var(--white);
+                text-decoration: none;
+                letter-spacing: -0.5px;
+            }
+
+            nav a {
+                color: var(--gray-300);
+                text-decoration: none;
+                margin-left: 32px;
+                font-size: 15px;
+                transition: color 0.2s;
+            }
+
+            nav a:hover {
+                color: var(--white);
+            }
+
+            /* Hero Section */
+            .hero {
+                padding: 120px 0 160px;
+                text-align: center;
+                position: relative;
+            }
+
+            .hero::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 800px;
+                height: 800px;
+                background: radial-gradient(
+                    circle,
+                    rgba(79, 70, 229, 0.15) 0%,
+                    transparent 70%
+                );
+                pointer-events: none;
+            }
+
+            .hero-content {
+                position: relative;
+                z-index: 1;
+            }
+
+            h1 {
+                font-size: 72px;
+                font-weight: 700;
+                margin-bottom: 24px;
+                letter-spacing: -2px;
+                background: linear-gradient(
+                    135deg,
+                    var(--white) 0%,
+                    var(--gray-300) 100%
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+
+            .subtitle {
+                font-size: 24px;
+                color: var(--indigo-400);
+                margin-bottom: 16px;
+                font-weight: 500;
+            }
+
+            .tagline {
+                font-size: 20px;
+                color: var(--gray-400);
+                max-width: 800px;
+                margin: 0 auto 48px;
+                line-height: 1.8;
+            }
+
+            .cta-buttons {
+                display: flex;
+                gap: 16px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                padding: 16px 32px;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.3s;
+                display: inline-block;
+                border: none;
+                cursor: pointer;
+            }
+
+            .btn-primary {
+                background: var(--indigo-600);
+                color: var(--white);
+            }
+
+            .btn-primary:hover {
+                background: var(--indigo-500);
+                transform: translateY(-2px);
+                box-shadow: 0 12px 24px rgba(79, 70, 229, 0.3);
+            }
+
+            .btn-secondary {
+                background: transparent;
+                color: var(--white);
+                border: 2px solid var(--navy-700);
+            }
+
+            .btn-secondary:hover {
+                border-color: var(--indigo-500);
+                background: rgba(79, 70, 229, 0.1);
+            }
+
+            /* Section Styles */
+            section {
+                padding: 120px 0;
+                opacity: 0;
+                transform: translateY(40px);
+                animation: fadeInUp 0.8s forwards;
+            }
+
+            @keyframes fadeInUp {
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            section:nth-child(2) {
+                animation-delay: 0.1s;
+            }
+            section:nth-child(3) {
+                animation-delay: 0.2s;
+            }
+            section:nth-child(4) {
+                animation-delay: 0.3s;
+            }
+
+            .section-title {
+                font-size: 48px;
+                font-weight: 700;
+                text-align: center;
+                margin-bottom: 64px;
+                letter-spacing: -1px;
+            }
+
+            .section-subtitle {
+                font-size: 18px;
+                color: var(--gray-400);
+                text-align: center;
+                max-width: 700px;
+                margin: -48px auto 64px;
+            }
+
+            /* How It Works */
+            .how-it-works {
+                background: linear-gradient(
+                    180deg,
+                    var(--navy-900) 0%,
+                    var(--navy-800) 100%
+                );
+            }
+
+            .steps {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 32px;
+                margin-top: 48px;
+            }
+
+            .step {
+                text-align: center;
+                padding: 32px 24px;
+                background: var(--navy-700);
+                border-radius: 12px;
+                border: 1px solid transparent;
+                transition: all 0.3s;
+            }
+
+            .step:hover {
+                border-color: var(--indigo-500);
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(79, 70, 229, 0.2);
+            }
+
+            .step-number {
+                display: inline-block;
+                width: 48px;
+                height: 48px;
+                line-height: 48px;
+                background: var(--indigo-600);
+                border-radius: 50%;
+                font-size: 20px;
+                font-weight: 700;
+                margin-bottom: 16px;
+            }
+
+            .step-title {
+                font-size: 20px;
+                font-weight: 600;
+                margin-bottom: 12px;
+                color: var(--white);
+            }
+
+            .step-desc {
+                color: var(--gray-400);
+                font-size: 15px;
+                line-height: 1.6;
+            }
+
+            /* Agents Section */
+            .divisions {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 24px;
+                margin-top: 48px;
+            }
+
+            .division {
+                background: var(--navy-800);
+                border: 1px solid var(--navy-700);
+                border-radius: 12px;
+                padding: 32px;
+                transition: all 0.3s;
+            }
+
+            .division:hover {
+                border-color: var(--indigo-500);
+                transform: translateY(-4px);
+            }
+
+            .division-title {
+                font-size: 22px;
+                font-weight: 700;
+                margin-bottom: 20px;
+                color: var(--indigo-400);
+            }
+
+            .agent {
+                margin-bottom: 16px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid var(--navy-700);
+            }
+
+            .agent:last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+
+            .agent-name {
+                font-weight: 600;
+                color: var(--white);
+                font-size: 16px;
+            }
+
+            .agent-role {
+                color: var(--gray-400);
+                font-size: 14px;
+                margin-top: 4px;
+            }
+
+            /* Features Grid */
+            .features-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 32px;
+                margin-top: 48px;
+            }
+
+            .feature {
+                background: var(--navy-800);
+                border: 1px solid var(--navy-700);
+                border-radius: 12px;
+                padding: 40px 32px;
+                transition: all 0.3s;
+            }
+
+            .feature:hover {
+                border-color: var(--indigo-500);
+                background: linear-gradient(
+                    135deg,
+                    var(--navy-800) 0%,
+                    rgba(79, 70, 229, 0.05) 100%
+                );
+            }
+
+            .feature-title {
+                font-size: 20px;
+                font-weight: 600;
+                margin-bottom: 12px;
+                color: var(--white);
+            }
+
+            .feature-desc {
+                color: var(--gray-400);
+                font-size: 15px;
+                line-height: 1.7;
+            }
+
+            /* Open Source */
+            .open-source {
+                background: linear-gradient(
+                    135deg,
+                    var(--navy-800) 0%,
+                    var(--navy-700) 100%
+                );
+                border-top: 1px solid var(--navy-700);
+                border-bottom: 1px solid var(--navy-700);
+                text-align: center;
+            }
+
+            .open-source-content {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+            .open-source h2 {
+                font-size: 42px;
+                margin-bottom: 24px;
+            }
+
+            .open-source p {
+                font-size: 18px;
+                color: var(--gray-400);
+                margin-bottom: 16px;
+                line-height: 1.8;
+            }
+
+            .open-source .btn {
+                margin-top: 24px;
+            }
+
+            /* Quickstart */
+            .quickstart-steps {
+                display: grid;
+                gap: 32px;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+
+            .quickstart-step {
+                background: var(--navy-800);
+                border: 1px solid var(--navy-700);
+                border-radius: 12px;
+                padding: 32px;
+            }
+
+            .quickstart-step h3 {
+                font-size: 20px;
+                margin-bottom: 16px;
+                color: var(--indigo-400);
+            }
+
+            .code-block {
+                background: var(--navy-900);
+                border: 1px solid var(--navy-700);
+                border-radius: 8px;
+                padding: 20px;
+                font-family: "Monaco", "Menlo", "Courier New", monospace;
+                font-size: 14px;
+                color: var(--gray-300);
+                overflow-x: auto;
+                margin-top: 12px;
+            }
+
+            .code-block code {
+                display: block;
+                white-space: pre;
+            }
+
+            /* Pricing */
+            .pricing-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                gap: 24px;
+                margin-top: 48px;
+            }
+
+            .pricing-card {
+                background: var(--navy-800);
+                border: 2px solid var(--navy-700);
+                border-radius: 16px;
+                padding: 40px 32px;
+                transition: all 0.3s;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .pricing-card:hover {
+                border-color: var(--indigo-500);
+                transform: translateY(-8px);
+                box-shadow: 0 16px 48px rgba(79, 70, 229, 0.2);
+            }
+
+            .pricing-card.featured {
+                border-color: var(--indigo-500);
+                background: linear-gradient(
+                    135deg,
+                    var(--navy-800) 0%,
+                    rgba(79, 70, 229, 0.1) 100%
+                );
+            }
+
+            .pricing-tier {
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--indigo-400);
+                margin-bottom: 8px;
+            }
+
+            .pricing-price {
+                font-size: 48px;
+                font-weight: 700;
+                margin-bottom: 8px;
+                letter-spacing: -2px;
+            }
+
+            .pricing-price small {
+                font-size: 18px;
+                color: var(--gray-400);
+                font-weight: 400;
+            }
+
+            .pricing-description {
+                color: var(--gray-400);
+                font-size: 14px;
+                margin-bottom: 32px;
+                padding-bottom: 24px;
+                border-bottom: 1px solid var(--navy-700);
+            }
+
+            .pricing-features {
+                list-style: none;
+                margin-bottom: 32px;
+                flex-grow: 1;
+            }
+
+            .pricing-features li {
+                padding: 12px 0;
+                color: var(--gray-300);
+                font-size: 15px;
+            }
+
+            .pricing-features li::before {
+                content: "✓";
+                color: var(--indigo-400);
+                font-weight: 700;
+                margin-right: 12px;
+            }
+
+            .pricing-card .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            /* Footer */
+            footer {
+                background: var(--navy-800);
+                border-top: 1px solid var(--navy-700);
+                padding: 64px 0 32px;
+            }
+
+            .footer-content {
+                display: grid;
+                grid-template-columns: 2fr 1fr 1fr 1fr;
+                gap: 48px;
+                margin-bottom: 48px;
+            }
+
+            .footer-brand {
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 16px;
+            }
+
+            .footer-desc {
+                color: var(--gray-400);
+                font-size: 15px;
+                line-height: 1.7;
+            }
+
+            .footer-links h4 {
+                font-size: 16px;
+                font-weight: 600;
+                margin-bottom: 16px;
+                color: var(--white);
+            }
+
+            .footer-links a {
+                display: block;
+                color: var(--gray-400);
+                text-decoration: none;
+                margin-bottom: 12px;
+                font-size: 15px;
+                transition: color 0.2s;
+            }
+
+            .footer-links a:hover {
+                color: var(--indigo-400);
+            }
+
+            .footer-bottom {
+                padding-top: 32px;
+                border-top: 1px solid var(--navy-700);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: var(--gray-400);
+                font-size: 14px;
+            }
+
+            .footer-license {
+                display: flex;
+                gap: 24px;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                h1 {
+                    font-size: 48px;
+                }
+
+                .subtitle {
+                    font-size: 20px;
+                }
+
+                .tagline {
+                    font-size: 18px;
+                }
+
+                .section-title {
+                    font-size: 36px;
+                }
+
+                section {
+                    padding: 80px 0;
+                }
+
+                .hero {
+                    padding: 80px 0 100px;
+                }
+
+                .footer-content {
+                    grid-template-columns: 1fr;
+                    gap: 32px;
+                }
+
+                .footer-bottom {
+                    flex-direction: column;
+                    gap: 16px;
+                    text-align: center;
+                }
+
+                .steps {
+                    grid-template-columns: 1fr;
+                }
+
+                .divisions {
+                    grid-template-columns: 1fr;
+                }
+
+                .features-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .pricing-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                nav {
+                    display: none;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <a href="#" class="logo">The Foundation</a>
+                    <nav>
+                        <a href="#quickstart">Quickstart</a>
+                        <a href="#pricing">Pricing</a>
+                        <a
+                            href="https://github.com/hdiesel323/openclaw-002"
+                            target="_blank"
+                            >GitHub</a
+                        >
+                        <a href="#docs">Docs</a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1>The Foundation</h1>
+                        <p class="subtitle">
+                            Open-source multi-agent AI orchestration (built on
+                            OpenClaw)
+                        </p>
+                        <p class="tagline">
+                            Deploy a team of 14 specialized AI agents that
+                            coordinate, plan, and execute complex workflows —
+                            with human approval gates at every step.
+                        </p>
+                        <div class="cta-buttons">
+                            <a href="#quickstart" class="btn btn-primary"
+                                >Self-Host (Free)</a
+                            >
+                            <a href="#pricing" class="btn btn-secondary"
+                                >Foundation Cloud</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works -->
+            <section class="how-it-works">
+                <div class="container">
+                    <h2 class="section-title">How It Works</h2>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="step-number">1</div>
+                            <h3 class="step-title">Define</h3>
+                            <p class="step-desc">
+                                Configure your agent team, assign roles, set
+                                authority levels
+                            </p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">2</div>
+                            <h3 class="step-title">Dispatch</h3>
+                            <p class="step-desc">
+                                Submit tasks through Discord or the API. Seldon
+                                creates a plan.
+                            </p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">3</div>
+                            <h3 class="step-title">Approve</h3>
+                            <p class="step-desc">
+                                Review the pre-flight plan. Approve, modify, or
+                                reject.
+                            </p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">4</div>
+                            <h3 class="step-title">Execute</h3>
+                            <p class="step-desc">
+                                Agents coordinate through workflows with
+                                dependency management and critic chains.
+                            </p>
+                        </div>
+                        <div class="step">
+                            <div class="step-number">5</div>
+                            <h3 class="step-title">Monitor</h3>
+                            <p class="step-desc">
+                                Track progress via the dashboard. Get updates in
+                                Discord threads.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Agents Section -->
+            <section class="agents">
+                <div class="container-wide">
+                    <h2 class="section-title">14 Specialized Agents</h2>
+                    <p class="section-subtitle">
+                        Five divisions working in harmony, each agent with
+                        specific expertise and authority
+                    </p>
+                    <div class="divisions">
+                        <div class="division">
+                            <h3 class="division-title">Command</h3>
+                            <div class="agent">
+                                <div class="agent-name">Seldon</div>
+                                <div class="agent-role">Orchestrator</div>
+                            </div>
+                            <div class="agent">
+                                <div class="agent-name">Daneel</div>
+                                <div class="agent-role">Builder</div>
+                            </div>
+                            <div class="agent">
+                                <div class="agent-name">Hardin</div>
+                                <div class="agent-role">Strategist</div>
+                            </div>
+                        </div>
+
+                        <div class="division">
+                            <h3 class="division-title">Infrastructure</h3>
+                            <div class="agent">
+                                <div class="agent-name">Demerzel</div>
+                                <div class="agent-role">Architect</div>
+                            </div>
+                            <div class="agent">
+                                <div class="agent-name">Amaryl</div>
+                                <div class="agent-role">QA Engineer</div>
+                            </div>
+                            <div class="agent">
+                                <div class="agent-name">Venabili</div>
+                                <div class="agent-role">Security</div>
+                            </div>
+                        </div>
+
+                        <div class="division">
+                            <h3 class="division-title">Commerce</h3>
+                            <div class="agent">
+                                <div class="agent-name">Magnifico</div>
+                                <div class="agent-role">Content Creator</div>
+                            </div>
+                            <div class="agent">
+                                <div class="agent-name">Mallow</div>
+                                <div class="agent-role">Sales</div>
+                            </div>
+                            <div class="agent">
+                                <div class="agent-name">Trader</div>
+                                <div class="agent-role">Finance</div>
+                            </div>
+                        </div>
+
+                        <div class="division">
+                            <h3 class="division-title">Intelligence</h3>
+                            <div class="agent">
+                                <div class="agent-name">Mis</div>
+                                <div class="agent-role">Research</div>
+                            </div>
+                            <div class="agent">
+                                <div class="agent-name">Gaal</div>
+                                <div class="agent-role">Analytics</div>
+                            </div>
+                            <div class="agent">
+                                <div class="agent-name">Riose</div>
+                                <div class="agent-role">Risk Assessment</div>
+                            </div>
+                        </div>
+
+                        <div class="division">
+                            <h3 class="division-title">Operations</h3>
+                            <div class="agent">
+                                <div class="agent-name">Preem</div>
+                                <div class="agent-role">Automation</div>
+                            </div>
+                            <div class="agent">
+                                <div class="agent-name">Arkady</div>
+                                <div class="agent-role">Monitoring</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features -->
+            <section class="features">
+                <div class="container">
+                    <h2 class="section-title">Built for Production</h2>
+                    <div class="features-grid">
+                        <div class="feature">
+                            <h3 class="feature-title">
+                                Pre-flight Approval Gates
+                            </h3>
+                            <p class="feature-desc">
+                                Every workflow starts with a human-reviewed
+                                plan. No agent takes action without your
+                                explicit approval.
+                            </p>
+                        </div>
+                        <div class="feature">
+                            <h3 class="feature-title">
+                                Dependency-based Workflow Engine
+                            </h3>
+                            <p class="feature-desc">
+                                Agents coordinate automatically using a directed
+                                acyclic graph. Tasks execute in the right order,
+                                every time.
+                            </p>
+                        </div>
+                        <div class="feature">
+                            <h3 class="feature-title">
+                                Discord Thread Integration
+                            </h3>
+                            <p class="feature-desc">
+                                Submit tasks and get updates in Discord. Each
+                                workflow gets its own thread for clean,
+                                organized communication.
+                            </p>
+                        </div>
+                        <div class="feature">
+                            <h3 class="feature-title">Multi-Model Routing</h3>
+                            <p class="feature-desc">
+                                Claude as primary, Grok for overflow. Automatic
+                                failover ensures your workflows never stop.
+                            </p>
+                        </div>
+                        <div class="feature">
+                            <h3 class="feature-title">
+                                Critic Chain Review System
+                            </h3>
+                            <p class="feature-desc">
+                                Multi-agent review before deployment. Peer
+                                agents validate work quality and catch issues
+                                early.
+                            </p>
+                        </div>
+                        <div class="feature">
+                            <h3 class="feature-title">Real-time Dashboard</h3>
+                            <p class="feature-desc">
+                                Monitor all workflows, agent activity, and
+                                system health from a unified control panel.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Open Source -->
+            <section class="open-source">
+                <div class="container">
+                    <div class="open-source-content">
+                        <h2>100% Open Source</h2>
+                        <p>
+                            Apache 2.0 license. No vendor lock-in, no hidden
+                            costs, no data collection.
+                        </p>
+                        <p>
+                            Self-host on your own infrastructure. Full control
+                            over your agents, data, and API keys.
+                        </p>
+                        <a
+                            href="https://github.com/hdiesel323/openclaw-002"
+                            class="btn btn-primary"
+                            target="_blank"
+                            >View on GitHub</a
+                        >
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quickstart -->
+            <section id="quickstart" class="quickstart">
+                <div class="container">
+                    <h2 class="section-title">Get Started in 5 Minutes</h2>
+                    <div class="quickstart-steps">
+                        <div class="quickstart-step">
+                            <h3>1. Clone the Repository</h3>
+                            <div class="code-block">
+                                <code
+                                    >git clone
+                                    https://github.com/hdiesel323/openclaw-002.git
+                                    cd openclaw-002</code
+                                >
+                            </div>
+                        </div>
+
+                        <div class="quickstart-step">
+                            <h3>2. Configure Your API Keys</h3>
+                            <div class="code-block">
+                                <code
+                                    >cp .env.example .env # Edit .env with your
+                                    API keys: # - ANTHROPIC_API_KEY # -
+                                    XAI_API_KEY (optional) # -
+                                    DISCORD_TOKEN</code
+                                >
+                            </div>
+                        </div>
+
+                        <div class="quickstart-step">
+                            <h3>3. Start the Platform</h3>
+                            <div class="code-block">
+                                <code>docker-compose up -d</code>
+                            </div>
+                        </div>
+
+                        <div class="quickstart-step">
+                            <h3>4. Open the Dashboard</h3>
+                            <div class="code-block">
+                                <code
+                                    ># Navigate to: http://localhost:3000 #
+                                    Default credentials: # Username: admin #
+                                    Password: changeme</code
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pricing -->
+            <section id="pricing" class="pricing">
+                <div class="container-wide">
+                    <h2 class="section-title">Pricing</h2>
+                    <p class="section-subtitle">
+                        Start free with self-hosting, or let us manage
+                        everything for you
+                    </p>
+                    <div class="pricing-grid">
+                        <div class="pricing-card">
+                            <div class="pricing-tier">Self-Hosted</div>
+                            <div class="pricing-price">
+                                Free<small> forever</small>
+                            </div>
+                            <div class="pricing-description">
+                                For teams who want full control
+                            </div>
+                            <ul class="pricing-features">
+                                <li>14 agents</li>
+                                <li>Unlimited workflows</li>
+                                <li>You manage infrastructure</li>
+                                <li>Community support</li>
+                            </ul>
+                            <a
+                                href="https://github.com/hdiesel323/openclaw-002"
+                                class="btn btn-secondary"
+                                target="_blank"
+                                >Get Started</a
+                            >
+                        </div>
+
+                        <div class="pricing-card">
+                            <div class="pricing-tier">Starter</div>
+                            <div class="pricing-price">
+                                $49<small>/month</small>
+                            </div>
+                            <div class="pricing-description">
+                                Perfect for small teams
+                            </div>
+                            <ul class="pricing-features">
+                                <li>5 agents</li>
+                                <li>5 workflow templates</li>
+                                <li>Managed hosting</li>
+                                <li>Discord setup included</li>
+                                <li>Email support</li>
+                            </ul>
+                            <a href="#" class="btn btn-primary"
+                                >Start Free Trial</a
+                            >
+                        </div>
+
+                        <div class="pricing-card featured">
+                            <div class="pricing-tier">Pro</div>
+                            <div class="pricing-price">
+                                $149<small>/month</small>
+                            </div>
+                            <div class="pricing-description">
+                                For production teams
+                            </div>
+                            <ul class="pricing-features">
+                                <li>14 agents</li>
+                                <li>Unlimited workflows</li>
+                                <li>Managed hosting</li>
+                                <li>Custom workflow builder</li>
+                                <li>Priority support</li>
+                            </ul>
+                            <a href="#" class="btn btn-primary"
+                                >Start Free Trial</a
+                            >
+                        </div>
+
+                        <div class="pricing-card">
+                            <div class="pricing-tier">Enterprise</div>
+                            <div class="pricing-price">Custom</div>
+                            <div class="pricing-description">
+                                For large organizations
+                            </div>
+                            <ul class="pricing-features">
+                                <li>Custom agent count</li>
+                                <li>Dedicated infrastructure</li>
+                                <li>Custom integrations</li>
+                                <li>SLA guarantee</li>
+                                <li>Dedicated support</li>
+                            </ul>
+                            <a href="#" class="btn btn-secondary"
+                                >Contact Sales</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-content">
+                    <div>
+                        <div class="footer-brand">The Foundation</div>
+                        <p class="footer-desc">
+                            Multi-agent AI orchestration platform built on
+                            OpenClaw. Built for production, designed for humans.
+                        </p>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Product</h4>
+                        <a href="#quickstart">Quickstart</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#docs">Documentation</a>
+                        <a href="#agents">Agents</a>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Community</h4>
+                        <a
+                            href="https://github.com/hdiesel323/openclaw-002"
+                            target="_blank"
+                            >GitHub</a
+                        >
+                        <a href="#discord">Discord</a>
+                        <a href="#contributing">Contributing</a>
+                        <a href="#roadmap">Roadmap</a>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Resources</h4>
+                        <a href="#blog">Blog</a>
+                        <a href="#examples">Examples</a>
+                        <a href="#api">API Reference</a>
+                        <a href="#changelog">Changelog</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <div>Copyright 2026 The Foundation Contributors</div>
+                    <div class="footer-license">
+                        <span>Apache 2.0 License</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

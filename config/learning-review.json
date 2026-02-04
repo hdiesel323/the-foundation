@@ -1,0 +1,54 @@
+{
+  "learning_review": {
+    "enabled": true,
+    "schedule": "heartbeat",
+    "review_interval_hours": 72,
+    "description": "Periodic review of captured learnings to identify patterns and promote insights",
+
+    "learning_id_formats": {
+      "learning": "LRN-YYYYMMDD-XXX",
+      "error": "ERR-YYYYMMDD-XXX",
+      "feature": "FEAT-YYYYMMDD-XXX"
+    },
+
+    "statuses": [
+      "pending",
+      "in_progress",
+      "resolved",
+      "wont_fix",
+      "promoted",
+      "promoted_to_skill"
+    ],
+
+    "pattern_detection": {
+      "recurring_threshold": 2,
+      "action_on_recurring": "promote_to_skill_extraction",
+      "similarity_check": "command_prefix_match",
+      "lookback_days": 30
+    },
+
+    "promotion_rules": [
+      {
+        "condition": "recurring_error >= 2",
+        "action": "extract_skill",
+        "description": "Recurring issues (2+) are promoted to skill extraction"
+      },
+      {
+        "condition": "priority == critical && status == pending",
+        "action": "escalate_to_human",
+        "description": "Critical pending items escalated"
+      },
+      {
+        "condition": "category == optimization && confidence >= 0.8",
+        "action": "promote_to_claude_md",
+        "description": "High-confidence optimizations promoted to project knowledge"
+      }
+    ],
+
+    "review_output": {
+      "summary_file": ".learnings/REVIEW_SUMMARY.md",
+      "format": "markdown",
+      "include_stats": true
+    }
+  }
+}

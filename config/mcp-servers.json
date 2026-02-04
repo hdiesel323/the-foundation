@@ -1,0 +1,148 @@
+{
+  "mcpServers": {
+    "memory": {
+      "command": "node",
+      "args": ["/app/mcp-servers/memory/index.js"],
+      "env": {
+        "DATABASE_URL": "${DATABASE_URL}"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-filesystem", "/data"],
+      "env": {}
+    },
+    "calendar": {
+      "command": "node",
+      "args": ["/app/mcp-servers/google-calendar/index.js"],
+      "env": {
+        "GOOGLE_CLIENT_ID": "${GOOGLE_CLIENT_ID}",
+        "GOOGLE_CLIENT_SECRET": "${GOOGLE_CLIENT_SECRET}",
+        "GOOGLE_REFRESH_TOKEN": "${GOOGLE_REFRESH_TOKEN}"
+      }
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-slack"],
+      "env": {
+        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+        "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
+      }
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "${BRAVE_API_KEY}"
+      }
+    },
+    "graphmem": {
+      "command": "node",
+      "args": ["/app/mcp-servers/graphmem/index.js"],
+      "env": {
+        "GRAPHMEM_DB_PATH": "${GRAPHMEM_DB_PATH:-/opt/openclaw/data/clawd_brain.db}"
+      }
+    },
+    "memory-bank": {
+      "command": "node",
+      "args": ["/app/mcp-servers/memory-bank/index.js"],
+      "env": {
+        "DATABASE_URL": "${DATABASE_URL}"
+      },
+      "tools": {
+        "biz_query": { "description": "Query business knowledge: leads, deals, revenue, campaigns" },
+        "biz_store": { "description": "Store business data: facts, preferences, insights" },
+        "biz_search": { "description": "Full-text search across all business tables" },
+        "biz_aggregate": { "description": "Aggregate metrics: revenue by vertical, pipeline by stage" }
+      }
+    },
+    "alpaca": {
+      "command": "node",
+      "args": ["/app/mcp-servers/alpaca/index.js"],
+      "env": {
+        "ALPACA_API_KEY": "${ALPACA_API_KEY}",
+        "ALPACA_SECRET_KEY": "${ALPACA_SECRET_KEY}",
+        "ALPACA_ENDPOINT": "${ALPACA_ENDPOINT:-https://paper-api.alpaca.markets/v2}"
+      },
+      "tools": {
+        "alpaca_positions": { "description": "Get current portfolio positions" },
+        "alpaca_orders": { "description": "Place, list, or cancel orders" },
+        "alpaca_portfolio": { "description": "Get portfolio value, buying power, and P&L" },
+        "alpaca_market_data": { "description": "Get quotes, bars, and market snapshots" }
+      }
+    },
+    "retreaver": {
+      "command": "node",
+      "args": ["/app/mcp-servers/retreaver/index.js"],
+      "env": {
+        "RETREAVER_API_KEY": "${RETREAVER_API_KEY}",
+        "RETREAVER_ENDPOINT": "${RETREAVER_ENDPOINT:-https://api.retreaver.com/v1}"
+      },
+      "tools": {
+        "retreaver_calls": { "description": "Query call tracking data and call logs" },
+        "retreaver_campaigns": { "description": "Manage campaigns and routing numbers" },
+        "retreaver_buyers": { "description": "Manage buyer accounts and bid settings" },
+        "retreaver_revenue": { "description": "Revenue attribution and performance metrics" }
+      }
+    },
+    "airtable": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-server-airtable"],
+      "env": {
+        "AIRTABLE_API_KEY": "${AIRTABLE_API_KEY}"
+      },
+      "tools": {
+        "airtable_read": { "description": "Read records from Airtable bases and tables" },
+        "airtable_write": { "description": "Create and update records in Airtable" },
+        "airtable_search": { "description": "Search and filter records with formulas" }
+      }
+    },
+    "qmd": {
+      "command": "qmd",
+      "args": ["mcp-server"],
+      "env": {
+        "QMD_DATA_DIR": "${QMD_DATA_DIR:-/opt/openclaw/.qmd}",
+        "QMD_MODEL": "${QMD_MODEL:-bge-small-en-v1.5}"
+      },
+      "tools": {
+        "qmd_query": {
+          "description": "Hybrid search (BM25 + vector) across QMD collections",
+          "parameters": {
+            "query": "Search query string",
+            "collection": "Optional collection name (agent-workspaces, shared-memory, documentation)",
+            "limit": "Max results (default 10)",
+            "mode": "Search mode: hybrid, keyword, semantic (default hybrid)"
+          }
+        },
+        "qmd_fetch": {
+          "description": "Fetch a specific document by path or ID from QMD",
+          "parameters": {
+            "path": "Document file path or ID",
+            "collection": "Collection name to fetch from"
+          }
+        }
+      },
+      "collections": [
+        "agent-workspaces",
+        "shared-memory",
+        "documentation"
+      ]
+    },
+    "shopify": {
+      "command": "node",
+      "args": ["/app/mcp-servers/shopify/index.js"],
+      "env": {
+        "SHOPIFY_STORE_URL": "${SHOPIFY_STORE_URL}",
+        "SHOPIFY_API_KEY": "${SHOPIFY_API_KEY}",
+        "SHOPIFY_API_SECRET": "${SHOPIFY_API_SECRET}",
+        "SHOPIFY_ACCESS_TOKEN": "${SHOPIFY_ACCESS_TOKEN}"
+      },
+      "tools": {
+        "shopify_products": { "description": "CRUD operations on products: list, create, update, delete" },
+        "shopify_orders": { "description": "Order management: list, fulfill, cancel, refund" },
+        "shopify_inventory": { "description": "Inventory tracking: levels, adjustments, locations" },
+        "shopify_analytics": { "description": "Store analytics: sales, traffic, conversion rates" }
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Editor
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Secrets (never commit)
+.env
+secrets/
+*.secret
+*.key
+
+# Data (deploy separately)
+data/
+backups/
+*.db
+*.db_cache.db
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# Runtime
+.claude/
+.playwright-mcp/

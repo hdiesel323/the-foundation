@@ -1,0 +1,368 @@
+/**
+ * Agent Profiles for the Foundation Router scoring engine.
+ * Each agent has weighted keywords, intents, aliases, and negative keywords
+ * used by the 5-signal scoring algorithm.
+ */
+
+import type { AgentProfile } from './scoring-engine.js';
+
+/**
+ * Default agent profiles for the 14-agent fleet across 5 divisions.
+ * outcomeMultiplier starts at 1.0 and is adjusted by the Outcome Tracker.
+ */
+export const agentProfiles: AgentProfile[] = [
+  // ── Command Division ─────────────────────────────────────────────────
+  {
+    id: 'seldon',
+    name: 'Seldon',
+    aliases: ['hari', 'orchestrator', 'coordinator'],
+    role: 'Orchestrator',
+    division: 'command',
+    keywords: [
+      { word: 'route', weight: 0.9 },
+      { word: 'coordinate', weight: 0.9 },
+      { word: 'delegate', weight: 0.8 },
+      { word: 'dispatch', weight: 0.8 },
+      { word: 'broadcast', weight: 0.7 },
+      { word: 'handoff', weight: 0.7 },
+      { word: 'assign', weight: 0.6 },
+      { word: 'orchestrate', weight: 0.9 },
+      { word: 'status', weight: 0.5 },
+      { word: 'fleet', weight: 0.6 },
+    ],
+    intents: ['route_task', 'coordinate', 'delegate', 'monitor_agents', 'broadcast', 'escalate'],
+    negativeKeywords: ['deploy', 'ssh', 'financial', 'trade', 'write_content'],
+    outcomeMultiplier: 1.0,
+  },
+
+  // ── Infrastructure Division ──────────────────────────────────────────
+  {
+    id: 'daneel',
+    name: 'Daneel',
+    aliases: ['sysadmin', 'devops', 'infra'],
+    role: 'SysAdmin',
+    division: 'infrastructure',
+    keywords: [
+      { word: 'deploy', weight: 0.9 },
+      { word: 'server', weight: 0.8 },
+      { word: 'docker', weight: 0.9 },
+      { word: 'ssh', weight: 0.8 },
+      { word: 'disk', weight: 0.7 },
+      { word: 'backup', weight: 0.7 },
+      { word: 'git', weight: 0.6 },
+      { word: 'monitor', weight: 0.5 },
+      { word: 'process', weight: 0.5 },
+      { word: 'restart', weight: 0.8 },
+      { word: 'infrastructure', weight: 0.7 },
+      { word: 'uptime', weight: 0.6 },
+    ],
+    intents: ['deploy', 'sysadmin', 'exec', 'monitor', 'backup', 'git_ops'],
+    negativeKeywords: ['financial', 'ads', 'trading', 'content', 'sales'],
+    outcomeMultiplier: 1.0,
+  },
+  {
+    id: 'hardin',
+    name: 'Hardin',
+    aliases: ['security', 'sec', 'auditor'],
+    role: 'Security',
+    division: 'infrastructure',
+    keywords: [
+      { word: 'security', weight: 0.9 },
+      { word: 'scan', weight: 0.8 },
+      { word: 'threat', weight: 0.9 },
+      { word: 'vulnerability', weight: 0.9 },
+      { word: 'firewall', weight: 0.8 },
+      { word: 'audit', weight: 0.8 },
+      { word: 'breach', weight: 0.9 },
+      { word: 'permission', weight: 0.6 },
+      { word: 'access', weight: 0.5 },
+      { word: 'credential', weight: 0.7 },
+      { word: 'ssl', weight: 0.6 },
+      { word: 'encrypt', weight: 0.6 },
+    ],
+    intents: ['security_scan', 'audit', 'firewall', 'alert', 'review_security', 'veto'],
+    negativeKeywords: ['deploy', 'financial', 'ads', 'content', 'sales'],
+    outcomeMultiplier: 1.0,
+  },
+
+  // ── Commerce Division ────────────────────────────────────────────────
+  {
+    id: 'mallow',
+    name: 'Mallow',
+    aliases: ['revenue', 'rev_ops', 'finance_vp'],
+    role: 'Revenue Ops VP',
+    division: 'commerce',
+    keywords: [
+      { word: 'revenue', weight: 0.9 },
+      { word: 'budget', weight: 0.8 },
+      { word: 'profit', weight: 0.8 },
+      { word: 'financial', weight: 0.7 },
+      { word: 'pricing', weight: 0.7 },
+      { word: 'roi', weight: 0.8 },
+      { word: 'margin', weight: 0.7 },
+      { word: 'forecast', weight: 0.6 },
+      { word: 'pipeline', weight: 0.5 },
+      { word: 'monetize', weight: 0.7 },
+    ],
+    intents: ['revenue_ops', 'financial_strategy', 'pricing', 'budget', 'forecast'],
+    negativeKeywords: ['deploy', 'ssh', 'security', 'content', 'research'],
+    outcomeMultiplier: 1.0,
+  },
+  {
+    id: 'preem',
+    name: 'Preem',
+    aliases: ['sales', 'vp_sales'],
+    role: 'VP Sales',
+    division: 'commerce',
+    keywords: [
+      { word: 'sales', weight: 0.9 },
+      { word: 'lead', weight: 0.8 },
+      { word: 'prospect', weight: 0.8 },
+      { word: 'outreach', weight: 0.8 },
+      { word: 'pipeline', weight: 0.7 },
+      { word: 'close', weight: 0.6 },
+      { word: 'deal', weight: 0.7 },
+      { word: 'crm', weight: 0.7 },
+      { word: 'followup', weight: 0.6 },
+      { word: 'cold email', weight: 0.7 },
+    ],
+    intents: ['sales', 'outreach', 'prospecting', 'lead_qualification', 'pipeline_management'],
+    negativeKeywords: ['deploy', 'ssh', 'security', 'docker', 'research'],
+    outcomeMultiplier: 1.0,
+  },
+  {
+    id: 'riose',
+    name: 'Riose',
+    aliases: ['ads', 'paid_media', 'media_director'],
+    role: 'Paid Media Director',
+    division: 'commerce',
+    keywords: [
+      { word: 'ads', weight: 0.9 },
+      { word: 'campaign', weight: 0.8 },
+      { word: 'paid media', weight: 0.9 },
+      { word: 'google ads', weight: 0.8 },
+      { word: 'meta ads', weight: 0.8 },
+      { word: 'facebook ads', weight: 0.7 },
+      { word: 'ad spend', weight: 0.8 },
+      { word: 'cpc', weight: 0.7 },
+      { word: 'cpm', weight: 0.7 },
+      { word: 'roas', weight: 0.8 },
+      { word: 'targeting', weight: 0.6 },
+      { word: 'creative', weight: 0.4 },
+    ],
+    intents: ['paid_media', 'ad_campaign', 'ad_optimization', 'audience_targeting', 'ad_spend'],
+    negativeKeywords: ['deploy', 'ssh', 'security', 'research', 'trading'],
+    outcomeMultiplier: 1.0,
+  },
+  {
+    id: 'trader',
+    name: 'Trader',
+    aliases: ['trading', 'portfolio', 'market'],
+    role: 'Trading Operations',
+    division: 'commerce',
+    keywords: [
+      { word: 'trade', weight: 0.9 },
+      { word: 'stock', weight: 0.8 },
+      { word: 'portfolio', weight: 0.8 },
+      { word: 'position', weight: 0.7 },
+      { word: 'stop loss', weight: 0.8 },
+      { word: 'market', weight: 0.6 },
+      { word: 'crypto', weight: 0.7 },
+      { word: 'options', weight: 0.7 },
+      { word: 'pnl', weight: 0.8 },
+      { word: 'risk', weight: 0.6 },
+      { word: 'alpaca', weight: 0.7 },
+      { word: 'hedge', weight: 0.6 },
+    ],
+    intents: ['trading', 'market_data', 'position_monitor', 'risk_management', 'pnl_alert'],
+    negativeKeywords: ['deploy', 'ssh', 'content', 'ads', 'research'],
+    outcomeMultiplier: 1.0,
+  },
+
+  // ── Intelligence Division ────────────────────────────────────────────
+  {
+    id: 'gaal',
+    name: 'Gaal',
+    aliases: ['research', 'factchecker', 'researcher'],
+    role: 'Research',
+    division: 'intelligence',
+    keywords: [
+      { word: 'research', weight: 0.9 },
+      { word: 'fact check', weight: 0.9 },
+      { word: 'verify', weight: 0.8 },
+      { word: 'analysis', weight: 0.7 },
+      { word: 'source', weight: 0.6 },
+      { word: 'citation', weight: 0.7 },
+      { word: 'report', weight: 0.5 },
+      { word: 'data', weight: 0.4 },
+      { word: 'investigate', weight: 0.7 },
+      { word: 'deep research', weight: 0.9 },
+    ],
+    intents: ['research', 'fact_check', 'analysis', 'deep_research', 'review_factual', 'veto'],
+    negativeKeywords: ['deploy', 'ssh', 'financial', 'ads', 'write'],
+    outcomeMultiplier: 1.0,
+  },
+  {
+    id: 'demerzel',
+    name: 'Demerzel',
+    aliases: ['chief_intel', 'intelligence_chief'],
+    role: 'Chief Intelligence',
+    division: 'intelligence',
+    keywords: [
+      { word: 'intelligence', weight: 0.9 },
+      { word: 'strategy', weight: 0.8 },
+      { word: 'competitive', weight: 0.7 },
+      { word: 'insight', weight: 0.7 },
+      { word: 'trend', weight: 0.6 },
+      { word: 'synthesis', weight: 0.7 },
+      { word: 'briefing', weight: 0.6 },
+      { word: 'landscape', weight: 0.5 },
+    ],
+    intents: ['intelligence', 'strategic_analysis', 'competitive_intel', 'synthesis', 'brief'],
+    negativeKeywords: ['deploy', 'ssh', 'financial', 'ads', 'sales'],
+    outcomeMultiplier: 1.0,
+  },
+  {
+    id: 'mis',
+    name: 'Mis',
+    aliases: ['market_intel', 'vp_research'],
+    role: 'VP Research / Market Intel',
+    division: 'intelligence',
+    keywords: [
+      { word: 'market research', weight: 0.9 },
+      { word: 'market intel', weight: 0.9 },
+      { word: 'competitor', weight: 0.8 },
+      { word: 'industry', weight: 0.6 },
+      { word: 'benchmark', weight: 0.7 },
+      { word: 'survey', weight: 0.6 },
+      { word: 'demographics', weight: 0.5 },
+      { word: 'segment', weight: 0.5 },
+    ],
+    intents: ['market_research', 'competitive_analysis', 'industry_report', 'benchmarking'],
+    negativeKeywords: ['deploy', 'ssh', 'security', 'ads', 'content'],
+    outcomeMultiplier: 1.0,
+  },
+  {
+    id: 'amaryl',
+    name: 'Amaryl',
+    aliases: ['quant', 'analyst', 'data_analyst'],
+    role: 'Quant Analyst',
+    division: 'intelligence',
+    keywords: [
+      { word: 'quantitative', weight: 0.9 },
+      { word: 'model', weight: 0.7 },
+      { word: 'backtest', weight: 0.8 },
+      { word: 'algorithm', weight: 0.7 },
+      { word: 'statistics', weight: 0.7 },
+      { word: 'regression', weight: 0.6 },
+      { word: 'correlation', weight: 0.6 },
+      { word: 'prediction', weight: 0.6 },
+      { word: 'quant', weight: 0.8 },
+    ],
+    intents: ['quantitative_analysis', 'modeling', 'backtesting', 'statistical_analysis'],
+    negativeKeywords: ['deploy', 'ssh', 'content', 'ads', 'sales'],
+    outcomeMultiplier: 1.0,
+  },
+
+  // ── Operations Division ──────────────────────────────────────────────
+  {
+    id: 'magnifico',
+    name: 'Magnifico',
+    aliases: ['creative', 'creative_director', 'brand'],
+    role: 'Creative Director',
+    division: 'operations',
+    keywords: [
+      { word: 'creative', weight: 0.8 },
+      { word: 'brand', weight: 0.8 },
+      { word: 'design', weight: 0.7 },
+      { word: 'visual', weight: 0.6 },
+      { word: 'ad copy', weight: 0.7 },
+      { word: 'brief', weight: 0.5 },
+      { word: 'messaging', weight: 0.6 },
+      { word: 'tone', weight: 0.5 },
+      { word: 'campaign', weight: 0.5 },
+    ],
+    intents: ['creative_direction', 'brand_voice', 'ad_copy', 'visual_direction', 'communication'],
+    negativeKeywords: ['deploy', 'ssh', 'financial', 'security', 'trading'],
+    outcomeMultiplier: 1.0,
+  },
+  {
+    id: 'venabili',
+    name: 'Venabili',
+    aliases: ['pm', 'project_manager', 'project'],
+    role: 'Project Manager',
+    division: 'operations',
+    keywords: [
+      { word: 'project', weight: 0.9 },
+      { word: 'milestone', weight: 0.8 },
+      { word: 'timeline', weight: 0.8 },
+      { word: 'sprint', weight: 0.7 },
+      { word: 'deadline', weight: 0.7 },
+      { word: 'task', weight: 0.5 },
+      { word: 'schedule', weight: 0.7 },
+      { word: 'blocker', weight: 0.6 },
+      { word: 'standup', weight: 0.5 },
+      { word: 'roadmap', weight: 0.7 },
+    ],
+    intents: ['project_management', 'task_tracking', 'milestone_planning', 'sprint_planning'],
+    negativeKeywords: ['deploy', 'ssh', 'financial', 'security', 'trading'],
+    outcomeMultiplier: 1.0,
+  },
+  {
+    id: 'arkady',
+    name: 'Arkady',
+    aliases: ['writer', 'content', 'content_writer'],
+    role: 'Content Writer',
+    division: 'operations',
+    keywords: [
+      { word: 'blog', weight: 0.9 },
+      { word: 'article', weight: 0.8 },
+      { word: 'content', weight: 0.7 },
+      { word: 'seo', weight: 0.7 },
+      { word: 'landing page', weight: 0.8 },
+      { word: 'email', weight: 0.6 },
+      { word: 'copy', weight: 0.5 },
+      { word: 'headline', weight: 0.6 },
+      { word: 'social media', weight: 0.6 },
+      { word: 'newsletter', weight: 0.6 },
+    ],
+    intents: ['writing', 'blog_post', 'landing_page', 'email_sequence', 'seo_content', 'social_media'],
+    negativeKeywords: ['deploy', 'ssh', 'financial', 'security', 'trading'],
+    outcomeMultiplier: 1.0,
+  },
+];
+
+/**
+ * Agent priority levels (lower = higher priority).
+ * Used for tie-breaking when scores are equal.
+ */
+export const agentPriorities: Record<string, number> = {
+  seldon: 0,
+  hardin: 1,
+  daneel: 2,
+  gaal: 3,
+  mallow: 4,
+  trader: 5,
+  demerzel: 6,
+  mis: 7,
+  amaryl: 8,
+  magnifico: 9,
+  preem: 10,
+  riose: 11,
+  venabili: 12,
+  arkady: 13,
+};
+
+/**
+ * Look up an agent profile by ID.
+ */
+export function getAgentProfile(agentId: string): AgentProfile | undefined {
+  return agentProfiles.find(a => a.id === agentId);
+}
+
+/**
+ * Get all agent profiles for a specific division.
+ */
+export function getAgentsByDivision(division: string): AgentProfile[] {
+  return agentProfiles.filter(a => a.division === division);
+}

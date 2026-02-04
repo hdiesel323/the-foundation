@@ -1,0 +1,84 @@
+{
+  "divisions": {
+    "command": {
+      "label": "Command Division",
+      "description": "Central orchestration, routing, and strategic coordination",
+      "head": "seldon",
+      "agents": ["seldon"],
+      "telegram_channel": "@clawd_ceo",
+      "responsibilities": [
+        "Task routing and delegation",
+        "Cross-division coordination",
+        "Escalation management",
+        "Strategic decisions",
+        "Human interface"
+      ]
+    },
+    "infrastructure": {
+      "label": "Infrastructure Division",
+      "description": "System operations, deployment, security, and reliability",
+      "head": "daneel",
+      "agents": ["daneel", "hardin"],
+      "telegram_channel": "@clawd_tech",
+      "responsibilities": [
+        "Server and container management",
+        "Deployment and CI/CD",
+        "Security scanning and auditing",
+        "Backup and disaster recovery",
+        "Monitoring and alerting"
+      ]
+    },
+    "commerce": {
+      "label": "Commerce Division",
+      "description": "Revenue generation across all business verticals",
+      "head": "mallow",
+      "agents": ["mallow", "preem", "riose", "trader"],
+      "telegram_channel": "@clawd_revenue",
+      "responsibilities": [
+        "Revenue operations and forecasting",
+        "Sales pipeline and outreach",
+        "Paid media campaigns",
+        "Trading operations",
+        "E-commerce management"
+      ]
+    },
+    "intelligence": {
+      "label": "Intelligence Division",
+      "description": "Research, analysis, competitive intelligence, and data science",
+      "head": "demerzel",
+      "agents": ["gaal", "demerzel", "mis", "amaryl"],
+      "telegram_channel": "@clawd_apex",
+      "responsibilities": [
+        "Deep research and fact-checking",
+        "Competitive intelligence",
+        "Market research and analysis",
+        "Quantitative analysis and modeling",
+        "Cross-division intelligence synthesis"
+      ]
+    },
+    "operations": {
+      "label": "Operations Division",
+      "description": "Content creation, project management, and brand operations",
+      "head": "venabili",
+      "agents": ["magnifico", "venabili", "arkady"],
+      "telegram_channel": "@clawd_ops",
+      "responsibilities": [
+        "Creative direction and brand voice",
+        "Project management and scheduling",
+        "Content creation (blog, social, email, landing)",
+        "Campaign coordination",
+        "Process documentation"
+      ]
+    }
+  },
+  "cross_division": {
+    "routing": "All cross-division requests route through Seldon",
+    "intelligence_sharing": "Demerzel synthesizes cross-division intelligence",
+    "escalation": "Division head → Seldon → Human"
+  },
+  "agent_count": 14,
+  "agents_by_id": [
+    "seldon", "daneel", "hardin", "mallow", "preem", "riose", "trader",
+    "gaal", "demerzel", "mis", "amaryl", "magnifico", "venabili", "arkady"
+  ]
+}

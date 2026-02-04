@@ -1,0 +1,32 @@
+[Unit]
+Description=OpenClaw Rescue Bot — monitors Main Gateway and recovers on failure
+Documentation=file:///opt/openclaw/config/rescue-bot-setup.md
+After=network.target docker.service
+Wants=network.target
+
+[Service]
+Type=simple
+ExecStart=/opt/openclaw/scripts/rescue-monitor.sh
+WorkingDirectory=/opt/openclaw
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=openclaw-rescue
+
+# Run as dedicated user (create with: useradd -r -s /usr/sbin/nologin openclaw)
+User=openclaw
+Group=openclaw
+
+# Environment
+Environment=RESCUE_CONFIG=/opt/openclaw/config/rescue-monitor.yml
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/openclaw/logs
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

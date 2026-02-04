@@ -1,0 +1,65 @@
+{
+  "broker": {
+    "name": "alpaca",
+    "mode": "paper",
+    "endpoint": "https://paper-api.alpaca.markets/v2",
+    "data_endpoint": "https://data.alpaca.markets/v2"
+  },
+  "risk_parameters": {
+    "max_position_pct": 10,
+    "max_portfolio_allocation_pct": 80,
+    "max_single_trade_pct": 5,
+    "stop_loss_default_pct": 5,
+    "take_profit_default_pct": 15,
+    "max_daily_loss_pct": 3,
+    "max_weekly_loss_pct": 7,
+    "max_open_positions": 20,
+    "max_correlated_positions": 3,
+    "min_cash_reserve_pct": 20
+  },
+  "asset_coverage": {
+    "stocks": {
+      "enabled": true,
+      "exchanges": ["NYSE", "NASDAQ", "AMEX"],
+      "min_market_cap": 100000000,
+      "min_avg_volume": 500000,
+      "excluded_sectors": []
+    },
+    "options": {
+      "enabled": false,
+      "note": "Phase 2 — requires options approval and additional risk framework",
+      "strategies": ["covered_calls", "cash_secured_puts", "spreads"]
+    },
+    "crypto": {
+      "enabled": true,
+      "pairs": ["BTC/USD", "ETH/USD", "SOL/USD", "AVAX/USD"],
+      "max_allocation_pct": 15,
+      "24h_trading": true
+    },
+    "commodities": {
+      "enabled": false,
+      "note": "Phase 3 — via commodity ETFs (GLD, SLV, USO)",
+      "etf_proxies": ["GLD", "SLV", "USO", "DBA", "PDBC"]
+    },
+    "prediction_markets": {
+      "enabled": true,
+      "platforms": ["polymarket", "kalshi", "metaculus"],
+      "max_allocation_pct": 5,
+      "min_edge_pct": 10,
+      "note": "Amaryl monitors for arbitrage and statistical edge"
+    }
+  },
+  "trading_hours": {
+    "pre_market": { "start": "04:00", "end": "09:30", "timezone": "America/New_York" },
+    "regular": { "start": "09:30", "end": "16:00", "timezone": "America/New_York" },
+    "after_hours": { "start": "16:00", "end": "20:00", "timezone": "America/New_York" },
+    "crypto": { "start": "00:00", "end": "23:59", "note": "24/7" }
+  },
+  "alerts": {
+    "position_pnl_alert_pct": 3,
+    "stop_loss_approaching_pct": 1,
+    "daily_loss_warning_pct": 2,
+    "channel": "telegram",
+    "telegram_channel": "@clawd_tech"
+  }
+}

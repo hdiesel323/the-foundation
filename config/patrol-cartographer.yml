@@ -1,0 +1,29 @@
+# patrol-cartographer.yml
+# Scheduled patrol: regenerates docs/CODEBASE_MAP.md and auto-commits changes.
+# Assigned to daneel (infrastructure agent) on a 24-hour cycle.
+
+patrol:
+  name: cartographer
+  description: "Regenerate codebase map and commit if changed"
+  agent: daneel
+  division: infrastructure
+  priority: P2
+
+  schedule:
+    interval: 24h
+    cron: "0 4 * * *"   # 04:00 UTC daily (fallback if cron used instead of interval)
+
+  action:
+    command: "scripts/cartographer-cron.sh"
+    workdir: "/opt/openclaw"
+    timeout: 120s
+
+  output:
+    file: "docs/CODEBASE_MAP.md"
+    auto_commit: true
+    commit_message: "chore: auto-update CODEBASE_MAP.md via cartographer patrol"
+
+  alerts:
+    on_failure:
+      channel: slack
+      message: "WARN: cartographer patrol failed — codebase map may be stale"

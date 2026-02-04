@@ -1,0 +1,320 @@
+{
+  "workflow_templates": {
+    "feature_build": {
+      "name": "Feature Build",
+      "description": "Full feature lifecycle: research → design → build → review → deploy",
+      "trigger": "Human requests a feature or enhancement",
+      "requires_approval": true,
+      "steps": [
+        {
+          "step": 1,
+          "name": "intake",
+          "action": "preflight",
+          "agent": "seldon",
+          "description": "Seldon receives task, creates pre-flight plan, posts to Discord thread, waits for human 'Go'",
+          "outputs": ["intent", "plan", "verification_criteria", "risks"],
+          "gate": "human_approval"
+        },
+        {
+          "step": 2,
+          "name": "research",
+          "action": "dispatch",
+          "agent": "mis",
+          "description": "Research existing patterns, competitor analysis, prior art",
+          "depends_on": ["intake"],
+          "optional": true
+        },
+        {
+          "step": 3,
+          "name": "design",
+          "action": "dispatch",
+          "agent": "demerzel",
+          "description": "Design architecture and approach based on research",
+          "depends_on": ["research"],
+          "critic_chain": "infrastructure"
+        },
+        {
+          "step": 4,
+          "name": "build",
+          "action": "dispatch",
+          "agent": "daneel",
+          "description": "Implement feature per design — create branch, write code, open PR",
+          "depends_on": ["design"],
+          "outputs": ["branch_name", "pr_number", "preview_url"]
+        },
+        {
+          "step": 5,
+          "name": "security_review",
+          "action": "dispatch",
+          "agent": "hardin",
+          "description": "Security review of PR — check for vulnerabilities, credential exposure",
+          "depends_on": ["build"],
+          "critic_chain": "security",
+          "can_veto": true
+        },
+        {
+          "step": 6,
+          "name": "quality_review",
+          "action": "dispatch",
+          "agent": "gaal",
+          "description": "Factual review — verify claims, test assertions, validate evidence",
+          "depends_on": ["build"],
+          "critic_chain": "factual",
+          "can_veto": true,
+          "parallel_with": ["security_review"]
+        },
+        {
+          "step": 7,
+          "name": "human_merge",
+          "action": "gate",
+          "agent": "seldon",
+          "description": "Seldon notifies human that PR is ready for merge. Human reviews and merges.",
+          "depends_on": ["security_review", "quality_review"],
+          "gate": "human_action",
+          "gate_action": "merge_pr"
+        },
+        {
+          "step": 8,
+          "name": "deploy",
+          "action": "dispatch",
+          "agent": "daneel",
+          "description": "Deploy merged PR to production — docker build, health check, monitoring",
+          "depends_on": ["human_merge"],
+          "outputs": ["deploy_url", "health_status"]
+        }
+      ]
+    },
+    "content_publish": {
+      "name": "Content Publish",
+      "description": "Content creation lifecycle: research → write → review → publish",
+      "trigger": "Content request (blog, social, email, landing page)",
+      "requires_approval": true,
+      "steps": [
+        {
+          "step": 1,
+          "name": "intake",
+          "action": "preflight",
+          "agent": "seldon",
+          "gate": "human_approval"
+        },
+        {
+          "step": 2,
+          "name": "research",
+          "action": "dispatch",
+          "agent": "mis",
+          "description": "SEO research, competitor content analysis, keyword targets",
+          "depends_on": ["intake"]
+        },
+        {
+          "step": 3,
+          "name": "creative_brief",
+          "action": "dispatch",
+          "agent": "magnifico",
+          "description": "Creative direction — tone, angle, visual style",
+          "depends_on": ["research"]
+        },
+        {
+          "step": 4,
+          "name": "write",
+          "action": "dispatch",
+          "agent": "arkady",
+          "description": "Write content per brief and research",
+          "depends_on": ["creative_brief"]
+        },
+        {
+          "step": 5,
+          "name": "fact_check",
+          "action": "dispatch",
+          "agent": "gaal",
+          "description": "Verify all claims, stats, quotes in content",
+          "depends_on": ["write"],
+          "critic_chain": "factual",
+          "can_veto": true
+        },
+        {
+          "step": 6,
+          "name": "human_approve",
+          "action": "gate",
+          "agent": "seldon",
+          "description": "Human reviews final content before publish",
+          "depends_on": ["fact_check"],
+          "gate": "human_action",
+          "gate_action": "approve_content"
+        },
+        {
+          "step": 7,
+          "name": "publish",
+          "action": "dispatch",
+          "agent": "arkady",
+          "description": "Publish to target platform",
+          "depends_on": ["human_approve"]
+        }
+      ]
+    },
+    "sales_outreach": {
+      "name": "Sales Outreach Campaign",
+      "description": "Lead research → qualify → outreach sequence",
+      "trigger": "New lead batch or outreach campaign request",
+      "requires_approval": true,
+      "steps": [
+        {
+          "step": 1,
+          "name": "intake",
+          "action": "preflight",
+          "agent": "seldon",
+          "gate": "human_approval"
+        },
+        {
+          "step": 2,
+          "name": "lead_research",
+          "action": "dispatch",
+          "agent": "mis",
+          "description": "Research target companies, contacts, pain points",
+          "depends_on": ["intake"]
+        },
+        {
+          "step": 3,
+          "name": "qualify",
+          "action": "dispatch",
+          "agent": "preem",
+          "description": "Score and qualify leads, prioritize pipeline",
+          "depends_on": ["lead_research"]
+        },
+        {
+          "step": 4,
+          "name": "creative_messaging",
+          "action": "dispatch",
+          "agent": "magnifico",
+          "description": "Craft outreach templates — email sequences, LinkedIn messages",
+          "depends_on": ["qualify"]
+        },
+        {
+          "step": 5,
+          "name": "human_approve",
+          "action": "gate",
+          "agent": "seldon",
+          "description": "Human reviews outreach messaging before sending",
+          "depends_on": ["creative_messaging"],
+          "gate": "human_action",
+          "gate_action": "approve_outreach"
+        },
+        {
+          "step": 6,
+          "name": "execute_outreach",
+          "action": "dispatch",
+          "agent": "preem",
+          "description": "Execute outreach campaign, track responses",
+          "depends_on": ["human_approve"]
+        }
+      ]
+    },
+    "security_audit": {
+      "name": "Security Audit",
+      "description": "Full security review of infrastructure and codebase",
+      "trigger": "Scheduled audit or security concern raised",
+      "requires_approval": false,
+      "steps": [
+        {
+          "step": 1,
+          "name": "scan",
+          "action": "dispatch",
+          "agent": "hardin",
+          "description": "Run security scans — vulnerability assessment, credential audit"
+        },
+        {
+          "step": 2,
+          "name": "analyze",
+          "action": "dispatch",
+          "agent": "demerzel",
+          "description": "Synthesize scan results, cross-reference with threat intel",
+          "depends_on": ["scan"]
+        },
+        {
+          "step": 3,
+          "name": "report",
+          "action": "dispatch",
+          "agent": "hardin",
+          "description": "Generate security report with findings and recommendations",
+          "depends_on": ["analyze"]
+        },
+        {
+          "step": 4,
+          "name": "notify",
+          "action": "alert",
+          "agent": "seldon",
+          "description": "Post report to Discord security channel + Telegram alert",
+          "depends_on": ["report"],
+          "channels": ["discord#security", "telegram"]
+        }
+      ]
+    },
+    "market_intel": {
+      "name": "Market Intelligence Report",
+      "description": "Competitive analysis and market research",
+      "trigger": "Scheduled weekly or on-demand request",
+      "requires_approval": false,
+      "steps": [
+        {
+          "step": 1,
+          "name": "scan",
+          "action": "dispatch",
+          "agent": "mis",
+          "description": "Scan competitors, social signals, market trends"
+        },
+        {
+          "step": 2,
+          "name": "quantify",
+          "action": "dispatch",
+          "agent": "amaryl",
+          "description": "Quantitative analysis — market sizing, trend modeling",
+          "depends_on": ["scan"],
+          "parallel_with": ["synthesize"]
+        },
+        {
+          "step": 3,
+          "name": "synthesize",
+          "action": "dispatch",
+          "agent": "demerzel",
+          "description": "Cross-division intel synthesis — strategic implications",
+          "depends_on": ["scan"]
+        },
+        {
+          "step": 4,
+          "name": "brief",
+          "action": "dispatch",
+          "agent": "seldon",
+          "description": "Post intel brief to Discord + weekly report",
+          "depends_on": ["quantify", "synthesize"],
+          "channels": ["discord#market-intel", "discord#weekly-reports"]
+        }
+      ]
+    }
+  },
+  "preflight": {
+    "format": {
+      "intent": "One-line summary of what will be done",
+      "plan": "Bullet list of steps",
+      "verification": "How success will be verified (preview URL, tests, metrics)",
+      "risks": "What could go wrong or be affected",
+      "estimated_agents": "Which agents will be involved",
+      "critic_chains": "Which review chains will be applied"
+    },
+    "post_to": "discord_thread",
+    "wait_for": "human_go",
+    "timeout_hours": 24,
+    "reminder_after_hours": 4
+  },
+  "gates": {
+    "human_approval": {
+      "type": "approval",
+      "notify_via": ["discord", "telegram"],
+      "actions": ["go", "stop", "modify"],
+      "timeout_hours": 24
+    },
+    "human_action": {
+      "type": "action_required",
+      "notify_via": ["discord", "telegram"],
+      "timeout_hours": 48
+    }
+  }
+}

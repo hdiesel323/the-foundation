@@ -1,0 +1,216 @@
+{
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "primary": true,
+      "role": "agent-command-center",
+      "botToken": "${DISCORD_BOT_TOKEN}",
+      "guildId": "${DISCORD_GUILD_ID}",
+      "categories": {
+        "command-center": {
+          "division": "command",
+          "channels": [
+            {
+              "name": "mission-briefing",
+              "purpose": "Daily briefs, strategic decisions, Seldon dispatches"
+            },
+            {
+              "name": "task-board",
+              "purpose": "Active tasks, handoffs, completions"
+            },
+            {
+              "name": "agent-status",
+              "purpose": "Heartbeats, online/offline, health checks"
+            },
+            {
+              "name": "alerts",
+              "purpose": "P0 incidents, VETO triggers, escalations"
+            }
+          ]
+        },
+        "engineering": {
+          "division": "infrastructure",
+          "channels": [
+            {
+              "name": "deployments",
+              "purpose": "Daneel deploy logs, docker events"
+            },
+            {
+              "name": "security",
+              "purpose": "Hardin patrol reports, vulnerability scans"
+            },
+            {
+              "name": "architecture",
+              "purpose": "Infrastructure decisions, system design"
+            },
+            { "name": "bugs", "purpose": "Issue tracking, error logs" }
+          ]
+        },
+        "research": {
+          "division": "intelligence",
+          "channels": [
+            {
+              "name": "market-intel",
+              "purpose": "Demerzel + Mis research findings"
+            },
+            {
+              "name": "competitor-watch",
+              "purpose": "Competitive intel change alerts"
+            },
+            {
+              "name": "reddit-digest",
+              "purpose": "Reddit/forum monitoring summaries"
+            },
+            { "name": "x-twitter-feed", "purpose": "Social media intelligence" }
+          ]
+        },
+        "content-creative": {
+          "division": "commerce",
+          "channels": [
+            {
+              "name": "content-pipeline",
+              "purpose": "Arkady content drafts, approvals"
+            },
+            {
+              "name": "design-lab",
+              "purpose": "Magnifico creative briefs, brand assets"
+            },
+            {
+              "name": "social-media",
+              "purpose": "Social post scheduling, engagement"
+            },
+            {
+              "name": "ad-campaigns",
+              "purpose": "Riose paid media reports, ROAS"
+            }
+          ]
+        },
+        "business": {
+          "division": "operations",
+          "channels": [
+            {
+              "name": "sales-pipeline",
+              "purpose": "Preem lead updates, deal progress"
+            },
+            {
+              "name": "revenue-ops",
+              "purpose": "Mallow revenue tracking, forecasts"
+            },
+            {
+              "name": "trading",
+              "purpose": "Trader + Amaryl positions, alerts"
+            },
+            {
+              "name": "weekly-reports",
+              "purpose": "Venabili project summaries, KPIs"
+            }
+          ]
+        }
+      },
+      "webhooks": {
+        "alerts": "${DISCORD_WEBHOOK_ALERTS}",
+        "deployments": "${DISCORD_WEBHOOK_DEPLOYMENTS}",
+        "trading": "${DISCORD_WEBHOOK_TRADING}"
+      }
+    },
+    "slack": {
+      "enabled": true,
+      "primary": false,
+      "role": "business-external",
+      "socketMode": true,
+      "botToken": "${SLACK_BOT_TOKEN}",
+      "appToken": "${SLACK_APP_TOKEN}",
+      "teamId": "${SLACK_TEAM_ID}",
+      "defaultChannel": "#openclaw",
+      "allowedUsers": ["${SLACK_ADMIN_USER_ID}"],
+      "requiredScopes": [
+        "chat:write",
+        "channels:read",
+        "channels:history",
+        "im:read",
+        "im:write",
+        "im:history"
+      ]
+    },
+    "telegram": {
+      "enabled": true,
+      "primary": false,
+      "role": "mobile-alerts",
+      "botToken": "${TELEGRAM_BOT_TOKEN}",
+      "chatId": "${TELEGRAM_ADMIN_CHAT_ID}",
+      "webhookUrl": "https://openclaw.yourdomain.com/webhook/telegram",
+      "allowedUsers": ["${TELEGRAM_ADMIN_USER_ID}"]
+    }
+  },
+  "task_threads": {
+    "enabled": true,
+    "platform": "discord",
+    "create_on_dispatch": true,
+    "thread_naming": "[{priority}] {task_name}",
+    "auto_archive_hours": 36,
+    "dashboard_archive_hours": 48,
+    "completion_behavior": {
+      "post_summary": true,
+      "lock_thread": false,
+      "pin_summary": true
+    },
+    "archival_behavior": {
+      "archive_thread": true,
+      "lock_thread": true,
+      "move_to_archive_table": true,
+      "preserve_thread_messages": true
+    },
+    "agent_personality_in_threads": true,
+    "fallback_channel": "task-board"
+  },
+  "routing": {
+    "defaults": {
+      "agent_status": "discord",
+      "task_updates": "discord",
+      "alerts_p0": ["discord", "telegram"],
+      "alerts_p1": ["discord"],
+      "business_reports": ["slack", "discord"],
+      "client_comms": "slack",
+      "mobile_urgent": "telegram"
+    },
+    "agent_channels": {
+      "seldon": {
+        "primary": "discord#mission-briefing",
+        "alerts": "discord#alerts"
+      },
+      "daneel": {
+        "primary": "discord#deployments",
+        "alerts": "discord#alerts"
+      },
+      "hardin": { "primary": "discord#security", "alerts": "discord#alerts" },
+      "magnifico": {
+        "primary": "discord#design-lab",
+        "slack": "slack#creative"
+      },
+      "trader": { "primary": "discord#trading", "alerts": "telegram" },
+      "gaal": { "primary": "discord#market-intel" },
+      "demerzel": { "primary": "discord#market-intel" },
+      "venabili": {
+        "primary": "discord#weekly-reports",
+        "slack": "slack#projects"
+      },
+      "preem": { "primary": "discord#sales-pipeline", "slack": "slack#sales" },
+      "arkady": {
+        "primary": "discord#content-pipeline",
+        "slack": "slack#content"
+      },
+      "mallow": { "primary": "discord#revenue-ops" },
+      "riose": { "primary": "discord#ad-campaigns" },
+      "mis": { "primary": "discord#market-intel" },
+      "amaryl": { "primary": "discord#trading" }
+    }
+  },
+  "agents": {
+    "bindings": [
+      { "channel": "discord", "agent": "seldon", "scope": "all" },
+      { "channel": "slack", "agent": "magnifico", "scope": "creative" },
+      { "channel": "slack", "agent": "preem", "scope": "sales" },
+      { "channel": "slack", "agent": "arkady", "scope": "content" }
+    ]
+  }
+}

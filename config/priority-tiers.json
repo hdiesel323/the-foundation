@@ -1,0 +1,108 @@
+{
+  "tiers": {
+    "P0": {
+      "name": "Critical",
+      "description": "System down, data loss risk, security breach, revenue emergency",
+      "sla": {
+        "acknowledge_seconds": 30,
+        "first_response_seconds": 300,
+        "resolve_seconds": 3600
+      },
+      "auto_escalation": {
+        "enabled": true,
+        "escalate_after_seconds": 900,
+        "escalate_to": "human",
+        "notify_channels": ["telegram", "slack"]
+      },
+      "examples": [
+        "Service outage",
+        "Security incident",
+        "Data corruption",
+        "Revenue alert — target missed by >20%",
+        "Trading stop-loss breach",
+        "Daily loss limit exceeded"
+      ]
+    },
+    "P1": {
+      "name": "Today",
+      "description": "Significant impact, needs resolution today",
+      "sla": {
+        "acknowledge_seconds": 120,
+        "first_response_seconds": 300,
+        "resolve_seconds": 21600
+      },
+      "auto_escalation": {
+        "enabled": true,
+        "escalate_after_seconds": 3600,
+        "escalate_to": "seldon",
+        "notify_channels": ["telegram"]
+      },
+      "examples": [
+        "Feature broken",
+        "Client-facing bug",
+        "Revenue impact",
+        "Pipeline stall — multiple deals at risk",
+        "Campaign anomaly — ROAS below 1.0",
+        "Competitor pricing change detected",
+        "Position sizing violation"
+      ]
+    },
+    "P2": {
+      "name": "This Week",
+      "description": "Important but not urgent, resolve within 3 days",
+      "sla": {
+        "acknowledge_seconds": 900,
+        "first_response_seconds": 3600,
+        "resolve_seconds": 259200
+      },
+      "auto_escalation": {
+        "enabled": true,
+        "escalate_after_seconds": 86400,
+        "escalate_to": "seldon",
+        "notify_channels": ["slack"]
+      },
+      "examples": [
+        "Non-critical improvement",
+        "Documentation gap",
+        "Performance optimization",
+        "Content deadline approaching",
+        "Stale leads in pipeline",
+        "Prediction market opportunity",
+        "Weekly digest review"
+      ]
+    },
+    "P3": {
+      "name": "Backlog",
+      "description": "Nice to have, no time pressure",
+      "sla": {
+        "acknowledge_seconds": 3600,
+        "first_response_seconds": 86400,
+        "resolve_seconds": null
+      },
+      "auto_escalation": {
+        "enabled": false
+      },
+      "examples": ["Cleanup task", "Tech debt", "Exploration", "Low-significance competitive change"]
+    }
+  },
+  "commerce_events": {
+    "revenue_behind_pace": "P0",
+    "monthly_target_missed": "P0",
+    "trading_stop_loss_breach": "P0",
+    "daily_loss_limit_exceeded": "P0",
+    "pipeline_stall": "P1",
+    "campaign_roas_below_threshold": "P1",
+    "campaign_auto_pause_triggered": "P1",
+    "competitor_pricing_change": "P1",
+    "deal_at_risk": "P1",
+    "content_deadline": "P2",
+    "stale_leads": "P2",
+    "prediction_market_opportunity": "P2",
+    "weekly_revenue_report": "P2"
+  },
+  "defaults": {
+    "unclassified_priority": "P2",
+    "max_concurrent_p0": 1,
+    "max_concurrent_p1": 3
+  }
+}

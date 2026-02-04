@@ -1,0 +1,43 @@
+{
+  "description": "Session lifecycle hooks — run on agent startup and shutdown",
+  "hooks": {
+    "pre_session": {
+      "script": "scripts/session-start.sh",
+      "description": "Load last insights, recent activities, open tasks, and active conversations",
+      "timeout_seconds": 30,
+      "required": false,
+      "env": {
+        "OPENCLAW_DB": "openclaw",
+        "OPENCLAW_USER": "openclaw"
+      }
+    },
+    "post_session": {
+      "script": "scripts/session-end.sh",
+      "description": "Persist session summary, log learnings, insert insights into PostgreSQL",
+      "timeout_seconds": 30,
+      "required": false,
+      "args": ["--auto-summary"],
+      "env": {
+        "OPENCLAW_DB": "openclaw",
+        "OPENCLAW_USER": "openclaw"
+      }
+    }
+  },
+  "agent_overrides": {
+    "seldon": {
+      "pre_session": {
+        "args": ["--include-fleet-status"]
+      }
+    },
+    "daneel": {
+      "pre_session": {
+        "args": ["--include-infra-health"]
+      }
+    },
+    "venabili": {
+      "pre_session": {
+        "args": ["--include-task-summary"]
+      }
+    }
+  }
+}

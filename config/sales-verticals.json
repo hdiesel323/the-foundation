@@ -1,0 +1,86 @@
+{
+  "verticals": {
+    "insurance": {
+      "label": "Insurance Lead Generation",
+      "sub_verticals": ["auto", "home", "health", "life", "medicare"],
+      "icp": {
+        "description": "Insurance agencies and call centers buying exclusive or semi-exclusive leads",
+        "company_size": "5-200 employees",
+        "decision_maker": "Agency owner, VP Sales, Call Center Manager",
+        "pain_points": ["declining lead quality", "high cost-per-acquisition", "compliance burden"],
+        "budget_range": "$2k-$50k/month"
+      },
+      "value_proposition": "AI-qualified insurance leads with real-time intent scoring, compliance pre-screening, and buyer-matched routing that reduces CPA by 30%+",
+      "channels": ["retreaver", "paid_media", "outbound"],
+      "avg_lead_value": 25,
+      "avg_deal_size": 5000
+    },
+    "legal": {
+      "label": "Legal Lead Generation",
+      "sub_verticals": ["personal_injury", "mass_tort", "family_law", "criminal_defense", "immigration"],
+      "icp": {
+        "description": "Law firms and legal intake centers seeking case-qualified leads",
+        "company_size": "2-100 attorneys",
+        "decision_maker": "Managing Partner, Director of Intake, Marketing Director",
+        "pain_points": ["unqualified leads", "high media costs", "intake bottlenecks"],
+        "budget_range": "$5k-$100k/month"
+      },
+      "value_proposition": "Case-qualified legal leads with AI intake pre-screening, real-time case value estimation, and geo-targeted delivery matching case type to firm specialty",
+      "channels": ["retreaver", "paid_media", "content"],
+      "avg_lead_value": 75,
+      "avg_deal_size": 15000
+    },
+    "home_services": {
+      "label": "Home Services Lead Generation",
+      "sub_verticals": ["hvac", "plumbing", "roofing", "solar", "pest_control", "restoration"],
+      "icp": {
+        "description": "Home services companies and franchise groups buying exclusive local leads",
+        "company_size": "5-500 employees",
+        "decision_maker": "Owner, GM, VP Marketing",
+        "pain_points": ["seasonal demand", "shared leads", "territory conflicts"],
+        "budget_range": "$1k-$25k/month"
+      },
+      "value_proposition": "Exclusive, territory-locked home services leads with real-time availability matching, AI qualification, and automated appointment setting",
+      "channels": ["paid_media", "outbound", "content"],
+      "avg_lead_value": 15,
+      "avg_deal_size": 3000
+    },
+    "funding": {
+      "label": "Business Funding",
+      "sub_verticals": ["mca", "sba", "credit_lines", "equipment_financing", "invoice_factoring"],
+      "icp": {
+        "description": "Small-medium businesses seeking working capital or growth funding",
+        "company_size": "1-500 employees, $100k-$10M revenue",
+        "decision_maker": "Business Owner, CFO, Controller",
+        "pain_points": ["bank rejection", "slow approval", "lack of options"],
+        "budget_range": "$50k-$500k funding amount"
+      },
+      "value_proposition": "AI-powered business funding matchmaking with instant pre-qualification, multi-lender comparison, and compliance-first approach that closes deals 3x faster",
+      "channels": ["outbound", "paid_media", "content"],
+      "avg_lead_value": 50,
+      "avg_deal_size": 10000
+    },
+    "cre": {
+      "label": "Commercial Real Estate",
+      "sub_verticals": ["office", "retail", "industrial", "multifamily", "land"],
+      "icp": {
+        "description": "CRE investors, developers, and brokers seeking deal flow and market intelligence",
+        "company_size": "1-50 people, $1M-$100M AUM",
+        "decision_maker": "Principal, Acquisitions Director, Managing Broker",
+        "pain_points": ["deal sourcing", "market data gaps", "slow due diligence"],
+        "budget_range": "$2k-$20k/month"
+      },
+      "value_proposition": "AI-driven CRE deal flow with automated market analysis, comp research, and underwriting support that cuts due diligence time by 50%",
+      "channels": ["outbound", "content", "networking"],
+      "avg_lead_value": 100,
+      "avg_deal_size": 25000
+    }
+  },
+  "global_settings": {
+    "lead_scoring_model": "multi_signal",
+    "scoring_signals": ["intent", "firmographic", "behavioral", "temporal"],
+    "qualification_stages": ["raw", "mql", "sql", "opportunity", "closed"],
+    "attribution_model": "first_touch_weighted",
+    "currency": "USD"
+  }
+}

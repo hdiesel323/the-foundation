@@ -1,0 +1,123 @@
+{
+  "brand": {
+    "name": "Brodwax Lighting",
+    "tagline": "Professional lighting for content creators",
+    "store_url": "https://brodwaxlighting.com",
+    "platform": "shopify"
+  },
+  "product_categories": {
+    "ring_lights": {
+      "label": "Ring Lights",
+      "products": [
+        {
+          "name": "BW-18 Pro Ring Light",
+          "sku": "BW-RL-18PRO",
+          "category": "ring_lights",
+          "price": 89.99,
+          "cost": 28.00,
+          "margin_pct": 68.9,
+          "target_market": ["youtube_creators", "tiktokers", "beauty_influencers"],
+          "features": ["18-inch diameter", "bi-color 3200K-5600K", "phone holder", "remote control"]
+        },
+        {
+          "name": "BW-10 Mini Ring Light",
+          "sku": "BW-RL-10MINI",
+          "category": "ring_lights",
+          "price": 34.99,
+          "cost": 11.00,
+          "margin_pct": 68.6,
+          "target_market": ["zoom_calls", "selfies", "desktop_streaming"],
+          "features": ["10-inch diameter", "clip mount", "USB powered", "3 color modes"]
+        }
+      ]
+    },
+    "panel_lights": {
+      "label": "Panel Lights",
+      "products": [
+        {
+          "name": "BW-660 LED Panel",
+          "sku": "BW-PL-660",
+          "category": "panel_lights",
+          "price": 129.99,
+          "cost": 42.00,
+          "margin_pct": 67.7,
+          "target_market": ["studio_photographers", "video_producers", "podcasters"],
+          "features": ["660 LEDs", "CRI 96+", "battery option", "barn doors included"]
+        },
+        {
+          "name": "BW-120 Portable Panel",
+          "sku": "BW-PL-120P",
+          "category": "panel_lights",
+          "price": 49.99,
+          "cost": 16.00,
+          "margin_pct": 68.0,
+          "target_market": ["mobile_creators", "travel_vloggers", "on_location"],
+          "features": ["pocket-size", "built-in battery", "magnetic mount", "RGBW"]
+        }
+      ]
+    },
+    "desk_lamps": {
+      "label": "Creator Desk Lamps",
+      "products": [
+        {
+          "name": "BW-Desk Pro",
+          "sku": "BW-DL-PRO",
+          "category": "desk_lamps",
+          "price": 69.99,
+          "cost": 22.00,
+          "margin_pct": 68.6,
+          "target_market": ["streamers", "remote_workers", "podcasters"],
+          "features": ["articulating arm", "screen bar mode", "USB charging port", "memory settings"]
+        },
+        {
+          "name": "BW-Desk Lite",
+          "sku": "BW-DL-LITE",
+          "category": "desk_lamps",
+          "price": 39.99,
+          "cost": 13.00,
+          "margin_pct": 67.5,
+          "target_market": ["students", "home_office", "casual_creators"],
+          "features": ["clamp mount", "touch dimmer", "eye-care mode", "USB-C powered"]
+        }
+      ]
+    }
+  },
+  "target_market": {
+    "primary": "content_creators",
+    "segments": [
+      {
+        "name": "YouTube Creators",
+        "size": "large",
+        "needs": ["consistent lighting", "professional look", "budget-friendly"],
+        "platforms": ["youtube", "tiktok"]
+      },
+      {
+        "name": "Streamers",
+        "size": "large",
+        "needs": ["RGB effects", "desk-friendly", "low heat"],
+        "platforms": ["twitch", "kick", "youtube_live"]
+      },
+      {
+        "name": "Remote Workers",
+        "size": "very_large",
+        "needs": ["zoom lighting", "eye comfort", "minimal setup"],
+        "platforms": ["zoom", "teams", "google_meet"]
+      }
+    ]
+  },
+  "revenue_targets": {
+    "phase_2": {
+      "monthly_revenue_min": 15000,
+      "monthly_revenue_max": 18000,
+      "target_orders_per_day": 15,
+      "avg_order_value": 65,
+      "target_margin_pct": 65
+    }
+  },
+  "fulfillment": {
+    "method": "3pl",
+    "warehouse": "US-based",
+    "shipping_options": ["standard_5_7", "express_2_3", "next_day"],
+    "free_shipping_threshold": 75
+  }
+}
