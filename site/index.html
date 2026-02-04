@@ -1186,6 +1186,48 @@
                 white-space: pre;
             }
 
+            /* Docs */
+            .docs-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+                margin-top: 48px;
+            }
+
+            .doc-card {
+                background: rgba(30, 41, 59, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 12px;
+                padding: 28px;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: block;
+            }
+
+            .doc-card:hover {
+                border-color: var(--indigo-500);
+                transform: translateY(-2px);
+                background: rgba(30, 41, 59, 0.6);
+            }
+
+            .doc-card-icon {
+                font-size: 28px;
+                margin-bottom: 14px;
+            }
+
+            .doc-card-title {
+                font-size: 18px;
+                font-weight: 600;
+                color: var(--white);
+                margin-bottom: 8px;
+            }
+
+            .doc-card-desc {
+                font-size: 14px;
+                color: var(--gray-400);
+                line-height: 1.6;
+            }
+
             /* Pricing */
             .pricing-grid {
                 display: grid;
@@ -1461,7 +1503,7 @@
                         <a href="#quickstart">Quickstart</a>
                         <a href="#pricing">Pricing</a>
                         <a
-                            href="https://github.com/hdiesel323/openclaw-002"
+                            href="https://github.com/hdiesel323/the-foundation"
                             target="_blank"
                             >GitHub</a
                         >
@@ -1986,7 +2028,7 @@
                             over your agents, data, and API keys.
                         </p>
                         <a
-                            href="https://github.com/hdiesel323/openclaw-002"
+                            href="https://github.com/hdiesel323/the-foundation"
                             class="btn btn-primary"
                             target="_blank"
                             >View on GitHub</a
@@ -2005,8 +2047,8 @@
                             <div class="code-block">
                                 <code
                                     >git clone
-                                    https://github.com/hdiesel323/openclaw-002.git
-                                    cd openclaw-002</code
+                                    https://github.com/hdiesel323/the-foundation.git
+                                    cd the-foundation</code
                                 >
                             </div>
                         </div>
@@ -2044,6 +2086,141 @@
                 </div>
             </section>
 
+            <!-- Documentation -->
+            <section id="docs" class="section">
+                <div class="container-wide">
+                    <h2 class="section-title">Documentation</h2>
+                    <p class="section-subtitle">
+                        Everything you need to deploy, configure, and operate
+                        your agent team
+                    </p>
+                    <div class="docs-grid">
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/getting-started.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#9889;</div>
+                            <div class="doc-card-title">Getting Started</div>
+                            <div class="doc-card-desc">
+                                Install, configure, and run your first agent
+                                workflow in minutes.
+                            </div>
+                        </a>
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/architecture.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#127959;</div>
+                            <div class="doc-card-title">Architecture</div>
+                            <div class="doc-card-desc">
+                                System overview, component diagram, data flow,
+                                and task lifecycle.
+                            </div>
+                        </a>
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/agents.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#129302;</div>
+                            <div class="doc-card-title">Agents</div>
+                            <div class="doc-card-desc">
+                                Meet the 14 agents &mdash; roles, tools,
+                                patrols, VETO authority, and divisions.
+                            </div>
+                        </a>
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/api-reference.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#128268;</div>
+                            <div class="doc-card-title">API Reference</div>
+                            <div class="doc-card-desc">
+                                Every Seldon Protocol endpoint with request and
+                                response examples.
+                            </div>
+                        </a>
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/workflows.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#128260;</div>
+                            <div class="doc-card-title">Workflows</div>
+                            <div class="doc-card-desc">
+                                5 workflow templates, step diagrams, gates, and
+                                dependency resolution.
+                            </div>
+                        </a>
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/discord-integration.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#128172;</div>
+                            <div class="doc-card-title">
+                                Discord Integration
+                            </div>
+                            <div class="doc-card-desc">
+                                Bot setup, channel structure, task-to-thread
+                                lifecycle, and archival.
+                            </div>
+                        </a>
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/database-schema.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#128451;</div>
+                            <div class="doc-card-title">Database Schema</div>
+                            <div class="doc-card-desc">
+                                40+ PostgreSQL tables across core, business, and
+                                Discord migrations.
+                            </div>
+                        </a>
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/configuration.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#9881;</div>
+                            <div class="doc-card-title">Configuration</div>
+                            <div class="doc-card-desc">
+                                All 20+ config files, model tiers, and
+                                environment variables explained.
+                            </div>
+                        </a>
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/deployment.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#128640;</div>
+                            <div class="doc-card-title">Deployment</div>
+                            <div class="doc-card-desc">
+                                VPS provisioning, Docker Compose, Cloudflare
+                                Tunnel, backups, and monitoring.
+                            </div>
+                        </a>
+                        <a
+                            href="https://github.com/hdiesel323/the-foundation/blob/main/docs/critic-chains.md"
+                            target="_blank"
+                            class="doc-card"
+                        >
+                            <div class="doc-card-icon">&#128737;</div>
+                            <div class="doc-card-title">Critic Chains</div>
+                            <div class="doc-card-desc">
+                                7 validation pipelines, VETO flow, retry logic,
+                                and security gates.
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
             <!-- Pricing -->
             <section id="pricing" class="pricing">
                 <div class="container-wide">
@@ -2068,7 +2245,7 @@
                                 <li>Community support</li>
                             </ul>
                             <a
-                                href="https://github.com/hdiesel323/openclaw-002"
+                                href="https://github.com/hdiesel323/the-foundation"
                                 class="btn btn-secondary"
                                 target="_blank"
                                 >Get Started</a
@@ -2158,7 +2335,7 @@
                     <div class="footer-links">
                         <h4>Community</h4>
                         <a
-                            href="https://github.com/hdiesel323/openclaw-002"
+                            href="https://github.com/hdiesel323/the-foundation"
                             target="_blank"
                             >GitHub</a
                         >
